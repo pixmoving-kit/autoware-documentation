@@ -1,76 +1,114 @@
-# Commit guidelines
+<a id="commit-guidelines"></a>
 
-## Branch rules
+# 提交指南
 
-### Start branch names with the corresponding issue numbers (advisory, non-automated)
+<a id="branch-rules"></a>
 
-#### Rationale
+## 分支规则
 
-- Developers can quickly find the corresponding issues.
-- It is helpful for tools.
-- It is consistent with GitHub's default behavior.
+<a id="start-branch-names-with-the-corresponding-issue-numbers-advisory-non-automated"></a>
 
-#### Exception
+### 分支名称以对应的 issue 编号开头（建议，非自动检查）
 
-If there are no corresponding issues, you can ignore this rule.
+<a id="rationale"></a>
 
-#### Example
+#### 理由
 
-```text
-123-add-feature
-```
+- 开发者可以快速找到对应的 issue。
+- 便于工具处理。
+- 与 GitHub 的默认行为一致。
 
-#### Reference
+<a id="exception"></a>
 
-- [GitHub Docs](https://docs.github.com/en/issues/tracking-your-work-with-issues/creating-a-branch-for-an-issue)
+#### 例外
 
-### Use `dash-case` for the separator of branch names (advisory, non-automated)
+如果没有对应的 issue，可以忽略此规则。
 
-#### Rationale
+<a id="example"></a>
 
-- It is consistent with GitHub's default behavior.
-
-#### Example
+#### 示例
 
 ```text
 123-add-feature
 ```
 
-#### Reference
+<a id="reference"></a>
 
-- [GitHub Docs](https://docs.github.com/en/issues/tracking-your-work-with-issues/creating-a-branch-for-an-issue)
+#### 参考资料
 
-### Make branch names descriptive (advisory, non-automated)
+- [GitHub 文档](https://docs.github.com/en/issues/tracking-your-work-with-issues/creating-a-branch-for-an-issue)
 
-#### Rationale
+<a id="use-dash-case-for-the-separator-of-branch-names-advisory-non-automated"></a>
 
-- It can avoid conflicts of names.
-- Developers can understand the purpose of the branch.
+### 分支名称使用 `dash-case` 分隔（建议，非自动检查）
 
-#### Exception
+<a id="rationale_1"></a>
 
-If you have already submitted a pull request, you do not have to change the branch name because you need to re-create a pull request, which is noisy and a waste of time.  
-Be careful from the next time.
+#### 理由
 
-#### Example
+- 与 GitHub 的默认行为一致。
 
-Usually it is good to start with a verb.
+<a id="example_1"></a>
+
+#### 示例
+
+```text
+123-add-feature
+```
+
+<a id="reference_1"></a>
+
+#### 参考资料
+
+- [GitHub 文档](https://docs.github.com/en/issues/tracking-your-work-with-issues/creating-a-branch-for-an-issue)
+
+<a id="make-branch-names-descriptive-advisory-non-automated"></a>
+
+### 使用具有描述性的分支名称（建议，非自动检查）
+
+<a id="rationale_2"></a>
+
+#### 理由
+
+- 可以避免名称冲突。
+- 开发者可以了解该分支的用途。
+
+<a id="exception_1"></a>
+
+#### 例外
+
+如果已经提交了拉取请求，则不必修改分支名称，因为这需要重新创建拉取请求，会产生额外干扰并浪费时间。  
+下次注意即可。
+
+<a id="example_2"></a>
+
+#### 示例
+
+通常以动词开头比较合适。
 
 ```text
 123-fix-memory-leak-of-trajectory-follower
 ```
 
-## Commit rules
+<a id="commit-rules"></a>
 
-### Sign-off your commits (required, automated)
+## 提交规则
 
-Developers must certify that they wrote or otherwise have the right to submit the code they are contributing to the project.
+<a id="sign-off-your-commits-required-automated"></a>
 
-#### Rationale
+### 为提交添加签署声明（必需，自动检查）
 
-If not, it will lead to complex license problems.
+开发者必须证明自己编写了所贡献的代码，或拥有向项目提交这些代码的权利。
 
-#### Example
+<a id="rationale_3"></a>
+
+#### 理由
+
+否则会导致复杂的许可证问题。
+
+<a id="example_3"></a>
+
+#### 示例
 
 ```bash
 git commit -s
@@ -82,6 +120,8 @@ feat: add a feature
 Signed-off-by: Autoware <autoware@example.com>
 ```
 
-#### Reference
+<a id="reference_2"></a>
+
+#### 参考资料
 
 - [GitHub Apps - DCO](https://github.com/apps/dco)

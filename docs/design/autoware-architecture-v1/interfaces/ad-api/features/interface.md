@@ -1,13 +1,19 @@
-# Interface
+<a id="interface"></a>
 
-## Related API
+# 接口
+
+<a id="related-api"></a>
+
+## 相关 API
 
 - {{ link_ad_api('/api/interface/version') }}
 
-## Description
+<a id="description"></a>
 
-This API provides the interface version of the set of AD APIs.
-It follows [Semantic Versioning][semver] in order to provide an intuitive understanding of the changes between versions.
+## 说明
+
+此 API 提供整套 AD API 的接口版本。
+版本遵循[语义化版本规范][semver]，便于直观理解不同版本之间的变化。
 
 <!-- link -->
 

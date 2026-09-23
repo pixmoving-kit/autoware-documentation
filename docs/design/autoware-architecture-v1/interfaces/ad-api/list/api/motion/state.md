@@ -6,11 +6,11 @@ type:
   name: autoware_adapi_v1_msgs/msg/MotionState
   msg:
     - name: state
-      text: A value of the motion state.
+      text: 运动状态值。
 ---
 
 {% extends 'design/autoware-architecture-v1/interfaces/templates/autoware-interface.jinja2' %}
 {% block description %}
-Get the motion state.
-For details, see the [motion state](../../../features/motion.md).
+获取运动状态。
+详情请参阅[运动状态](../../../features/motion.md)。
 {% endblock %}

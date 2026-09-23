@@ -6,15 +6,15 @@ type:
   name: autoware_adapi_v1_msgs/msg/PedalsCommand
   msg:
     - name: stamp
-      text: Timestamp when this message was sent.
+      text: 发送此消息时的时间戳。
     - name: throttle
-      text: Target throttle pedal ratio.
+      text: 目标油门踏板比例。
     - name: brake
-      text: Target brake pedal ratio.
+      text: 目标制动踏板比例。
 ---
 
 {% extends 'design/autoware-architecture-v1/interfaces/templates/autoware-interface.jinja2' %}
 {% block description %}
-Sends pedals command used in remote operation mode. The pedal value is the ratio with the maximum pedal depression being 1.0.
-To use this API, select the corresponding mode as described in [manual control](../../../../../features/manual-control.md).
+发送远程操作模式下使用的踏板指令。踏板值表示踏下程度的比例，完全踏下时为 1.0。
+使用此 API 前，请按照[手动控制](../../../../../features/manual-control.md)中的说明选择相应模式。
 {% endblock %}

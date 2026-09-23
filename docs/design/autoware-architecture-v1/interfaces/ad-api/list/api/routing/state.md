@@ -6,11 +6,11 @@ type:
   name: autoware_adapi_v1_msgs/msg/RouteState
   msg:
     - name: state
-      text: A value of the route state.
+      text: 路线状态值。
 ---
 
 {% extends 'design/autoware-architecture-v1/interfaces/templates/autoware-interface.jinja2' %}
 {% block description %}
-Get the route state.
-For details, see the [routing](../../../features/routing.md).
+获取路线状态。
+详情请参阅[路线规划](../../../features/routing.md)。
 {% endblock %}

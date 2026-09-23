@@ -1,24 +1,32 @@
-# Rosbag replay simulation
+<a id="rosbag-replay-simulation"></a>
 
-## Preparation
+# Rosbag 回放仿真
 
-### Download the sample map and rosbag
+<a id="preparation"></a>
 
-Use the [`demo_artifacts`](https://github.com/autowarefoundation/autoware/tree/main/ansible/roles/demo_artifacts) ansible role to download and extract both the sample map and the sample rosbag:
+## 准备工作
+
+<a id="download-the-sample-map-and-rosbag"></a>
+
+### 下载示例地图和 rosbag
+
+使用 [`demo_artifacts`](https://github.com/autowarefoundation/autoware/tree/main/ansible/roles/demo_artifacts) Ansible 角色，下载并解压示例地图和示例 rosbag：
 
 ```bash
 ansible-galaxy collection install -f -r "ansible-galaxy-requirements.yaml"
 ansible-playbook autoware.dev_env.install_dev_env --tags demo_artifacts --ask-become-pass
 ```
 
-After running the role:
+运行该角色后：
 
-- sample map → `~/autoware_data/maps/sample-map-rosbag/`
-- sample rosbag → `~/autoware_data/recordings/bags/sample-rosbag/`
+- 示例地图 → `~/autoware_data/maps/sample-map-rosbag/`
+- 示例 rosbag → `~/autoware_data/recordings/bags/sample-rosbag/`
 
-### Make sure the ML model artifacts are downloaded
+<a id="make-sure-the-ml-model-artifacts-are-downloaded"></a>
 
-Check if you have `~/autoware_data/ml_models` folder and files in it.
+### 确保已下载机器学习模型制品
+
+检查是否存在 `~/autoware_data/ml_models` 文件夹及其中的文件。
 
 ```bash
 $ cd ~/autoware_data/ml_models
@@ -42,103 +50,111 @@ vad
 yabloc_pose_initializer
 ```
 
-If not, please, follow [Manual downloading of artifacts](https://github.com/autowarefoundation/autoware/tree/main/ansible/roles/artifacts).
+如果没有，请按照[手动下载制品](https://github.com/autowarefoundation/autoware/tree/main/ansible/roles/artifacts)的说明操作。
 
 !!! info
 
-    - Sample map and rosbag: Copyright 2020 TIER IV, Inc.
-    - Due to privacy concerns, the rosbag does not contain image data, which will cause:
-      - Traffic light recognition functionality cannot be tested with this sample rosbag.
-      - Object detection accuracy is decreased.
+    - 示例地图和 rosbag：Copyright 2020 TIER IV, Inc.
+    - 出于隐私考虑，该 rosbag 不包含图像数据，这会导致：
+      - 无法使用此示例 rosbag 测试交通信号灯识别功能。
+      - 目标检测精度下降。
 
-## How to run a rosbag replay simulation
+<a id="how-to-run-a-rosbag-replay-simulation"></a>
 
-!!! tip "[Using Autoware Launch GUI](#using-autoware-launch-gui)"
+## 运行 rosbag 回放仿真
 
-    If you prefer a graphical user interface (GUI) over the command line for launching and managing your simulations, refer to the `Using Autoware Launch GUI` section at the end of this document for a step-by-step guide.
+!!! tip "[使用 Autoware Launch GUI](#using-autoware-launch-gui)"
 
-1. Launch Autoware.
+    如果你更倾向于使用图形用户界面（GUI）而非命令行来启动和管理仿真，请参阅本文末尾“使用 Autoware Launch GUI”章节中的分步指南。
+
+1. 启动 Autoware。
 
    ```sh
    source ~/autoware/install/setup.bash
    ros2 launch autoware_launch logging_simulator.launch.xml map_path:=$HOME/autoware_data/maps/sample-map-rosbag vehicle_model:=sample_vehicle sensor_model:=sample_sensor_kit
    ```
 
-   Note that you cannot use `~` instead of `$HOME` here.
+   注意，此处不能用 `~` 代替 `$HOME`。
 
-   ![after-autoware-launch](images/rosbag-replay/after-autoware-launch.png)
+   ![启动 Autoware 后](images/rosbag-replay/after-autoware-launch.png)
 
-   > ⚠️ You might encounter error and warning messages in the terminal before playing the `rosbag`. This is normal behavior. These should cease once the `rosbag` is played and proper initialization takes place
+   > ⚠️ 播放 `rosbag` 前，终端中可能会出现错误和警告消息，这是正常现象。开始播放 `rosbag` 并正确完成初始化后，这些消息应会消失。
 
-2. Play the sample rosbag file.
+2. 播放示例 rosbag 文件。
 
    ```sh
    source ~/autoware/install/setup.bash
    ros2 bag play ~/autoware_data/recordings/bags/sample-rosbag/ -r 0.2 -s sqlite3
    ```
 
-   > ⚠️ Due to the discrepancy between the timestamp in the `rosbag` and the current system timestamp, Autoware may generate warning messages in the terminal alerting to this mismatch. This is normal behavior.
+   > ⚠️ 由于 `rosbag` 中的时间戳与当前系统时间戳存在差异，Autoware 可能在终端中发出警告，提示时间戳不匹配。这是正常现象。
 
-   ![after-rosbag-play](images/rosbag-replay/after-rosbag-play.png)
+   ![播放 rosbag 后](images/rosbag-replay/after-rosbag-play.png)
 
-3. To focus the view on the ego vehicle, change the `Target Frame` in the RViz Views panel from `viewer` to `base_link`.
+3. 要使视图聚焦于自车，请将 RViz Views 面板中的 `Target Frame` 从 `viewer` 改为 `base_link`。
 
-   ![change-target-frame](images/rosbag-replay/change-target-frame.png)
+   ![更改目标坐标系](images/rosbag-replay/change-target-frame.png)
 
-4. To switch the view to `Third Person Follower` etc, change the `Type` in the RViz Views panel.
+4. 要将视图切换为 `Third Person Follower` 等类型，请修改 RViz Views 面板中的 `Type`。
 
-   ![third-person-follower](images/rosbag-replay/third-person-follower.png)
+   ![第三人称跟随视图](images/rosbag-replay/third-person-follower.png)
 
 !!! tip
 
-    [:fa-cl-s fa-film: Reference video tutorials](https://drive.google.com/file/d/12D6aSC1Y3Kf7STtEPWG5RYynxKdVcPrc/view?usp=sharing){ .md-button }
+    [:fa-cl-s fa-film: 参考视频教程](https://drive.google.com/file/d/12D6aSC1Y3Kf7STtEPWG5RYynxKdVcPrc/view?usp=sharing){ .md-button }
 
-## Using Autoware Launch GUI
+<a id="using-autoware-launch-gui"></a>
 
-This section provides a step-by-step guide for using the Autoware Launch GUI to launch and manage your rosbag replay simulation. offering an alternative to the command-line instructions provided in the previous section.
+## 使用 Autoware Launch GUI
 
-### Getting Started with Autoware Launch GUI
+本节逐步介绍如何使用 Autoware Launch GUI 启动和管理 rosbag 回放仿真，为上一节中的命令行操作提供另一种方式。
 
-1. **Installation:** Ensure you have installed the Autoware Launch GUI. [Installation instructions](https://github.com/autowarefoundation/autoware-launch-gui#installation).
+<a id="getting-started-with-autoware-launch-gui"></a>
 
-2. **Launching the GUI:** Open the Autoware Launch GUI from your applications menu.
-   ![GUI_screenshot_for_launching](images/rosbag-replay/launch-gui/launch_gui_main.png)
+### Autoware Launch GUI 入门
 
-### Launching a Logging Simulation
+1. **安装：** 确保已安装 Autoware Launch GUI。参阅[安装说明](https://github.com/autowarefoundation/autoware-launch-gui#installation)。
 
-1. **Set Autoware Path:** In the GUI, set the path to your Autoware installation.
-   ![GUI_screenshot_for_setting_Autoware_path](images/rosbag-replay/launch-gui/launch_gui_setup.png)
-2. **Select Launch File:** Choose `logging_simulator.launch.xml` for the lane driving scenario.
-   ![GUI screenshot for selecting launch file](images/rosbag-replay/launch-gui/selecting_launch_file.png)
-3. **Customize Parameters:** Adjust parameters such as `map_path`, `vehicle_model`, and `sensor_model` as needed.
+2. **启动 GUI：** 从应用程序菜单中打开 Autoware Launch GUI。
+   ![启动 GUI 的界面截图](images/rosbag-replay/launch-gui/launch_gui_main.png)
 
-   ![GUI screenshot for customizing parameters](images/rosbag-replay/launch-gui/customizing-parameters1.png)
-   ![GUI screenshot for customizing parameters](images/rosbag-replay/launch-gui/customizing-parameters2.png)
+<a id="launching-a-logging-simulation"></a>
 
-4. **Start Simulation:** Click the launch button to start the simulation and have access to all the logs.
+### 启动日志仿真
 
-   ![GUI screenshot for starting simulation](images/rosbag-replay/launch-gui/starting_simulation.png)
+1. **设置 Autoware 路径：** 在 GUI 中设置 Autoware 的安装路径。
+   ![设置 Autoware 路径的界面截图](images/rosbag-replay/launch-gui/launch_gui_setup.png)
+2. **选择启动文件：** 为车道内行驶场景选择 `logging_simulator.launch.xml`。
+   ![选择启动文件的界面截图](images/rosbag-replay/launch-gui/selecting_launch_file.png)
+3. **自定义参数：** 根据需要调整 `map_path`、`vehicle_model` 和 `sensor_model` 等参数。
 
-5. **Play Rosbag:** Move to the `Rosbag` tab and select the rosbag file you wish to play.
+   ![自定义参数的界面截图](images/rosbag-replay/launch-gui/customizing-parameters1.png)
+   ![自定义参数的界面截图](images/rosbag-replay/launch-gui/customizing-parameters2.png)
 
-   ![GUI screenshot for selecting rosbag file](images/rosbag-replay/launch-gui/selecting_rosbag_file.png)
+4. **开始仿真：** 点击启动按钮开始仿真，并查看所有日志。
 
-6. **Adjust Playback Speed:** Adjust the playback speed as needed and any other parameters you wish to customize.
+   ![开始仿真的界面截图](images/rosbag-replay/launch-gui/starting_simulation.png)
 
-   ![GUI screenshot for adjusting playback speed](images/rosbag-replay/launch-gui/adjusting_flags.png)
+5. **播放 Rosbag：** 切换到 `Rosbag` 选项卡，选择要播放的 rosbag 文件。
 
-7. **Start Playback:** Click the play button to start the rosbag playback and have access to settings such as `pause/play`, `stop`, and `speed slider`5.
+   ![选择 rosbag 文件的界面截图](images/rosbag-replay/launch-gui/selecting_rosbag_file.png)
 
-   ![GUI screenshot for starting playback](images/rosbag-replay/launch-gui/starting_playback.png)
+6. **调整播放速度：** 根据需要调整播放速度及其他希望自定义的参数。
 
-8. **View Simulation:** Move to the `RViz` window to view the simulation.
+   ![调整播放速度的界面截图](images/rosbag-replay/launch-gui/adjusting_flags.png)
 
-   ![after-rosbag-play](images/rosbag-replay/after-rosbag-play.png)
+7. **开始播放：** 点击播放按钮开始回放 rosbag，即可使用 `pause/play`、`stop` 和 `speed slider` 等设置。
 
-9. To focus the view on the ego vehicle, change the `Target Frame` in the RViz Views panel from `viewer` to `base_link`.
+   ![开始播放的界面截图](images/rosbag-replay/launch-gui/starting_playback.png)
 
-   ![change-target-frame](images/rosbag-replay/change-target-frame.png)
+8. **查看仿真：** 切换到 `RViz` 窗口查看仿真。
 
-10. To switch the view to `Third Person Follower` etc, change the `Type` in the RViz Views panel.
+   ![播放 rosbag 后](images/rosbag-replay/after-rosbag-play.png)
 
-    ![third-person-follower](images/rosbag-replay/third-person-follower.png)
+9. 要使视图聚焦于自车，请将 RViz Views 面板中的 `Target Frame` 从 `viewer` 改为 `base_link`。
+
+   ![更改目标坐标系](images/rosbag-replay/change-target-frame.png)
+
+10. 要将视图切换为 `Third Person Follower` 等类型，请修改 RViz Views 面板中的 `Type`。
+
+    ![第三人称跟随视图](images/rosbag-replay/third-person-follower.png)

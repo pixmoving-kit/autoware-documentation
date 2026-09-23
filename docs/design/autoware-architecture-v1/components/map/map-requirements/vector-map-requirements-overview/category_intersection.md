@@ -1,423 +1,593 @@
-## Category:Intersection
+<a id="categoryintersection"></a>
+
+## 类别：交叉路口
 
 ---
 
-### vm-03-01 Intersection criteria
+<a id="vm-03-01-intersection-criteria"></a>
 
-#### Detail of requirements <!-- omit in toc -->
+### vm-03-01 交叉路口标准
 
-Essential criteria for the construction of an intersection:
+<a id="detail-of-requirements"></a>
 
-- Encircle the drivable area at the intersection with a Polygon (_type:intersection_area_).
-- Add _turn_direction_ to all Lanelets in the intersection.
-- Ensure that all lanelets in the intersection are tagged:
+#### 需求详情 <!-- omit in toc -->
+
+创建交叉路口的基本标准：
+
+- 使用 Polygon（_type:intersection_area_）围住交叉路口的可行驶区域。
+- 为交叉路口内的所有 Lanelet 添加 _turn_direction_。
+- 确保交叉路口内的所有 lanelet 带有以下标签：
   - _key:intersection_area_
-  - _value: Polygon's ID_
-- Attach _right_of_way_ to the necessary Lanelets.
-- Also, it is necessary to appropriately create traffic lights, crosswalks, and stop lines.
+  - _value: Polygon 的 ID_
+- 为需要的 Lanelet 添加 _right_of_way_。
+- 还需正确创建交通信号灯、人行横道和停止线。
 
-For detailed information, refer to the respective requirements on this page.
+详细信息请参阅本页中的相应需求。
 
-##### Autoware modules <!-- omit in toc -->
+<a id="autoware-modules"></a>
 
-- The requirements for _turn_direction_ and _right_of_way_ are related to the intersection module, which plans velocity to avoid collisions with other vehicles, taking traffic light instructions into account.
-- The requirements for _intersection_area_ are related to the avoidance module, which plans routes that evade by veering out of lanes in the intersections.
+##### Autoware 模块 <!-- omit in toc -->
 
-#### Preferred vector map <!-- omit in toc -->
+- _turn_direction_ 和 _right_of_way_ 需求与交叉路口模块相关，该模块考虑交通信号灯指示，规划速度以避免与其他车辆碰撞。
+- _intersection_area_ 需求与避障模块相关，该模块规划在交叉路口偏出车道避障的路线。
 
-None in particular.
+<a id="preferred-vector-map"></a>
 
-#### Incorrect vector map <!-- omit in toc -->
+#### 推荐的矢量地图 <!-- omit in toc -->
 
-None in particular.
+无特别说明。
 
-#### Related Autoware module
+<a id="incorrect-vector-map"></a>
 
-- [Intersection - Autoware Universe Documentation](https://autowarefoundation.github.io/autoware_universe/main/planning/behavior_velocity_planner/autoware_behavior_velocity_intersection_module/)
-- [Blind Spot design - Autoware Universe Documentation](https://autowarefoundation.github.io/autoware_universe/main/planning/behavior_velocity_planner/autoware_behavior_velocity_blind_spot_module/)
-- [Static Avoidance - Autoware Universe Documentation](https://autowarefoundation.github.io/autoware_universe/main/planning/behavior_path_planner/autoware_behavior_path_static_obstacle_avoidance_module/)
-- [Dynamic Avoidance - Autoware Universe Documentation](https://autowarefoundation.github.io/autoware_universe/main/planning/behavior_path_planner/autoware_behavior_path_dynamic_obstacle_avoidance_module/)
+#### 错误的矢量地图 <!-- omit in toc -->
+
+无特别说明。
+
+<a id="related-autoware-module"></a>
+
+#### 相关 Autoware 模块
+
+- [交叉路口 - Autoware Universe 文档](https://autowarefoundation.github.io/autoware_universe/main/planning/behavior_velocity_planner/autoware_behavior_velocity_intersection_module/)
+- [盲区设计 - Autoware Universe 文档](https://autowarefoundation.github.io/autoware_universe/main/planning/behavior_velocity_planner/autoware_behavior_velocity_blind_spot_module/)
+- [静态避障 - Autoware Universe 文档](https://autowarefoundation.github.io/autoware_universe/main/planning/behavior_path_planner/autoware_behavior_path_static_obstacle_avoidance_module/)
+- [动态避障 - Autoware Universe 文档](https://autowarefoundation.github.io/autoware_universe/main/planning/behavior_path_planner/autoware_behavior_path_dynamic_obstacle_avoidance_module/)
 
 ---
 
-### vm-03-02 Lanelet's turn direction and virtual linestring
+<a id="vm-03-02-lanelets-turn-direction-and-virtual-linestring"></a>
 
-#### Detail of requirements <!-- omit in toc -->
+### vm-03-02 Lanelet 转向方向与虚拟 Linestring
 
-Add the following tag to the Lanelets in the intersection:
+<a id="detail-of-requirements_1"></a>
+
+#### 需求详情 <!-- omit in toc -->
+
+为交叉路口内的 Lanelet 添加以下标签：
 
 - turn_direction : straight
 - turn_direction : left
 - turn_direction : right
 
-Also, if the left or right Linestrings of Lanelets at the intersection lack road paintings, designate these as _type:virtual_.
+此外，如果交叉路口 Lanelet 的左侧或右侧 Linestring 没有对应道路标线，应将其指定为 _type:virtual_。
 
-##### Behavior of Autoware： <!-- omit in toc -->
+<a id="behavior-of-autoware"></a>
 
-Autoware will start flashing the turn signals (blinkers) 30 meters as default before turn_direction-tagged Lanelet. If you change the blinking timing, add the following tags:
+##### Autoware 的行为： <!-- omit in toc -->
+
+默认情况下，Autoware 会在带有 turn_direction 标签的 Lanelet 前 30 米开始闪烁转向灯。如果需要更改闪烁时机，请添加以下标签：
 
 - key: _turn_signal_distance_
-- value: numerical value (m)
+- value：数值（m）
 
 ![svg](../assets/vm-03-02_1.svg)
 
-#### Preferred vector map <!-- omit in toc -->
+<a id="preferred-vector-map_1"></a>
+
+#### 推荐的矢量地图 <!-- omit in toc -->
 
 ![svg](../assets/vm-03-02_2.svg)
 
-#### Incorrect vector map <!-- omit in toc -->
+<a id="incorrect-vector-map_1"></a>
 
-None in particular.
+#### 错误的矢量地图 <!-- omit in toc -->
 
-#### Related Autoware module
+无特别说明。
 
-- [Intersection - Autoware Universe Documentation](https://autowarefoundation.github.io/autoware_universe/main/planning/behavior_velocity_planner/autoware_behavior_velocity_intersection_module/)
-- [Blind Spot design - Autoware Universe Documentation](https://autowarefoundation.github.io/autoware_universe/main/planning/behavior_velocity_planner/autoware_behavior_velocity_blind_spot_module/)
-- [virtual_traffic_light in behavior_velocity_planner - Autoware Universe Documentation](https://autowarefoundation.github.io/autoware_universe/main/planning/behavior_velocity_planner/autoware_behavior_velocity_virtual_traffic_light_module/)
+<a id="related-autoware-module_1"></a>
+
+#### 相关 Autoware 模块
+
+- [交叉路口 - Autoware Universe 文档](https://autowarefoundation.github.io/autoware_universe/main/planning/behavior_velocity_planner/autoware_behavior_velocity_intersection_module/)
+- [盲区设计 - Autoware Universe 文档](https://autowarefoundation.github.io/autoware_universe/main/planning/behavior_velocity_planner/autoware_behavior_velocity_blind_spot_module/)
+- [behavior_velocity_planner 中的 virtual_traffic_light - Autoware Universe 文档](https://autowarefoundation.github.io/autoware_universe/main/planning/behavior_velocity_planner/autoware_behavior_velocity_virtual_traffic_light_module/)
 
 ---
 
-### vm-03-03 Lanelet width in the intersection
+<a id="vm-03-03-lanelet-width-in-the-intersection"></a>
 
-#### Detail of requirements： <!-- omit in toc -->
+### vm-03-03 交叉路口内的 Lanelet 宽度
 
-Lanelets in the intersection should have a consistent width. Additionally, draw Linestrings with smooth curves.
+<a id="detail-of-requirements_2"></a>
 
-The shape of this curve must be determined by the Vector Map creator.
+#### 需求详情： <!-- omit in toc -->
+
+交叉路口内的 Lanelet 应保持一致的宽度。此外，应使用平滑曲线绘制 Linestring。
+
+此曲线的形状必须由矢量地图制作者确定。
 
 ![svg](../assets/vm-03-03_1.svg)
 
-#### Preferred vector map <!-- omit in toc -->
+<a id="preferred-vector-map_2"></a>
+
+#### 推荐的矢量地图 <!-- omit in toc -->
 
 ![svg](../assets/vm-03-03_2.svg)
 
-#### Incorrect vector map <!-- omit in toc -->
+<a id="incorrect-vector-map_2"></a>
+
+#### 错误的矢量地图 <!-- omit in toc -->
 
 ![svg](../assets/vm-03-03_3.svg)
 
 ---
 
-### vm-03-04 Lanelet creation in the intersection
+<a id="vm-03-04-lanelet-creation-in-the-intersection"></a>
 
-#### Detail of requirements <!-- omit in toc -->
+### vm-03-04 在交叉路口中创建 Lanelet
 
-Create all Lanelets in the intersection, including lanelets not driven by the vehicle. Additionally, link stop lines and traffic lights to the Lanelets appropriately.
+<a id="detail-of-requirements_3"></a>
 
-Refer also to the creation scope [vm-07-01](category_others.md#vm-07-01-vector-map-creation-range)
+#### 需求详情 <!-- omit in toc -->
 
-##### Behavior of Autoware <!-- omit in toc -->
+创建交叉路口内的所有 Lanelet，包括车辆不会行驶的 lanelet。此外，应将停止线和交通信号灯正确关联到 Lanelet。
 
-Autoware uses lanelets to predict the movements of other vehicles and plan the vehicle's velocity accordingly. Therefore, it is necessary to create all lanelets in the intersection.
+另请参阅创建范围 [vm-07-01](category_others.md#vm-07-01-vector-map-creation-range)
+
+<a id="behavior-of-autoware_1"></a>
+
+##### Autoware 的行为 <!-- omit in toc -->
+
+Autoware 使用 lanelet 预测其他车辆的运动，并据此规划自车速度。因此，需要创建交叉路口内的全部 lanelet。
 
 ![svg](../assets/vm-03-04_1.svg)
 
-#### Preferred vector map <!-- omit in toc -->
+<a id="preferred-vector-map_3"></a>
+
+#### 推荐的矢量地图 <!-- omit in toc -->
 
 ![svg](../assets/vm-03-04_2.svg)
 
-#### Incorrect vector map <!-- omit in toc -->
+<a id="incorrect-vector-map_3"></a>
+
+#### 错误的矢量地图 <!-- omit in toc -->
 
 ![svg](../assets/vm-03-04_3.svg)
 
-#### Related Autoware module
+<a id="related-autoware-module_2"></a>
 
-- [Intersection - Autoware Universe Documentation](https://autowarefoundation.github.io/autoware_universe/main/planning/behavior_velocity_planner/autoware_behavior_velocity_intersection_module/)
+#### 相关 Autoware 模块
+
+- [交叉路口 - Autoware Universe 文档](https://autowarefoundation.github.io/autoware_universe/main/planning/behavior_velocity_planner/autoware_behavior_velocity_intersection_module/)
 
 ---
 
-### vm-03-05 Lanelet division in the intersection
+<a id="vm-03-05-lanelet-division-in-the-intersection"></a>
 
-#### Detail of requirements <!-- omit in toc -->
+### vm-03-05 交叉路口内的 Lanelet 分割
 
-Create the Lanelets in the intersection as a single object without dividing them.
+<a id="detail-of-requirements_4"></a>
+
+#### 需求详情 <!-- omit in toc -->
+
+将交叉路口内的 Lanelet 创建为单个对象，不要拆分。
 
 ![svg](../assets/vm-03-05_1.svg)
 
-#### Preferred vector map <!-- omit in toc -->
+<a id="preferred-vector-map_4"></a>
+
+#### 推荐的矢量地图 <!-- omit in toc -->
 
 ![svg](../assets/vm-03-05_2.svg)
 
-#### Incorrect vector map <!-- omit in toc -->
+<a id="incorrect-vector-map_4"></a>
+
+#### 错误的矢量地图 <!-- omit in toc -->
 
 ![svg](../assets/vm-03-03_3.svg)
 
-#### Related Autoware module
+<a id="related-autoware-module_3"></a>
 
-- [Intersection - Autoware Universe Documentation](https://autowarefoundation.github.io/autoware_universe/main/planning/behavior_velocity_planner/autoware_behavior_velocity_intersection_module/)
+#### 相关 Autoware 模块
+
+- [交叉路口 - Autoware Universe 文档](https://autowarefoundation.github.io/autoware_universe/main/planning/behavior_velocity_planner/autoware_behavior_velocity_intersection_module/)
 
 ---
 
-### vm-03-06 Guide lines in the intersection
+<a id="vm-03-06-guide-lines-in-the-intersection"></a>
 
-#### Detail of requirements <!-- omit in toc -->
+### vm-03-06 交叉路口内的引导线
 
-If there are guide lines in the intersection, draw the Lanelet following them.
+<a id="detail-of-requirements_5"></a>
 
-In cases where the Lanelets branches off, begin the branching at the end of the guide line. However, it is not necessary to share points or linestrings between Lanelets.
+#### 需求详情 <!-- omit in toc -->
+
+如果交叉路口内有引导线，应沿引导线绘制 Lanelet。
+
+当 Lanelet 出现分支时，应从引导线的末端开始分支。但 Lanelet 之间无需共享 point 或 linestring。
 
 ![svg](../assets/vm-03-06_1.svg)
 
-#### Preferred vector map <!-- omit in toc -->
+<a id="preferred-vector-map_5"></a>
+
+#### 推荐的矢量地图 <!-- omit in toc -->
 
 ![svg](../assets/vm-03-06_2.svg)
 
-#### Incorrect vector map <!-- omit in toc -->
+<a id="incorrect-vector-map_5"></a>
 
-None in particular.
+#### 错误的矢量地图 <!-- omit in toc -->
 
-#### Related Autoware module
+无特别说明。
 
-- [Intersection - Autoware Universe Documentation](https://autowarefoundation.github.io/autoware_universe/main/planning/behavior_velocity_planner/autoware_behavior_velocity_intersection_module/)
+<a id="related-autoware-module_4"></a>
+
+#### 相关 Autoware 模块
+
+- [交叉路口 - Autoware Universe 文档](https://autowarefoundation.github.io/autoware_universe/main/planning/behavior_velocity_planner/autoware_behavior_velocity_intersection_module/)
 
 ---
 
-### vm-03-07 Multiple lanelets in the intersection
+<a id="vm-03-07-multiple-lanelets-in-the-intersection"></a>
 
-#### Detail of requirements <!-- omit in toc -->
+### vm-03-07 交叉路口内的多个 lanelet
 
-When connecting multiple lanes with Lanelets at an intersection, those Lanelets should be made adjacent to each other without crossing.
+<a id="detail-of-requirements_6"></a>
+
+#### 需求详情 <!-- omit in toc -->
+
+在交叉路口通过 Lanelet 连接多条车道时，这些 Lanelet 应彼此相邻，不能交叉。
 
 ![svg](../assets/vm-03-07_1.svg)
 
-#### Preferred vector map <!-- omit in toc -->
+<a id="preferred-vector-map_6"></a>
+
+#### 推荐的矢量地图 <!-- omit in toc -->
 
 ![svg](../assets/vm-03-07_2.svg)
 
-#### Incorrect vector map <!-- omit in toc -->
+<a id="incorrect-vector-map_6"></a>
+
+#### 错误的矢量地图 <!-- omit in toc -->
 
 ![svg](../assets/vm-03-07_3.svg)
 
-#### Related Autoware module
+<a id="related-autoware-module_5"></a>
 
-- [Intersection - Autoware Universe Documentation](https://autowarefoundation.github.io/autoware_universe/main/planning/behavior_velocity_planner/autoware_behavior_velocity_intersection_module/)
+#### 相关 Autoware 模块
+
+- [交叉路口 - Autoware Universe 文档](https://autowarefoundation.github.io/autoware_universe/main/planning/behavior_velocity_planner/autoware_behavior_velocity_intersection_module/)
 
 ---
 
-### vm-03-08 Intersection area range
+<a id="vm-03-08-intersection-area-range"></a>
 
-#### Detail of requirements <!-- omit in toc -->
+### vm-03-08 交叉路口区域范围
 
-Encircle the intersection's drivable area with a Polygon (_type:intersection_area_). The boundary of this intersection's Polygon should be defined by the objects below.
+<a id="detail-of-requirements_7"></a>
 
-- Linestrings (_subtype:road_border_)
-- Straight lines at the connection points of lanelets in the intersection."
+#### 需求详情 <!-- omit in toc -->
 
-#### Preferred vector map <!-- omit in toc -->
+使用 Polygon（_type:intersection_area_）围住交叉路口的可行驶区域。交叉路口 Polygon 的边界应由以下对象确定。
+
+- Linestring（_subtype:road_border_）
+- 交叉路口内 lanelet 连接点处的直线。
+
+<a id="preferred-vector-map_7"></a>
+
+#### 推荐的矢量地图 <!-- omit in toc -->
 
 ![svg](../assets/vm-03-08_1.svg)
 
-#### Incorrect vector map <!-- omit in toc -->
+<a id="incorrect-vector-map_7"></a>
 
-None in particular.
+#### 错误的矢量地图 <!-- omit in toc -->
 
-#### Related Autoware module
+无特别说明。
 
-- [Intersection - Autoware Universe Documentation](https://autowarefoundation.github.io/autoware_universe/main/planning/behavior_velocity_planner/autoware_behavior_velocity_intersection_module/)
-- [Blind Spot design - Autoware Universe Documentation](https://autowarefoundation.github.io/autoware_universe/main/planning/behavior_velocity_planner/autoware_behavior_velocity_blind_spot_module/)
-- [Static Avoidance - Autoware Universe Documentation](https://autowarefoundation.github.io/autoware_universe/main/planning/behavior_path_planner/autoware_behavior_path_static_obstacle_avoidance_module/)
-- [Dynamic Avoidance - Autoware Universe Documentation](https://autowarefoundation.github.io/autoware_universe/main/planning/behavior_path_planner/autoware_behavior_path_dynamic_obstacle_avoidance_module/)
+<a id="related-autoware-module_6"></a>
+
+#### 相关 Autoware 模块
+
+- [交叉路口 - Autoware Universe 文档](https://autowarefoundation.github.io/autoware_universe/main/planning/behavior_velocity_planner/autoware_behavior_velocity_intersection_module/)
+- [盲区设计 - Autoware Universe 文档](https://autowarefoundation.github.io/autoware_universe/main/planning/behavior_velocity_planner/autoware_behavior_velocity_blind_spot_module/)
+- [静态避障 - Autoware Universe 文档](https://autowarefoundation.github.io/autoware_universe/main/planning/behavior_path_planner/autoware_behavior_path_static_obstacle_avoidance_module/)
+- [动态避障 - Autoware Universe 文档](https://autowarefoundation.github.io/autoware_universe/main/planning/behavior_path_planner/autoware_behavior_path_dynamic_obstacle_avoidance_module/)
 
 ---
 
-### vm-03-09 Range of Lanelet in the intersection
+<a id="vm-03-09-range-of-lanelet-in-the-intersection"></a>
 
-#### Detail of requirements <!-- omit in toc -->
+### vm-03-09 交叉路口内的 Lanelet 范围
 
-Determine the start and end positions of lanelets in the intersection (henceforth the boundaries of lanelet connections) based on the stop line's position.
+<a id="detail-of-requirements_8"></a>
 
-- For cases with a painted stop line:
-  - The stop line's linestring (_type:stop_line_) position must align with the lanelet's start.
-  - Extend the lanelet's end to where the opposing lane's stop line would be.
-- Without a painted stop line:
-  - Use a drawn linestring (_type:stop_line_) to establish positions as if there were a painted stop line.
+#### 需求详情 <!-- omit in toc -->
 
-#### Preferred vector map <!-- omit in toc -->
+根据停止线的位置确定交叉路口内 lanelet 的起止位置（下文称为 lanelet 连接边界）。
+
+- 存在绘制的停止线时：
+  - 停止线的 linestring（_type:stop_line_）位置必须与 lanelet 起点对齐。
+  - 将 lanelet 末端延伸至对向车道停止线所在的位置。
+- 没有绘制的停止线时：
+  - 绘制 linestring（_type:stop_line_），按存在停止线的情况确定位置。
+
+<a id="preferred-vector-map_8"></a>
+
+#### 推荐的矢量地图 <!-- omit in toc -->
 
 ![svg](../assets/vm-03-09_1.svg)
 
-#### Incorrect vector map <!-- omit in toc -->
+<a id="incorrect-vector-map_8"></a>
 
-None in particular.
+#### 错误的矢量地图 <!-- omit in toc -->
 
-#### Related Autoware module
+无特别说明。
 
-- [Intersection - Autoware Universe Documentation](https://autowarefoundation.github.io/autoware_universe/main/planning/behavior_velocity_planner/autoware_behavior_velocity_intersection_module/)
+<a id="related-autoware-module_7"></a>
+
+#### 相关 Autoware 模块
+
+- [交叉路口 - Autoware Universe 文档](https://autowarefoundation.github.io/autoware_universe/main/planning/behavior_velocity_planner/autoware_behavior_velocity_intersection_module/)
 
 ---
 
-### vm-03-10 Right of way (with signal)
+<a id="vm-03-10-right-of-way-with-signal"></a>
 
-#### Detail of requirements <!-- omit in toc -->
+### vm-03-10 路权（有信号灯）
 
-Set the regulatory element 'right_of_way' for Lanelets that meet all of the following criteria:
+<a id="detail-of-requirements_9"></a>
 
-- Lanelets in the intersection with a _turn_direction_ of _right_ or _left_.
-- Lanelets that intersect with the vehicle's lanelet.
-- There are traffic lights at the intersection.
+#### 需求详情 <!-- omit in toc -->
 
-Set to _yield_ those lanelets in the intersection that intersect the vehicle's lanelet, and set to _yield_ those lanelets that do not share the same signal change timing with the vehicle. Also, if the vehicle is turning left, set the opposing vehicle's right-turn lane to _yield_. There is no need to set _yield_ for lanelets where the vehicle goes straight (_turn_direction:straight_).
+为满足以下全部条件的 Lanelet 设置监管元素 'right_of_way'：
+
+- 交叉路口内 _turn_direction_ 为 _right_ 或 _left_ 的 Lanelet。
+- 与自车 lanelet 相交的 Lanelet。
+- 交叉路口设有交通信号灯。
+
+将交叉路口内与自车 lanelet 相交的 lanelet 设置为 _yield_，并将信号切换时序与自车不同的 lanelet 设置为 _yield_。此外，如果自车左转，应将对向车辆的右转车道设置为 _yield_。自车直行的 lanelet（_turn_direction:straight_）无需设置 _yield_。
 
 ![svg](../assets/vm-03-10_1.svg)
 
-#### Preferred vector map <!-- omit in toc -->
+<a id="preferred-vector-map_9"></a>
 
-##### The vehicle turns left <!-- omit in toc -->
+#### 推荐的矢量地图 <!-- omit in toc -->
+
+<a id="the-vehicle-turns-left"></a>
+
+##### 自车左转 <!-- omit in toc -->
 
 ![svg](../assets/vm-03-10_2.svg)
 
-##### The vehicle turns right <!-- omit in toc -->
+<a id="the-vehicle-turns-right"></a>
+
+##### 自车右转 <!-- omit in toc -->
 
 ![svg](../assets/vm-03-10_3.svg)
 
-#### Incorrect vector map <!-- omit in toc -->
+<a id="incorrect-vector-map_9"></a>
 
-None in particular.
+#### 错误的矢量地图 <!-- omit in toc -->
 
-#### Related Autoware module
+无特别说明。
 
-- [Intersection - Autoware Universe Documentation](https://autowarefoundation.github.io/autoware_universe/main/planning/behavior_velocity_planner/autoware_behavior_velocity_intersection_module/)
+<a id="related-autoware-module_8"></a>
+
+#### 相关 Autoware 模块
+
+- [交叉路口 - Autoware Universe 文档](https://autowarefoundation.github.io/autoware_universe/main/planning/behavior_velocity_planner/autoware_behavior_velocity_intersection_module/)
 
 ---
 
-### vm-03-11 Right of way (without signal)
+<a id="vm-03-11-right-of-way-without-signal"></a>
 
-#### Detail of requirements <!-- omit in toc -->
+### vm-03-11 路权（无信号灯）
 
-Set the regulatory element 'right_of_way' for Lanelets that meet all of the following criteria:
+<a id="detail-of-requirements_10"></a>
 
-- Lanelets in the intersection with a _turn_direction_ of _right_ or _left_.
-- Lanelets that intersect with the vehicle's lanelet.
-- There are **no** traffic lights at the intersection.
+#### 需求详情 <!-- omit in toc -->
+
+为满足以下全部条件的 Lanelet 设置监管元素 'right_of_way'：
+
+- 交叉路口内 _turn_direction_ 为 _right_ 或 _left_ 的 Lanelet。
+- 与自车 lanelet 相交的 Lanelet。
+- 交叉路口**没有**交通信号灯。
 
 ![svg](../assets/vm-03-11_1.svg)
 
-#### Preferred vector map <!-- omit in toc -->
+<a id="preferred-vector-map_10"></a>
 
-##### ① The vehicle on the priority lane <!-- omit in toc -->
+#### 推荐的矢量地图 <!-- omit in toc -->
+
+<a id="1-the-vehicle-on-the-priority-lane"></a>
+
+##### ① 自车位于优先车道 <!-- omit in toc -->
 
 ![svg](../assets/vm-03-11_2.svg)
 
-##### ② The vehicle on the non-priority lane <!-- omit in toc -->
+<a id="2-the-vehicle-on-the-non-priority-lane"></a>
 
-A regulatory element is not necessary. However, when the vehicle goes straight, it has relative priority over other vehicles turning right from the opposing non-priority road. Therefore, settings for _right_of_way_ and _yield_ are required in this case.
+##### ② 自车位于非优先车道 <!-- omit in toc -->
+
+无需监管元素。但当自车直行时，相对于从对向非优先道路右转的其他车辆，自车具有优先权。因此，此时需要设置 _right_of_way_ 和 _yield_。
 
 ![svg](../assets/vm-03-11_3.svg)
 
-#### Incorrect vector map <!-- omit in toc -->
+<a id="incorrect-vector-map_10"></a>
 
-None in particular.
+#### 错误的矢量地图 <!-- omit in toc -->
 
-#### Related Autoware module
+无特别说明。
 
-- [Intersection - Autoware Universe Documentation](https://autowarefoundation.github.io/autoware_universe/main/planning/behavior_velocity_planner/autoware_behavior_velocity_intersection_module/)
+<a id="related-autoware-module_9"></a>
 
----
+#### 相关 Autoware 模块
 
-### vm-03-12 Right of way supplements
-
-#### Detail of requirements <!-- omit in toc -->
-
-##### Why it's necessary to configure 'right_of_way' <!-- omit in toc -->
-
-Without the 'right_of_way' setting, Autoware interprets other lanes intersecting its path as having priority. Therefore, as long as there are other vehicles in the crossing lane, Autoware cannot enter the intersection regardless of signal indications.
-
-An example of a problem: Even when our signal allows proceeding, our vehicle waits beforehand if other vehicles are waiting at a red light where the opposing lane intersects with a right-turn lane.
-
-#### Preferred vector map <!-- omit in toc -->
-
-None in particular.
-
-#### Incorrect vector map <!-- omit in toc -->
-
-None in particular.
-
-#### Related Autoware module
-
-- [Intersection - Autoware Universe Documentation](https://autowarefoundation.github.io/autoware_universe/main/planning/behavior_velocity_planner/autoware_behavior_velocity_intersection_module/)
+- [交叉路口 - Autoware Universe 文档](https://autowarefoundation.github.io/autoware_universe/main/planning/behavior_velocity_planner/autoware_behavior_velocity_intersection_module/)
 
 ---
 
-### vm-03-13 Merging from private area, sidewalk
+<a id="vm-03-12-right-of-way-supplements"></a>
 
-#### Detail of requirements <!-- omit in toc -->
+### vm-03-12 路权补充说明
 
-Set _location=private_ for Lanelets within private property.
+<a id="detail-of-requirements_11"></a>
 
-When a road, which enters or exits private property, intersects with a sidewalk, create a Lanelet for that sidewalk (_subtype:walkway_).
+#### 需求详情 <!-- omit in toc -->
 
-##### Behavior of Autoware： <!-- omit in toc -->
+<a id="why-its-necessary-to-configure-right_of_way"></a>
 
-- The vehicle stops temporarily before entering the sidewalk.
-- The vehicle comes to a stop before merging onto the public road.
+##### 为什么必须配置 'right_of_way' <!-- omit in toc -->
+
+未设置 'right_of_way' 时，Autoware 会认为与其路径相交的其他车道具有优先权。因此，只要交叉车道上存在其他车辆，无论信号灯如何指示，Autoware 都无法进入交叉路口。
+
+问题示例：即使自车信号灯允许通行，如果其他车辆在对向车道与右转车道的交汇处等待红灯，自车仍会提前等待。
+
+<a id="preferred-vector-map_11"></a>
+
+#### 推荐的矢量地图 <!-- omit in toc -->
+
+无特别说明。
+
+<a id="incorrect-vector-map_11"></a>
+
+#### 错误的矢量地图 <!-- omit in toc -->
+
+无特别说明。
+
+<a id="related-autoware-module_10"></a>
+
+#### 相关 Autoware 模块
+
+- [交叉路口 - Autoware Universe 文档](https://autowarefoundation.github.io/autoware_universe/main/planning/behavior_velocity_planner/autoware_behavior_velocity_intersection_module/)
+
+---
+
+<a id="vm-03-13-merging-from-private-area-sidewalk"></a>
+
+### vm-03-13 从私人区域汇入及人行道
+
+<a id="detail-of-requirements_12"></a>
+
+#### 需求详情 <!-- omit in toc -->
+
+为私人区域内的 Lanelet 设置 _location=private_。
+
+当出入私人区域的道路与人行道相交时，为该人行道创建 Lanelet（_subtype:walkway_）。
+
+<a id="behavior-of-autoware_2"></a>
+
+##### Autoware 的行为： <!-- omit in toc -->
+
+- 车辆在进入人行道前临时停车。
+- 车辆在汇入公共道路前停车。
 
 ![svg](../assets/vm-03-13_1.svg)
 
-#### Preferred vector map <!-- omit in toc -->
+<a id="preferred-vector-map_12"></a>
+
+#### 推荐的矢量地图 <!-- omit in toc -->
 
 ![svg](../assets/vm-03-13_2.svg)
 
-#### Incorrect vector map <!-- omit in toc -->
+<a id="incorrect-vector-map_12"></a>
 
-None in particular.
+#### 错误的矢量地图 <!-- omit in toc -->
 
-#### Related Autoware module
+无特别说明。
 
-- [Intersection - Autoware Universe Documentation](https://autowarefoundation.github.io/autoware_universe/main/planning/behavior_velocity_planner/autoware_behavior_velocity_intersection_module/)
+<a id="related-autoware-module_11"></a>
+
+#### 相关 Autoware 模块
+
+- [交叉路口 - Autoware Universe 文档](https://autowarefoundation.github.io/autoware_universe/main/planning/behavior_velocity_planner/autoware_behavior_velocity_intersection_module/)
 
 ---
 
-### vm-03-14 Road marking
+<a id="vm-03-14-road-marking"></a>
 
-#### Detail of requirements <!-- omit in toc -->
+### vm-03-14 道路标线
 
-If there is a stop line ahead of the guide lines in the intersection, ensure the following:
+<a id="detail-of-requirements_13"></a>
 
-- Create a Lanelet for the guide lines.
-- The Lanelet for the guide lines references a Regulatory Element (_subtype:road_marking_).
-- The Regulatory Element refers to the _stop_line_'s Linestring."
+#### 需求详情 <!-- omit in toc -->
 
-Refer to [Web.Auto Documentation - Creation of Regulatory Element](https://docs.web.auto/en/user-manuals/vector-map-builder/how-to-use/edit-maps#creation-of-regulatory-element) for the method of creation in Vector Map Builder.
+如果交叉路口引导线前方有停止线，请确保以下设置：
+
+- 为引导线创建 Lanelet。
+- 引导线的 Lanelet 引用 Regulatory Element（_subtype:road_marking_）。
+- 该监管元素引用 _stop_line_ 的 Linestring。
+
+有关在 Vector Map Builder 中的创建方法，请参阅 [Web.Auto 文档 - 创建监管元素](https://docs.web.auto/en/user-manuals/vector-map-builder/how-to-use/edit-maps#creation-of-regulatory-element)。
 
 ![svg](../assets/vm-03-14_1.svg)
 
-#### Preferred vector map <!-- omit in toc -->
+<a id="preferred-vector-map_13"></a>
+
+#### 推荐的矢量地图 <!-- omit in toc -->
 
 ![svg](../assets/vm-03-14_2.svg)
 
-#### Incorrect vector map <!-- omit in toc -->
+<a id="incorrect-vector-map_13"></a>
 
-None in particular.
+#### 错误的矢量地图 <!-- omit in toc -->
 
-#### Related Autoware module
+无特别说明。
 
-- [Intersection - Autoware Universe Documentation](https://autowarefoundation.github.io/autoware_universe/main/planning/behavior_velocity_planner/autoware_behavior_velocity_intersection_module/)
+<a id="related-autoware-module_12"></a>
+
+#### 相关 Autoware 模块
+
+- [交叉路口 - Autoware Universe 文档](https://autowarefoundation.github.io/autoware_universe/main/planning/behavior_velocity_planner/autoware_behavior_velocity_intersection_module/)
 
 ---
 
-### vm-03-15 Exclusive bicycle lane
+<a id="vm-03-15-exclusive-bicycle-lane"></a>
 
-#### Detail of requirements <!-- omit in toc -->
+### vm-03-15 自行车专用道
 
-If an exclusive bicycle lane exists, create a Lanelet (_subtype:road_). The section adjoining the road should share a Linestring. For bicycle lanes at intersections, assign a yield*lane designation beneath the \_right_of_way* for lanes that intersect with the vehicle's left-turn lane. (Refer to [vm-03-10](./category_intersection.md#vm-03-10-right-of-way-with-signal) and [vm-03-11](./category_intersection.md#vm-03-11-right-of-way-without-signal) for right_of_way).
+<a id="detail-of-requirements_14"></a>
 
-In addition, set _lane_change = no_ as OptionalTags.
+#### 需求详情 <!-- omit in toc -->
 
-##### Behavior of Autoware： <!-- omit in toc -->
+如果存在自行车专用道，创建 Lanelet（_subtype:road_）。与道路相邻的部分应共享 Linestring。对于交叉路口内与自车左转车道相交的自行车道，应在 _right_of_way_ 下指定 yield_lane。（有关 right_of_way，请参阅 [vm-03-10](./category_intersection.md#vm-03-10-right-of-way-with-signal) 和 [vm-03-11](./category_intersection.md#vm-03-11-right-of-way-without-signal)。）
 
-The blind spot (entanglement check) feature verifies the lanelet(subtype:road) and decides if the vehicle can proceed.
+此外，将 _lane_change = no_ 设置为 OptionalTags。
+
+<a id="behavior-of-autoware_3"></a>
+
+##### Autoware 的行为： <!-- omit in toc -->
+
+盲区检测（卷入检查）功能检查 lanelet(subtype:road)，并判断车辆能否继续前进。
 
 ![png](../assets/vm-03-15_1.png)
 
 ![svg](../assets/vm-03-15_2.svg)
 
-#### Preferred vector map <!-- omit in toc -->
+<a id="preferred-vector-map_14"></a>
+
+#### 推荐的矢量地图 <!-- omit in toc -->
 
 ![svg](../assets/vm-03-15_3.svg)
 
-#### Incorrect vector map <!-- omit in toc -->
+<a id="incorrect-vector-map_14"></a>
 
-None in particular.
+#### 错误的矢量地图 <!-- omit in toc -->
 
-#### Related Autoware module
+无特别说明。
 
-- [Blind Spot design - Autoware Universe Documentation](https://autowarefoundation.github.io/autoware_universe/main/planning/behavior_velocity_planner/autoware_behavior_velocity_blind_spot_module/)
+<a id="related-autoware-module_13"></a>
+
+#### 相关 Autoware 模块
+
+- [盲区设计 - Autoware Universe 文档](https://autowarefoundation.github.io/autoware_universe/main/planning/behavior_velocity_planner/autoware_behavior_velocity_blind_spot_module/)

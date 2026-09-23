@@ -1,20 +1,28 @@
-# Localization
+<a id="localization"></a>
 
-## Related API
+# 定位
+
+<a id="related-api"></a>
+
+## 相关 API
 
 - {{ link_ad_api('/api/localization/initialization_state') }}
 - {{ link_ad_api('/api/localization/initialize') }}
 
-## Description
+<a id="description"></a>
 
-This API manages the initialization of localization. Autoware requires a global pose as the initial guess for localization.
+## 说明
 
-## States
+此 API 管理定位初始化。Autoware 需要一个全局位姿作为定位的初始估计。
 
-![localization-initialization-state](localization/state.drawio.svg)
+<a id="states"></a>
 
-| State         | Description                                                                      |
+## 状态
+
+![定位初始化状态](localization/state.drawio.svg)
+
+| 状态         | 说明                                                                      |
 | ------------- | -------------------------------------------------------------------------------- |
-| UNINITIALIZED | Localization is not initialized. Waiting for a global pose as the initial guess. |
-| INITIALIZING  | Localization is initializing.                                                    |
-| INITIALIZED   | Localization is initialized. Initialization can be requested again if necessary. |
+| UNINITIALIZED | 定位尚未初始化，正在等待用作初始估计的全局位姿。 |
+| INITIALIZING  | 定位正在初始化。                                                    |
+| INITIALIZED   | 定位已初始化。必要时可以再次请求初始化。 |

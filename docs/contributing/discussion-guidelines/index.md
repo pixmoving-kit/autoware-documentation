@@ -1,10 +1,12 @@
-# Discussion guidelines
+<a id="discussion-guidelines"></a>
+
+# 讨论指南
 
 !!! warning
 
-    Under Construction
+    正在编写
 
-Refer to the following links for now:
+目前请参考以下链接：
 
 - <https://docs.github.com/en/discussions/guides/best-practices-for-community-conversations-on-github>
 - <https://opensource.guide/how-to-contribute/#communicating-effectively>

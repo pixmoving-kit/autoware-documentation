@@ -6,14 +6,14 @@ type:
   name: autoware_adapi_v1_msgs/srv/GetDoorLayout
   res:
     - name: status
-      text: response status
+      text: 响应状态
     - name: doors.roles
-      text: The roles of the door in the service the vehicle provides.
+      text: 车门在车辆所提供服务中的用途。
     - name: doors.description
-      text: The description of the door for display in the interface.
+      text: 用于界面显示的车门说明。
 ---
 
 {% extends 'design/autoware-architecture-v1/interfaces/templates/autoware-interface.jinja2' %}
 {% block description %}
-Get the door layout. It is an array of roles and descriptions for each door.
+获取车门布局，返回包含各车门用途和说明的数组。
 {% endblock %}

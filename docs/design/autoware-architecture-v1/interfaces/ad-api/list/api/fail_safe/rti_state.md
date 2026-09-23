@@ -6,13 +6,13 @@ type:
   name: autoware_adapi_v1_msgs/msg/RtiState
   msg:
     - name: request
-      text: The flag for whether RTI is requested.
+      text: 表示是否请求 RTI 的标志。
     - name: message
-      text: The message such as reasons for RTI.
+      text: 包含 RTI 原因等信息的消息。
 ---
 
 {% extends 'design/autoware-architecture-v1/interfaces/templates/autoware-interface.jinja2' %}
 {% block description %}
-Get the RTI state.
-For details, see the [fail-safe](../../../features/fail-safe.md).
+获取 RTI 状态。
+详情请参阅[故障安全](../../../features/fail-safe.md)。
 {% endblock %}

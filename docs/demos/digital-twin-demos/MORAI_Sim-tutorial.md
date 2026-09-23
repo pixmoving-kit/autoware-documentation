@@ -2,48 +2,56 @@
 
 !!! note
 
-    Any kind of for-profit activity with the trial version of the MORAI SIM:Drive is strictly prohibited.
+    严禁使用 MORAI SIM:Drive 试用版开展任何营利活动。
 
-## Hardware requirements
+<a id="hardware-requirements"></a>
 
-| Minimum PC Specs |                                                      |
+## 硬件要求
+
+| 最低 PC 配置 |                                                      |
 | :--------------- | :--------------------------------------------------- |
-| OS               | Windows 10, Ubuntu 20.04, Ubuntu 18.04, Ubuntu 16.04 |
-| CPU              | Intel i5-9600KF or AMD Ryzen 5 3500X                 |
-| RAM              | DDR4 16GB                                            |
+| 操作系统               | Windows 10, Ubuntu 20.04, Ubuntu 18.04, Ubuntu 16.04 |
+| CPU              | Intel i5-9600KF 或 AMD Ryzen 5 3500X                 |
+| 内存              | DDR4 16GB                                            |
 | GPU              | RTX2060 Super                                        |
 
-| Required PC Specs |                                                      |
+| 所需 PC 配置 |                                                      |
 | :---------------- | :--------------------------------------------------- |
-| OS                | Windows 10, Ubuntu 20.04, Ubuntu 18.04, Ubuntu 16.04 |
-| CPU               | Intel i9-9900K or AMD Ryzen 7 3700X (or higher)      |
-| RAM               | DDR4 64GB (or higher)                                |
-| GPU               | RTX2080Ti or higher                                  |
+| 操作系统                | Windows 10, Ubuntu 20.04, Ubuntu 18.04, Ubuntu 16.04 |
+| CPU               | Intel i9-9900K 或 AMD Ryzen 7 3700X（或更高）      |
+| 内存               | DDR4 64GB（或更高）                                |
+| GPU               | RTX2080Ti 或更高                                  |
 
-## Application and Download
+<a id="application-and-download"></a>
 
-Only for AWF developers, trial license for 3 months can be issued.
-Download the [application form](https://drive.google.com/file/d/1SO9hAr2-828MNl410xSABp3znHaR-AWV/view?usp=sharing) and send to [Hyeongseok Jeon](#technical-support)
+## 申请与下载
 
-After the trial license is issued, you can login to MORAI Sim:Drive via Launchers ([Windows](https://drive.google.com/file/d/1NMd2kInUALXYosRMtOHDPPGou9yCWMKK/view?usp=sharing)/[Ubuntu](https://drive.google.com/file/d/1qmA_1eUDyNJ85AeAzSxZRQaDbR_Sc76R/view?usp=sharing))
+仅面向 AWF 开发者，可签发为期 3 个月的试用许可证。
+下载[申请表](https://drive.google.com/file/d/1SO9hAr2-828MNl410xSABp3znHaR-AWV/view?usp=sharing)，并发送给 [Hyeongseok Jeon](#technical-support)。
 
-CAUTION: Do not use the Launchers in the following manual
+试用许可证签发后，可通过启动器（[Windows](https://drive.google.com/file/d/1NMd2kInUALXYosRMtOHDPPGou9yCWMKK/view?usp=sharing)/[Ubuntu](https://drive.google.com/file/d/1qmA_1eUDyNJ85AeAzSxZRQaDbR_Sc76R/view?usp=sharing)）登录 MORAI Sim:Drive。
 
-## Technical Documents
+注意：请勿使用以下手册中提供的启动器。
 
-as Oct. 2022, our simulation version is _ver.22.R3_ but the english manual is under construction.
+<a id="technical-documents"></a>
 
-Be aware that the following manuals are for _ver.22.R2_
+## 技术文档
 
-- [MORAI Sim:Drive Manual](https://morai-sim--drive-user-manual--en-22-r2.scrollhelp.site/msdume2/)
-- [ITRI BUS Odd tutorial](https://morai.atlassian.net/wiki/external/1158610949/ZDE2Mjk0MTc5OTAxNGZmZjg3ZDMxZjQxNzFkNTgxYWM?atlOrigin=eyJpIjoiNDc1OGNkMjkxMTMzNDVjOGExMGFiMDY0M2ZmNzkwMjkiLCJwIjoiYyJ9)
-- [Tutorial for rosbag replay with Tacoma Airport](https://morai.atlassian.net/wiki/external/1098547535/MTJjMDRmZDlhZDhiNDI2YzhkNzgzMWJiMjNiYTYxMzc?atlOrigin=eyJpIjoiZTc5NzBlM2VkMmFiNDZlM2JlZjk1N2Q3ZjZjYWYwZjMiLCJwIjoiYyJ9)
+截至 2022 年 10 月，仿真软件版本为 _ver.22.R3_，但英文手册仍在编写中。
 
-## Technical Support
+请注意，以下手册适用于 _ver.22.R2_。
+
+- [MORAI Sim:Drive 手册](https://morai-sim--drive-user-manual--en-22-r2.scrollhelp.site/msdume2/)
+- [ITRI BUS ODD 教程](https://morai.atlassian.net/wiki/external/1158610949/ZDE2Mjk0MTc5OTAxNGZmZjg3ZDMxZjQxNzFkNTgxYWM?atlOrigin=eyJpIjoiNDc1OGNkMjkxMTMzNDVjOGExMGFiMDY0M2ZmNzkwMjkiLCJwIjoiYyJ9)
+- [Tacoma 机场 rosbag 回放教程](https://morai.atlassian.net/wiki/external/1098547535/MTJjMDRmZDlhZDhiNDI2YzhkNzgzMWJiMjNiYTYxMzc?atlOrigin=eyJpIjoiZTc5NzBlM2VkMmFiNDZlM2JlZjk1N2Q3ZjZjYWYwZjMiLCJwIjoiYyJ9)
+
+<a id="technical-support"></a>
+
+## 技术支持
 
 <!-- cspell: ignore Hyeongseok　Jeon　-->
 
-Hyeongseok Jeon will give full technical support
+Hyeongseok Jeon 将提供全面的技术支持。
 
 - <hsjeon@morai.ai>
-- Hyeongseok Jeon#2355 in Discord
+- Discord：Hyeongseok Jeon#2355

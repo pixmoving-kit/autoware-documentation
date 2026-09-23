@@ -1,40 +1,50 @@
-# Planning simulator demo with Autoware Launch GUI
+<a id="planning-simulator-demo-with-autoware-launch-gui"></a>
 
-This section provides a step-by-step guide on using the Autoware Launch GUI for planning simulations, offering an alternative to the command-line instructions provided in the Basic simulations section.
+# 使用 Autoware Launch GUI 进行规划仿真演示
 
-## Getting Started with Autoware Launch GUI
+本节逐步介绍如何使用 Autoware Launch GUI 进行规划仿真，为基础仿真章节中的命令行操作提供另一种方式。
 
-1. **Installation:** Ensure you have installed the Autoware Launch GUI. [Installation instructions](https://github.com/autowarefoundation/autoware-launch-gui#installation).
+<a id="getting-started-with-autoware-launch-gui"></a>
 
-2. **Launching the GUI:** Open the Autoware Launch GUI from your applications menu.
+## Autoware Launch GUI 入门
 
-   ![GUI screenshot for launching the GUI](images/launch-gui/launch_gui_main.png)
+1. **安装：** 确保已安装 Autoware Launch GUI。参阅[安装说明](https://github.com/autowarefoundation/autoware-launch-gui#installation)。
 
-## Launching a Planning Simulation
+2. **启动 GUI：** 从应用程序菜单中打开 Autoware Launch GUI。
 
-### Lane Driving Scenario
+   ![启动 GUI 的界面截图](images/launch-gui/launch_gui_main.png)
 
-1. **Set Autoware Path:** In the GUI, set the path to your Autoware installation.
+<a id="launching-a-planning-simulation"></a>
 
-   ![GUI_screenshot_for_setting_Autoware_path](images/launch-gui/launch_gui_setup.png)
+## 启动规划仿真
 
-2. **Select Launch File:** Choose `planning_simulator.launch.xml` for the lane driving scenario.
+<a id="lane-driving-scenario"></a>
 
-   ![GUI screenshot for selecting launch file](images/launch-gui/selecting_launch_file.png)
+### 车道内行驶场景
 
-3. **Customize Parameters:** Adjust parameters such as `map_path`, `vehicle_model`, and `sensor_model` as needed.
+1. **设置 Autoware 路径：** 在 GUI 中设置 Autoware 的安装路径。
 
-   ![GUI screenshot for customizing parameters](images/launch-gui/customizing-parameters1.png)
-   ![GUI screenshot for customizing parameters](images/launch-gui/customizing-parameters2.png)
+   ![设置 Autoware 路径的界面截图](images/launch-gui/launch_gui_setup.png)
 
-4. **Start Simulation:** Click the launch button to start the simulation.
+2. **选择启动文件：** 为车道内行驶场景选择 `planning_simulator.launch.xml`。
 
-   ![GUI screenshot for starting simulation](images/launch-gui/starting_simulation.png)
+   ![选择启动文件的界面截图](images/launch-gui/selecting_launch_file.png)
 
-5. **Any Scenario:** From here, you can follow the instructions in the [Planning Scenario Simulations](index.md#basic-simulations).
+3. **自定义参数：** 根据需要调整 `map_path`、`vehicle_model` 和 `sensor_model` 等参数。
 
-## Monitoring and Managing the Simulation
+   ![自定义参数的界面截图](images/launch-gui/customizing-parameters1.png)
+   ![自定义参数的界面截图](images/launch-gui/customizing-parameters2.png)
 
-- **Real-Time Monitoring:** Use the GUI to monitor CPU/Memory usage and Autoware logs in real-time.
-- **Profile Management:** Save your simulation profiles for quick access in future simulations.
-- **Adjusting Parameters:** Easily modify simulation parameters on-the-fly through the GUI.
+4. **开始仿真：** 点击启动按钮开始仿真。
+
+   ![开始仿真的界面截图](images/launch-gui/starting_simulation.png)
+
+5. **其他场景：** 此后，可以按照[规划场景仿真](index.md#basic-simulations)中的说明操作。
+
+<a id="monitoring-and-managing-the-simulation"></a>
+
+## 监控和管理仿真
+
+- **实时监控：** 使用 GUI 实时监控 CPU／内存使用情况和 Autoware 日志。
+- **配置管理：** 保存仿真配置，便于在后续仿真中快速使用。
+- **调整参数：** 通过 GUI 便捷地动态修改仿真参数。

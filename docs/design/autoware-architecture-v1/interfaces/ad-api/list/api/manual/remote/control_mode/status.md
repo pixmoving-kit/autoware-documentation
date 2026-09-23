@@ -6,10 +6,10 @@ type:
   name: autoware_adapi_v1_msgs/msg/ManualControlModeStatus
   msg:
     - name: stamp
-      text: Timestamp when this message was sent.
+      text: 发送此消息时的时间戳。
 ---
 
 {% extends 'design/autoware-architecture-v1/interfaces/templates/autoware-interface.jinja2' %}
 {% block description %}
-Get the current manual operation mode.
+获取当前的手动操作模式。
 {% endblock %}

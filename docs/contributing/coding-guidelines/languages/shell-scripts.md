@@ -1,10 +1,12 @@
-# Shell scripts
+<a id="shell-scripts"></a>
+
+# Shell 脚本
 
 !!! warning
 
-    Under Construction
+    正在编写
 
-Refer to the following links for now:
+目前请参考以下链接：
 
 - <https://google.github.io/styleguide/shellguide.html>
 - <https://github.com/koalaman/shellcheck>

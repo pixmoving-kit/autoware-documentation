@@ -1,10 +1,12 @@
-# `repositories/*.repos` files
+<a id="repositoriesrepos-files"></a>
 
-Autoware uses **multiple Git repositories** managed through a meta-repository approach.
+# `repositories/*.repos` 文件
 
-The `autoware` repository itself **does not contain the full source code**. Instead, it references many separately maintained repositories.
+Autoware 采用元仓库方式管理**多个 Git 仓库**。
 
-These files reside under [autoware/repositories](https://github.com/autowarefoundation/autoware/blob/main/repositories) directory.
+`autoware` 仓库本身**不包含完整源代码**，而是引用多个独立维护的仓库。
+
+这些文件位于 [autoware/repositories](https://github.com/autowarefoundation/autoware/blob/main/repositories) 目录下。
 
 <div class="grid cards" markdown>
 
@@ -12,89 +14,97 @@ These files reside under [autoware/repositories](https://github.com/autowarefoun
 
   ***
 
-  Holds the references to essential autoware repositories.
+  保存必需的 Autoware 仓库引用。
 
 - `autoware-nightly.repos`
 
   ***
 
-  This sets some of the `autoware.repos` repositories to the main branch for development.
+  将 `autoware.repos` 中的部分仓库设置为用于开发的 main 分支。
 
 - `tools.repos`
 
   ***
 
-  Mainly holds the reference to [autowarefoundation/autoware_tools](https://github.com/autowarefoundation/autoware_tools.git) repository.
+  主要保存 [autowarefoundation/autoware_tools](https://github.com/autowarefoundation/autoware_tools.git) 仓库的引用。
 
 - `tools-nightly.repos`
 
   ***
 
-  Sets the tools repository to the main branch.
+  将工具仓库设置为 main 分支。
 
 - `simulator.repos`
 
   ***
 
-  Holds the reference to [tier4/scenario_simulator_v2](https://github.com/tier4/scenario_simulator_v2.git) repository.
+  保存 [tier4/scenario_simulator_v2](https://github.com/tier4/scenario_simulator_v2.git) 仓库的引用。
 
 - `extra-packages.repos`
 
   ***
 
-  Holds optional repositories. Right now holds the references to [tier4/pacmod_interface](https://github.com/tier4/pacmod_interface.git) and [tier4/tamagawa_imu_driver](https://github.com/tier4/tamagawa_imu_driver.git).
+  保存可选仓库。目前包含 [tier4/pacmod_interface](https://github.com/tier4/pacmod_interface.git) 和 [tier4/tamagawa_imu_driver](https://github.com/tier4/tamagawa_imu_driver.git) 的引用。
 
 - `autoware-index.repos`
 
   ***
 
-  Generated locally from the [Autoware Index](../installation/autoware/autoware-index.md) registry of community packages. It is user-specific and not tracked by git.
+  在本地根据 [Autoware Index](../installation/autoware/autoware-index.md) 社区功能包注册目录生成。它因用户而异，不由 git 跟踪。
 
 </div>
 
-## How to use `.repos` files
+<a id="how-to-use-repos-files"></a>
 
-### Prerequisites
+## 使用 `.repos` 文件
 
-Autoware uses [vcs2l](https://github.com/ros-infrastructure/vcs2l) to construct workspaces.
+<a id="prerequisites"></a>
 
-You can install it with `sudo apt install python3-vcs2l`.
+### 前提条件
 
-### Configurations
+Autoware 使用 [vcs2l](https://github.com/ros-infrastructure/vcs2l) 创建工作空间。
 
-Always first pull the `autoware.repos` since it holds the essential repositories.
+可以通过 `sudo apt install python3-vcs2l` 安装。
+
+<a id="configurations"></a>
+
+### 配置
+
+请始终先导入 `autoware.repos`，因为其中包含必需的仓库。
 
 ```bash
 vcs import src < repositories/autoware.repos
 ```
 
-For most cases, this will be enough.
+对于大多数情况，这已经足够。
 
-If you want to use the nightly versions of the repositories, also pull the `autoware-nightly.repos` file. (It requires `autoware.repos` to be pulled first.)
+如果需要使用仓库的 nightly 版本，还应导入 `autoware-nightly.repos` 文件。（必须先导入 `autoware.repos`。）
 
 ```bash
 vcs import src < repositories/autoware-nightly.repos
 ```
 
-If you want to use the other repositories such as scenario simulator or the tools, pull the corresponding `.repos` files.
+如果需要使用场景仿真器或工具等其他仓库，请导入对应的 `.repos` 文件。
 
-### Managing repositories
+<a id="managing-repositories"></a>
 
-Generally, the following command should be enough to update all the repositories.
+### 管理仓库
+
+通常，以下命令足以更新所有仓库。
 
 ```bash
 vcs pull src
 ```
 
-But if some repositories have not-committed changes, you may need to manage them manually.
+但如果某些仓库存在未提交的修改，可能需要手动处理。
 
 !!! tip
 
-    You can run `vcs status src` to check the status of the repositories.
+    可以运行 `vcs status src` 检查各仓库状态。
 
 !!! note "`vcs help`"
 
-    The available commands are:
+    可用命令如下：
     ```
     branch     Show the branches
     custom     Run a custom command
@@ -109,4 +119,4 @@ But if some repositories have not-committed changes, you may need to manage them
     status     Show the working tree status
     validate   Validate the repository list file
     ```
-    You can call them with `vcs <command> src`.
+    可以通过 `vcs <command> src` 调用。

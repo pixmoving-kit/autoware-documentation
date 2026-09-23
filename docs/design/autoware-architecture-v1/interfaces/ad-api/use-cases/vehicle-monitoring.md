@@ -1,21 +1,29 @@
-# Vehicle monitoring
+<a id="vehicle-monitoring"></a>
 
-AD API provides current vehicle status for remote monitoring, visualization for passengers, etc.
-Use the API below depending on the data you want to monitor.
+# 车辆监控
 
-## Vehicle status
+AD API 提供当前车辆状态，用于远程监控、面向乘客的可视化等。
+根据希望监控的数据，使用以下 API。
 
-The [vehicle status](../features/vehicle-status.md) provides basic information such as kinematics, indicators, and dimensions.
-This allows a remote operator to know the position and velocity of the vehicle.
-For applications such as FMS, it can help find vehicles that need assistance, such as vehicles that are stuck or brake suddenly.
-It is also possible to determine the actual distance to an object from the vehicle dimensions.
+<a id="vehicle-status"></a>
 
-## Planning factors
+## 车辆状态
 
-The [planning factors](../features/planning-factors.md) provides the planning status of the vehicle.
-HMI can use this to warn of sudden movements of the vehicle, and to share the stop reason with passengers for comfortable driving.
+[车辆状态](../features/vehicle-status.md)提供运动学信息、指示灯和尺寸等基本信息。
+远程操作员可据此了解车辆的位置和速度。
+对于 FMS 等应用，这有助于发现停滞或突然制动等需要协助的车辆。
+还可以根据车辆尺寸确定与物体之间的实际距离。
 
-## Detected objects
+<a id="planning-factors"></a>
 
-The [perception](../features/perception.md) provides the objects detected by Autoware.
-HMI can use this to visualize objects around the vehicle.
+## 规划因素
+
+[规划因素](../features/planning-factors.md)提供车辆的规划状态。
+HMI 可利用这些信息提醒车辆即将发生的突然运动，并向乘客说明停车原因，以改善乘坐舒适性。
+
+<a id="detected-objects"></a>
+
+## 检测目标
+
+[感知](../features/perception.md)提供 Autoware 检测到的目标。
+HMI 可利用这些信息将车辆周围的目标可视化。

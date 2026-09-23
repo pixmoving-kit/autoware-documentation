@@ -1,41 +1,47 @@
-# Source installation
+<a id="source-installation"></a>
 
-## Prerequisites
+# 源码安装
 
-- OS
+<a id="prerequisites"></a>
+
+## 前提条件
+
+- 操作系统
   - [Ubuntu 22.04](https://releases.ubuntu.com/22.04/)
 
 - ROS
   - ROS 2 Humble
 
-  For ROS 2 system dependencies, refer to [REP-2000](https://www.ros.org/reps/rep-2000.html).
+  ROS 2 的系统依赖请参阅 [REP-2000](https://www.ros.org/reps/rep-2000.html)。
 
 - [Git](https://git-scm.com/)
-  - [Registering SSH keys to GitHub](https://github.com/settings/keys) is preferable.
+  - 建议[向 GitHub 注册 SSH 密钥](https://github.com/settings/keys)。
 
 ```bash
 sudo apt-get -y update
 sudo apt-get -y install git
 ```
 
-## How to set up a development environment
+<a id="how-to-set-up-a-development-environment"></a>
 
-1. Clone `autowarefoundation/autoware` and move to the directory.
+## 设置开发环境
+
+1. 克隆 `autowarefoundation/autoware` 并进入该目录。
 
    ```bash
    git clone https://github.com/autowarefoundation/autoware.git
    cd autoware
    ```
 
-   By default, this checks out the `main` branch, which contains the latest in-development changes. If you want to use a stable release, check out the corresponding release tag. For example, to use the `1.9.0` release (compatible with both ROS 2 Humble and Jazzy):
+   默认检出 `main` 分支，其中包含正在开发的最新变更。如需使用稳定版本，请检出相应的发布标签。例如，使用 `1.9.0` 版本（同时兼容 ROS 2 Humble 和 Jazzy）：
 
    ```bash
    git checkout 1.9.0
    ```
 
-   The list of available tags can be found on the [autoware releases page](https://github.com/autowarefoundation/autoware/releases).
+   可用标签列表见 [Autoware 发布页面](https://github.com/autowarefoundation/autoware/releases)。
 
-2. If you are installing Autoware for the first time, you can automatically install the dependencies by using the provided Ansible playbook.
+2. 如果是首次安装 Autoware，可以使用提供的 Ansible playbook 自动安装依赖。
 
    ```bash
    bash ansible/scripts/install-ansible.sh
@@ -44,17 +50,17 @@ sudo apt-get -y install git
    ansible-playbook autoware.dev_env.install_dev_env
    ```
 
-   To install without **NVIDIA GPU** support:
+   如需在不支持 **NVIDIA GPU** 的情况下安装：
 
    ```bash
    ansible-playbook autoware.dev_env.install_dev_env --skip-tags nvidia
    ```
 
-   If you encounter any build issues, please consult the [Troubleshooting](../../community/support/troubleshooting/index.md#build-issues) section for assistance.
+   如果遇到构建问题，请参阅[故障排查](../../community/support/troubleshooting/index.md#build-issues)章节。
 
 !!! info
 
-    Before installing NVIDIA libraries, please ensure that you have reviewed and agreed to the licenses.
+    安装 NVIDIA 库之前，请确保已阅读并同意相关许可证。
 
     - [CUDA](https://docs.nvidia.com/cuda/eula/index.html)
     - [cuDNN](https://docs.nvidia.com/deeplearning/cudnn/sla/index.html)
@@ -62,29 +68,31 @@ sudo apt-get -y install git
 
 !!! note
 
-    The following items will be automatically installed. If the ansible script doesn't work or if you already have different versions of dependent libraries installed, please install the following items manually.
+    以下项目会自动安装。如果 Ansible 脚本无法运行，或你已经安装了不同版本的依赖库，请手动安装以下项目。
 
-    - [Install Ansible](https://github.com/autowarefoundation/autoware/tree/main/ansible#ansible-installation)
-    - [Install Build Tools](https://github.com/autowarefoundation/autoware/tree/main/ansible/roles/build_tools#manual-installation)
-    - [Install Dev Tools](https://github.com/autowarefoundation/autoware/tree/main/ansible/roles/dev_tools#manual-installation)
-    - [Install geographiclib](https://github.com/autowarefoundation/autoware/tree/main/ansible/roles/geographiclib#manual-installation)
-    - [Install the RMW Implementation](https://github.com/autowarefoundation/autoware/tree/main/ansible/roles/rmw_implementation#manual-installation)
-    - [Install ROS 2](https://github.com/autowarefoundation/autoware/tree/main/ansible/roles/ros2#manual-installation)
-    - [Install ROS 2 Dev Tools](https://github.com/autowarefoundation/autoware/tree/main/ansible/roles/ros2_dev_tools#manual-installation)
-    - [Install Nvidia CUDA](https://github.com/autowarefoundation/autoware/tree/main/ansible/roles/cuda#manual-installation)
-    - [Install Nvidia cuDNN and TensorRT](https://github.com/autowarefoundation/autoware/tree/main/ansible/roles/tensorrt#manual-installation)
-    - [Install the Autoware RViz Theme](https://github.com/autowarefoundation/autoware/tree/main/ansible/roles/qt5ct_setup#readme) (only affects Autoware RViz)
-    - [Download the Artifacts](https://github.com/autowarefoundation/autoware/tree/main/ansible/roles/artifacts#readme) (for perception inference)
+    - [安装 Ansible](https://github.com/autowarefoundation/autoware/tree/main/ansible#ansible-installation)
+    - [安装构建工具](https://github.com/autowarefoundation/autoware/tree/main/ansible/roles/build_tools#manual-installation)
+    - [安装开发工具](https://github.com/autowarefoundation/autoware/tree/main/ansible/roles/dev_tools#manual-installation)
+    - [安装 geographiclib](https://github.com/autowarefoundation/autoware/tree/main/ansible/roles/geographiclib#manual-installation)
+    - [安装 RMW 实现](https://github.com/autowarefoundation/autoware/tree/main/ansible/roles/rmw_implementation#manual-installation)
+    - [安装 ROS 2](https://github.com/autowarefoundation/autoware/tree/main/ansible/roles/ros2#manual-installation)
+    - [安装 ROS 2 开发工具](https://github.com/autowarefoundation/autoware/tree/main/ansible/roles/ros2_dev_tools#manual-installation)
+    - [安装 Nvidia CUDA](https://github.com/autowarefoundation/autoware/tree/main/ansible/roles/cuda#manual-installation)
+    - [安装 Nvidia cuDNN 和 TensorRT](https://github.com/autowarefoundation/autoware/tree/main/ansible/roles/tensorrt#manual-installation)
+    - [安装 Autoware RViz 主题](https://github.com/autowarefoundation/autoware/tree/main/ansible/roles/qt5ct_setup#readme)（仅影响 Autoware RViz）
+    - [下载制品](https://github.com/autowarefoundation/autoware/tree/main/ansible/roles/artifacts#readme)（用于感知推理）
 
-## How to set up a workspace
+<a id="how-to-set-up-a-workspace"></a>
 
-!!! info "[Using Autoware Build GUI](#using-autoware-build-gui)"
+## 设置工作空间
 
-    If you prefer a graphical user interface (GUI) over the command line for launching and managing your simulations, refer to the `Using Autoware Build GUI` section at the end of this document for a step-by-step guide.
+!!! info "[使用 Autoware Build GUI](#using-autoware-build-gui)"
 
-1. Create the `src` directory and clone repositories into it.
+    如果你更倾向于使用图形用户界面（GUI）而非命令行来启动和管理仿真，请参阅本文末尾“使用 Autoware Build GUI”章节中的分步指南。
 
-   Autoware uses [vcs2l](https://github.com/ros-infrastructure/vcs2l) to construct workspaces.
+1. 创建 `src` 目录并将仓库克隆到其中。
+
+   Autoware 使用 [vcs2l](https://github.com/ros-infrastructure/vcs2l) 创建工作空间。
 
    ```bash
    cd autoware
@@ -92,40 +100,40 @@ sudo apt-get -y install git
    vcs import src < repositories/autoware.repos
    ```
 
-   If you are an active developer, you may also want to pull the nightly repositories, which contain the latest updates:
+   如果你正在积极参与开发，也可以拉取包含最新更新的 nightly 仓库：
 
    ```bash
    vcs import src < repositories/autoware-nightly.repos
    ```
 
-   > ⚠️ Note: The nightly repositories are unstable and may contain bugs. Use them with caution.
+   > ⚠️ 注意：nightly 仓库不稳定，可能存在缺陷，请谨慎使用。
 
-   Optionally, you may also download the extra repositories that contain drivers for specific hardware, but they are not necessary for building and running Autoware:
+   你还可以选择下载包含特定硬件驱动的额外仓库，但构建和运行 Autoware 并不需要这些仓库：
 
    ```bash
    vcs import src < repositories/extra-packages.repos
    ```
 
-   > ⚠️ You might need to install the dependencies of the extra packages manually.
+   > ⚠️ 你可能需要手动安装额外功能包的依赖。
    >
-   > ➡️ Check the readme of the extra packages for more information.
+   > ➡️ 详情请查看额外功能包的 readme。
 
-2. Add community packages to your workspace. _(optional)_ <span class="aw-badge-new">NEW</span>
+2. 将社区功能包添加到工作空间。_（可选）_ <span class="aw-badge-new">新增</span>
 
-   The [Autoware Index](autoware-index.md) is a registry of community packages that extend Autoware, each built and tested against the latest Autoware release.
-   Pick packages on its [browse site](https://autowarefoundation.github.io/autoware-index/) or with `aw-index-cli` to generate `repositories/autoware-index.repos`, then import it the same way:
+   [Autoware Index](autoware-index.md) 是用于扩展 Autoware 的社区功能包注册目录，其中的每个功能包都会基于最新 Autoware 版本进行构建和测试。
+   在其[浏览网站](https://autowarefoundation.github.io/autoware-index/)上或通过 `aw-index-cli` 选择功能包，生成 `repositories/autoware-index.repos`，然后以相同方式导入：
 
    ```bash
    vcs import src < repositories/autoware-index.repos
    ```
 
-   > ➡️ See the [Autoware Index](autoware-index.md) page for the full guide.
+   > ➡️ 完整指南请参阅 [Autoware Index](autoware-index.md) 页面。
 
-3. Install dependent ROS packages.
+3. 安装依赖的 ROS 功能包。
 
-   Autoware requires some ROS 2 packages in addition to the core components.
-   The tool `rosdep` allows an automatic search and installation of such dependencies.
-   You might need to run `rosdep update` before `rosdep install`.
+   除核心组件外，Autoware 还需要一些 ROS 2 功能包。
+   `rosdep` 工具可以自动查找并安装这些依赖。
+   运行 `rosdep install` 前，可能需要先运行 `rosdep update`。
 
    ```bash
    source /opt/ros/humble/setup.bash
@@ -135,41 +143,43 @@ sudo apt-get -y install git
    rosdep install -y --from-paths src --ignore-src --rosdistro $ROS_DISTRO
    ```
 
-4. [Install and set up ccache to speed up consecutive builds](../../tutorials/others/advanced-usage-of-colcon.md#using-ccache-to-speed-up-recompilation). _(optional but highly recommended)_
+4. [安装并设置 ccache，以加快后续构建速度](../../tutorials/others/advanced-usage-of-colcon.md#using-ccache-to-speed-up-recompilation)。_（可选，但强烈推荐）_
 
-5. Build the workspace.
+5. 构建工作空间。
 
-   Autoware uses [colcon](https://github.com/colcon) to build workspaces.
-   For more advanced options, refer to the [documentation](https://colcon.readthedocs.io/).
+   Autoware 使用 [colcon](https://github.com/colcon) 构建工作空间。
+   更多高级选项请参阅[文档](https://colcon.readthedocs.io/)。
 
    ```bash
    colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release
    ```
 
-   If there is any build issue, refer to [Troubleshooting](../../community/support/troubleshooting/index.md#build-issues).
+   如果遇到构建问题，请参阅[故障排查](../../community/support/troubleshooting/index.md#build-issues)。
 
-6. Follow the steps in [Network Configuration](../../installation/additional-settings-for-developers/network-configuration/index.md) before running Autoware.
+6. 运行 Autoware 前，请完成[网络配置](../../installation/additional-settings-for-developers/network-configuration/index.md)中的步骤。
 
-7. Apply the settings recommended in [Console settings for ROS 2](../../installation/additional-settings-for-developers/console-settings.md) for a better development experience. _(optional)_
+7. 应用 [ROS 2 控制台设置](../../installation/additional-settings-for-developers/console-settings.md)中的推荐设置，以改善开发体验。_（可选）_
 
-## How to update a workspace
+<a id="how-to-update-a-workspace"></a>
 
-1. Update the `.repos` file.
+## 更新工作空间
+
+1. 更新 `.repos` 文件。
 
    ```bash
    cd autoware
    git pull <remote> <your branch>
    ```
 
-   `<remote>` is usually `git@github.com:autowarefoundation/autoware.git`
+   `<remote>` 通常为 `git@github.com:autowarefoundation/autoware.git`
 
-2. Update the repositories.
+2. 更新仓库。
 
    ```bash
    vcs import src < repositories/autoware.repos
    ```
 
-   > ⚠️ If you are using nightly repositories, you can also update them.
+   > ⚠️ 如果使用 nightly 仓库，也可以一并更新。
    >
    > ```bash
    > vcs import src < repositories/autoware-nightly.repos
@@ -179,30 +189,30 @@ sudo apt-get -y install git
    vcs pull src
    ```
 
-   For Git users:
-   - `vcs import` is similar to `git checkout`.
-     - Note that it doesn't pull from the remote.
-   - `vcs pull` is similar to `git pull`.
-     - Note that it doesn't switch branches.
+   对于 Git 用户：
+   - `vcs import` 类似于 `git checkout`。
+     - 注意，它不会从远程拉取内容。
+   - `vcs pull` 类似于 `git pull`。
+     - 注意，它不会切换分支。
 
-   For more information, refer to the [official documentation](https://github.com/ros-infrastructure/vcs2l).
+   更多信息请参阅[官方文档](https://github.com/ros-infrastructure/vcs2l)。
 
-   It might be the case that dependencies imported via `vcs import` have been moved/removed.
-   Vcs2l does not currently handle those cases, so if builds fail after `vcs import`, cleaning
-   and re-importing all dependencies may be necessary:
+   通过 `vcs import` 导入的依赖可能已被移动或移除。
+   Vcs2l 目前无法处理这些情况，因此，如果在 `vcs import` 后构建失败，可能需要清理
+   并重新导入所有依赖：
 
    ```bash
    rm -rf src/*
    vcs import src < repositories/autoware.repos
    ```
 
-   > ⚠️ If you are using nightly repositories, import them as well.
+   > ⚠️ 如果使用 nightly 仓库，也请一并导入。
    >
    > ```bash
    > vcs import src < repositories/autoware-nightly.repos
    > ```
 
-3. Install dependent ROS packages.
+3. 安装依赖的 ROS 功能包。
 
    ```bash
    source /opt/ros/humble/setup.bash
@@ -212,42 +222,48 @@ sudo apt-get -y install git
    rosdep install -y --from-paths src --ignore-src --rosdistro $ROS_DISTRO
    ```
 
-4. Build the workspace.
+4. 构建工作空间。
 
    ```bash
    colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release
    ```
 
-## Using Autoware Build GUI
+<a id="using-autoware-build-gui"></a>
 
-In addition to the traditional command-line methods of building Autoware packages, developers and users can leverage the Autoware Build GUI for a more streamlined and user-friendly experience. This GUI application simplifies the process of building and managing Autoware packages.
+## 使用 Autoware Build GUI
 
-### Integration with Autoware source installation
+除了通过传统命令行方式构建 Autoware 功能包，开发者和用户还可以使用 Autoware Build GUI 获得更简便、友好的操作体验。该 GUI 应用简化了 Autoware 功能包的构建和管理流程。
 
-When using the Autoware Build GUI in conjunction with the traditional source installation process:
+<a id="integration-with-autoware-source-installation"></a>
 
-- **Initial Setup**: Follow the standard Autoware source installation guide to set up your environment and workspace.
-- **Using the GUI**: Once the initial setup is complete, you can use the Autoware Build GUI to manage subsequent builds and package updates.
+### 与 Autoware 源码安装流程结合使用
 
-This integration offers a more accessible approach to building and managing Autoware packages, catering to both new users and experienced developers.
+将 Autoware Build GUI 与传统源码安装流程结合使用时：
 
-### Getting started with Autoware Build GUI
+- **初始设置**：按照标准 Autoware 源码安装指南设置环境和工作空间。
+- **使用 GUI**：完成初始设置后，可以使用 Autoware Build GUI 管理后续构建和功能包更新。
 
-1. **Installation:** Ensure you have installed the Autoware Build GUI. [Installation instructions](https://github.com/autowarefoundation/autoware-build-gui#installation).
-2. **Launching the App**: Once installed, launch the Autoware Build GUI.
-   ![Build_GUI_Main](images/build-gui/build_gui_main.png)
-3. **Setting Up**: Set the path to your Autoware folder within the GUI.
-   ![Build_GUI_Setup](images/build-gui/build_gui_setup.png)
-4. **Building Packages**: Select the Autoware packages you wish to build and manage the build process through the GUI.
-   ![Build_GUI_Build](images/build-gui/build_gui_build.png)
+这种结合方式使 Autoware 功能包的构建和管理更加易用，兼顾新用户和有经验的开发者。
 
-   4.1. **Build Configuration**: Choose from a list of default build configurations, or select the packages you wish to build manually.
-   ![Build_GUI_Build_Configuration](images/build-gui/build_gui_build_configuration.png)
+<a id="getting-started-with-autoware-build-gui"></a>
 
-   4.2. **Build Options**: Choose which build type you wish to use, with ability to specify additional build options.
-   ![Build_GUI_Build_Options](images/build-gui/build_gui_build_options.png)
+### Autoware Build GUI 入门
 
-5. **Save and Load**: Save your build configurations for future use, or load a previously saved configuration if you don't wish to build all packages or use one of the default configurations provided.
-   ![Build_GUI_Save](images/build-gui/build_gui_save.png)
-6. **Updating Workspace**: Update your Autoware workspace's packages to the latest version using the GUI or adding Calibration tools to the workspace.
-   ![Build_GUI_Update](images/build-gui/build_gui_update.png)
+1. **安装：** 确保已安装 Autoware Build GUI。参阅[安装说明](https://github.com/autowarefoundation/autoware-build-gui#installation)。
+2. **启动应用**：安装完成后，启动 Autoware Build GUI。
+   ![构建 GUI 主界面](images/build-gui/build_gui_main.png)
+3. **设置**：在 GUI 中设置 Autoware 文件夹的路径。
+   ![构建 GUI 设置](images/build-gui/build_gui_setup.png)
+4. **构建功能包**：选择要构建的 Autoware 功能包，并通过 GUI 管理构建过程。
+   ![构建 GUI 构建操作](images/build-gui/build_gui_build.png)
+
+   4.1. **构建配置**：从默认构建配置列表中选择，或手动选择要构建的功能包。
+   ![构建 GUI 构建配置](images/build-gui/build_gui_build_configuration.png)
+
+   4.2. **构建选项**：选择构建类型，也可以指定额外的构建选项。
+   ![构建 GUI 构建选项](images/build-gui/build_gui_build_options.png)
+
+5. **保存和加载**：保存构建配置供以后使用；如果不想构建所有功能包或使用提供的默认配置，也可以加载此前保存的配置。
+   ![构建 GUI 保存配置](images/build-gui/build_gui_save.png)
+6. **更新工作空间**：使用 GUI 将 Autoware 工作空间中的功能包更新到最新版本，或将标定工具添加到工作空间。
+   ![构建 GUI 更新工作空间](images/build-gui/build_gui_update.png)

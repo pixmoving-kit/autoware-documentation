@@ -6,23 +6,23 @@ type:
   name: autoware_adapi_v1_msgs/msg/VelocityFactorArray
   msg:
     - name: factors.pose
-      text: The base link pose related to the velocity factor.
+      text: 与速度因素相关的 base_link 位姿。
     - name: factors.distance
-      text: The distance from the base link to the above pose.
+      text: 从 base_link 到上述位姿的距离。
     - name: factors.status
-      text: The status of the velocity factor.
+      text: 速度因素的状态。
     - name: factors.behavior
-      text: The behavior type of the velocity factor.
+      text: 速度因素的行为类型。
     - name: factors.sequence
-      text: The sequence type of the velocity factor.
+      text: 速度因素的序列类型。
     - name: factors.detail
-      text: The additional information of the velocity factor.
+      text: 速度因素的附加信息。
     - name: factors.cooperation
-      text: The cooperation status if the module supports.
+      text: 模块支持时提供的协作状态。
 ---
 
 {% extends 'design/autoware-architecture-v1/interfaces/templates/autoware-interface.jinja2' %}
 {% block description %}
-Get the velocity factors, sorted in ascending order of distance.
-For details, see the [planning factors](../../../features/planning-factors.md).
+获取速度因素，并按距离升序排列。
+详情请参阅[规划因素](../../../features/planning-factors.md)。
 {% endblock %}

@@ -1,6 +1,8 @@
-# Lane change scenario
+<a id="lane-change-scenario"></a>
 
-1. Download and unpack Nishishinjuku map.
+# 变道场景
+
+1. 下载并解压 Nishishinjuku 地图。
 
    ```bash
    mkdir -p ~/autoware_data/maps
@@ -8,19 +10,19 @@
    unzip -d ~/autoware_data/maps ~/autoware_data/maps/nishishinjuku_autoware_map.zip
    ```
 
-2. Launch autoware with Nishishinjuku map with following command:
+2. 使用以下命令加载 Nishishinjuku 地图并启动 Autoware：
 
    ```bash
    source ~/autoware/install/setup.bash
    ros2 launch autoware_launch planning_simulator.launch.xml map_path:=$HOME/autoware_data/maps/nishishinjuku_autoware_map vehicle_model:=sample_vehicle sensor_model:=sample_sensor_kit
    ```
 
-   ![open-nishishinjuku-map](images/lane-change/open-nishishinjuku-map.png)
+   ![打开 Nishishinjuku 地图](images/lane-change/open-nishishinjuku-map.png)
 
-3. Set an initial pose and a goal pose in adjacent lanes.
+3. 分别在相邻车道上设置初始位姿和目标位姿。
 
-   ![set-position-and-goal](images/lane-change/set-position-and-goal.png)
+   ![设置位置和目标](images/lane-change/set-position-and-goal.png)
 
-4. Engage the ego vehicle. It will make a lane change along the planned path.
+4. 启用自车自动驾驶。车辆将沿规划路径完成变道。
 
-   ![lane-changing](images/lane-change/lane-changing.png)
+   ![变道](images/lane-change/lane-changing.png)

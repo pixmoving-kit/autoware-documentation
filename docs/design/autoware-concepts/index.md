@@ -1,89 +1,99 @@
-# Autoware concepts
+<a id="autoware-concepts"></a>
 
-The concept of Autoware revolves around providing an open and flexible platform to accelerate the development and deployment of autonomous driving systems. Below is an extended explanation of its key principles.
+# Autoware 概念
 
-**See also:**
+Autoware 的理念是提供开放、灵活的平台，加速自动驾驶系统的开发与部署。以下详细介绍其关键原则。
 
-- [Open Source Philosophy](../../contributing/open-source-philosophy.md)
-- [Autoware System Capabilities](../autoware-system-capabilities.md)
+**另请参阅：**
 
-## Microautonomy Architecture: conceptual Overview
+- [开源理念](../../contributing/open-source-philosophy.md)
+- [Autoware 系统能力](../autoware-system-capabilities.md)
 
-**Microautonomy architecture** is the way Autoware breaks down “autonomous driving” into many small, replaceable
-capabilities rather than one monolithic stack.
-Each capability (e.g., object detection, behavior planning, lane-level routing) is a module with clear inputs and
-outputs, so systems can be composed like building blocks for different vehicles and use cases.
+<a id="microautonomy-architecture-conceptual-overview"></a>
 
-!!! question "What is _microautonomy architecture_?"
+## 微自主架构：概念概述
 
-    In short, it’s a **component-based autonomy design** where driving behaviors are built by _composing many small autonomy modules_ instead of relying on a single, fixed pipeline.
-    This makes it easy to mix, match, and upgrade parts without rewriting the whole system.
+**微自主架构（Microautonomy architecture）**是 Autoware 将“自动驾驶”拆分为许多小型、可替换能力的方式，
+而非构建单一的整体式软件栈。
+每项能力（例如目标检测、行为规划、车道级路线规划）都是具有明确输入和
+输出的模块，因此可像搭积木一样，为不同车辆和使用场景组合系统。
 
-Autoware’s modules are connected through well-defined interfaces, which allows you to **swap or extend individual
-components** while keeping the rest of the system intact. For example, you can replace the default object detection with
-a custom neural network specialized in construction cones, and the downstream tracking, planning, and control modules
-still work as before.
+!!! question "什么是微自主架构？"
 
-!!! example "Composability example"
+    它是一种**基于组件的自主系统设计**，通过_组合多个小型自主模块_构建驾驶行为，而非依赖单一、固定的流水线。
+    因此，无需重写整个系统即可方便地组合、替换和升级各部分。
 
-    - Start with the default perception pipeline
-    - Plug in a dedicated detector for special targets (e.g., cones, forklifts)
-    - Keep the same planner and controller. They just see “objects”, regardless of how they were detected
+Autoware 的模块通过明确的接口连接，使你能够**替换或扩展单个
+组件**，同时保持系统其他部分不变。例如，可以将默认目标检测替换为
+专门检测施工锥桶的自定义神经网络，而下游的跟踪、规划和控制模块
+仍可照常工作。
 
-At a high level, these interfaces come in two flavors:
+!!! example "可组合性示例"
 
-- **Internal component interfaces** connect modules inside Autoware (e.g., perception → planning → control).
-- **External AD APIs** expose Autoware’s capabilities to the outside world (e.g., fleet management, cloud services,
-  infotainment).
+    - 从默认感知流水线开始
+    - 接入面向特殊目标（例如锥桶、叉车）的专用检测器
+    - 保持相同的规划器和控制器。它们只接收“目标”，无需关心目标的检测方式
 
-!!! success "Why this matters for developers and partners"
+总体而言，这些接口分为两类：
 
-    - You can **reuse** core Autoware modules and only customize what’s unique to your product.
-    - You can **incrementally evolve** your stack (swap one module at a time).
-    - Partners can **collaborate around shared, stable interfaces**, contributing components that plug into a common
-      ecosystem.
+- **内部组件接口**连接 Autoware 内部模块（例如感知 → 规划 → 控制）。
+- **外部 AD API**向外部系统开放 Autoware 的能力（例如车队管理、云服务、
+  信息娱乐系统）。
 
-## Core & Universe repository model
+!!! success "对开发者与合作伙伴的价值"
 
-![Autoware Ecosystem](images/autoware_ecosystem.png)
+    - 可以**复用** Autoware 核心模块，只定制产品特有的部分。
+    - 可以**逐步演进**软件栈，每次替换一个模块。
+    - 合作伙伴可以**围绕共享、稳定的接口协作**，贡献能够接入共同
+      生态系统的组件。
 
-Autoware’s software ecosystem is organized into two layers: **Autoware Core** and **Autoware Universe**.
-Together, they balance **quality assurance** with **community-driven innovation**.
+<a id="core-universe-repository-model"></a>
 
-### Autoware Core: The quality-assured base
+## Core 与 Universe 仓库模式
 
-[**Autoware Core**](https://github.com/autowarefoundation/autoware_core) contains the foundational packages maintained by the Autoware Foundation (AWF).
-These packages follow strict development standards—unit tests, integration tests, performance validation, and on-vehicle testing.
-Core serves as the **stable, production-ready platform** that users can rely on for building autonomous driving systems.
+![Autoware 生态系统](images/autoware_ecosystem.png)
 
-!!! success "Core provides:"
+Autoware 的软件生态分为两层：**Autoware Core** 和 **Autoware Universe**。
+两者共同兼顾**质量保障**与**社区驱动的创新**。
 
-    - A vetted, reliable foundation
-    - Consistent APIs and behavior
-    - Maintained, tested, and versioned releases
+<a id="autoware-core-the-quality-assured-base"></a>
 
-### Autoware Universe: The community innovation layer
+### Autoware Core：经过质量保障的基础层
 
-[**Autoware Universe**](https://github.com/autowarefoundation/autoware_universe) is a broader collection of open-source packages contributed by individuals, companies, and research groups.
-These packages are owned and maintained by their original authors, who set their own quality and development practices.
+[**Autoware Core**](https://github.com/autowarefoundation/autoware_core) 包含由 Autoware 基金会（AWF）维护的基础功能包。
+这些功能包遵循严格的开发标准，包括单元测试、集成测试、性能验证和实车测试。
+Core 是用户构建自动驾驶系统时可以信赖的**稳定、可用于生产环境的平台**。
 
-Contributions can take two forms:
+!!! success "Core 提供："
 
-- merged directly into the Universe repository hosted by AWF, or
-- hosted externally and listed as part of the Universe ecosystem.
+    - 经过审查、可靠的基础
+    - 一致的 API 和行为
+    - 持续维护、经过测试且具有版本管理的发布
 
-Universe acts as a **sandbox for experimentation**, allowing new ideas, algorithms, and hardware adaptations to be shared quickly.
+<a id="autoware-universe-the-community-innovation-layer"></a>
 
-!!! example "Universe enables:"
+### Autoware Universe：社区创新层
 
-    - Rapid prototyping and experimentation
-    - A place for sharing specialized modules
-    - An entry point for contributions from the global community
+[**Autoware Universe**](https://github.com/autowarefoundation/autoware_universe) 是更广泛的开源功能包集合，由个人、公司和研究团队贡献。
+这些功能包由原作者拥有和维护，并采用各自的质量要求和开发实践。
 
-Promising packages from Autoware Universe may be **adopted into Autoware Core** when they demonstrate sufficient maturity, stability, and usefulness.
-This creates a natural pipeline from innovation → standardization → production.
-The specific requirements a package must meet are defined in [What belongs in Autoware Core](core-package-inclusion-criteria.md).
+贡献可以采用两种形式：
+
+- 直接合入由 AWF 托管的 Universe 仓库，或
+- 托管在外部，并作为 Universe 生态的一部分列出。
+
+Universe 是**用于实验的空间**，让新想法、算法和硬件适配成果能够快速共享。
+
+!!! example "Universe 支持："
+
+    - 快速原型开发和实验
+    - 共享专用模块
+    - 为全球社区贡献提供入口
+
+当 Autoware Universe 中有潜力的功能包展现出足够的成熟度、稳定性和实用性时，可被**纳入 Autoware Core**。
+由此形成从创新 → 标准化 → 生产应用的自然演进流程。
+功能包必须满足的具体要求见[哪些功能包适合纳入 Autoware Core](core-package-inclusion-criteria.md)。
 
 !!! info
 
-    Find more details in [🔗 Repository Structure](../repository-structure.md) documentation.
+    更多详情请参阅[🔗 仓库结构](../repository-structure.md)文档。

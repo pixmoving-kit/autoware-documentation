@@ -1,112 +1,122 @@
-# Quick start demos
+<a id="quick-start-demos"></a>
 
-## Digital twin demos (End to end simulation)
+# 快速入门演示
 
-[:fa-cl-s fa-circle-arrow-right: AWSIM Full Demo](digital-twin-demos/awsim-tutorial.md){ .md-button } [:fa-cl-s fa-circle-arrow-right: AWSIM with Autoware Core Demo](digital-twin-demos/autoware-core-awsim/index.md){ .md-button }
+<a id="digital-twin-demos-end-to-end-simulation"></a>
 
-???+ abstract "Summary"
+## 数字孪生演示（端到端仿真）
+
+[:fa-cl-s fa-circle-arrow-right: AWSIM 完整演示](digital-twin-demos/awsim-tutorial.md){ .md-button } [:fa-cl-s fa-circle-arrow-right: AWSIM 与 Autoware Core 演示](digital-twin-demos/autoware-core-awsim/index.md){ .md-button }
+
+???+ abstract "概述"
 
     <div class="grid cards" markdown>
 
-    -   **Tests:**
+    -   **测试内容：**
 
         ---
 
-        - All components _(in the demo)_
-        - Can test specific components _(based on the configuration)_
+        - 所有组件（演示中涉及的组件）
+        - 可测试特定组件（取决于配置）
 
-    -   **Simulates:**
+    -   **仿真内容：**
 
         ---
 
-        - Sensors (Lidar, camera, GNSS/INS, etc.)
-        - Vehicle dynamics
-        - NPCs (Non playable characters / other road users & obstacles)
+        - 传感器（激光雷达、相机、GNSS/INS 等）
+        - 车辆动力学
+        - NPC（非玩家角色，即其他道路使用者和障碍物）
 
     </div>
 
-## Planning simulation demo
+<a id="planning-simulation-demo"></a>
 
-[:fa-cl-s fa-circle-arrow-right: Planning Simulation Demo](planning-sim/index.md){ .md-button }
+## 规划仿真演示
 
-???+ abstract "Summary"
+[:fa-cl-s fa-circle-arrow-right: 规划仿真演示](planning-sim/index.md){ .md-button }
+
+???+ abstract "概述"
 
     <div class="grid cards" markdown>
 
-    -   **Tests:**
+    -   **测试内容：**
 
         ---
 
-        - Planning component
-        - Control component
+        - 规划组件
+        - 控制组件
 
-    -   **Simulates:**
+    -   **仿真内容：**
 
         ---
 
-        - Perception output (bounding boxes)
-          - Allows you to place dummy objects and simulate their simple movement
-          - Traffic light output
-        - Localization output
-          - Allows you to place the ego vehicle anywhere on the map
-        - Map output
-          - Lets you test the validity of Lanelet2 maps
+        - 感知输出（包围框）
+          - 可放置虚拟目标，并模拟其简单运动
+          - 交通信号灯输出
+        - 定位输出
+          - 可将自车放置在地图上的任意位置
+        - 地图输出
+          - 可测试 Lanelet2 地图的有效性
 
     </div>
 
-## Rosbag replay simulation demo
+<a id="rosbag-replay-simulation-demo"></a>
 
-[:fa-cl-s fa-circle-arrow-right: Rosbag Replay Simulation Demo](rosbag-replay-simulation.md){ .md-button }
+## Rosbag 回放仿真演示
 
-???+ abstract "Summary"
+[:fa-cl-s fa-circle-arrow-right: Rosbag 回放仿真演示](rosbag-replay-simulation.md){ .md-button }
+
+???+ abstract "概述"
 
     <div class="grid cards" markdown>
 
-    -   **Tests:**
+    -   **测试内容：**
 
         ---
 
-        - Sensing component _(in the demo)_
-        - Perception component _(in the demo)_
-        - Localization component _(in the demo)_
-        - Anything else _(based on recorded data)_
+        - 传感组件（演示中涉及的组件）
+        - 感知组件（演示中涉及的组件）
+        - 定位组件（演示中涉及的组件）
+        - 其他组件（取决于录制的数据）
 
-    -   **Plays back:**
+    -   **回放内容：**
 
         ---
 
-        - Left, right and top lidar output _(in the demo)_
-        - GNSS/INS data _(in the demo)_
-        - Vehicle status _(in the demo)_
-        - Anything else _(based on recorded data)_
+        - 左侧、右侧及顶部激光雷达输出（演示中涉及的数据）
+        - GNSS/INS 数据（演示中涉及的数据）
+        - 车辆状态（演示中涉及的数据）
+        - 其他数据（取决于录制的数据）
 
     </div>
 
-## Scenario simulator v2 demo
+<a id="scenario-simulator-v2-demo"></a>
 
-[:fa-cl-s fa-circle-arrow-right: Scenario Simulator v2 Demo](scenario-simulation/scenario-simulator/installation.md){ .md-button }
+## Scenario Simulator v2 演示
 
-???+ abstract "Summary"
+[:fa-cl-s fa-circle-arrow-right: Scenario Simulator v2 演示](scenario-simulation/scenario-simulator/installation.md){ .md-button }
+
+???+ abstract "概述"
 
     <div class="grid cards" markdown>
 
-    -   **Tests:**
+    -   **测试内容：**
 
         ---
 
-        - Planning component
-        - Control component
+        - 规划组件
+        - 控制组件
 
-    -   **Simulates:**
+    -   **仿真内容：**
 
         ---
 
-        - Perception output (bounding boxes)
-          - Allows you to place dummy objects and simulate their simple movement
-          - Traffic light output
-        - Localization output
-          - Allows you to place the ego vehicle anywhere on the map
-        - Map output
-          - Lets you test the validity of Lanelet2 maps
+        - 感知输出（包围框）
+          - 可放置虚拟目标，并模拟其简单运动
+          - 交通信号灯输出
+        - 定位输出
+          - 可将自车放置在地图上的任意位置
+        - 地图输出
+          - 可测试 Lanelet2 地图的有效性
 
     </div>

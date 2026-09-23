@@ -1,6 +1,10 @@
-# Cooperation
+<a id="cooperation"></a>
 
-## Related API
+# 协作
+
+<a id="related-api"></a>
+
+## 相关 API
 
 - {{ link_ad_api('/api/planning/velocity_factors') }}
 - {{ link_ad_api('/api/planning/steering_factors') }}
@@ -8,87 +12,97 @@
 - {{ link_ad_api('/api/planning/cooperation/set_policies') }}
 - {{ link_ad_api('/api/planning/cooperation/get_policies') }}
 
-## Description
+<a id="description"></a>
 
-Request to cooperate (RTC) is a feature that enables a human operator to support the decision in autonomous driving mode.
-Autoware usually drives the vehicle using its own decisions, but the operator may prefer to make their decisions in experiments and complex situations.
+## 说明
 
-The planning component manages each situation that requires decision as a scene.
-Each scene has an ID that doesn't change until the scene is completed or canceled.
-The operator can override the decision of the target scene using this ID.
-In practice, the user interface application can hides the specification of the ID and provides an abstracted interface to the operator.
+协作请求（Request to Cooperate，RTC）允许人工操作员在自动驾驶模式下协助决策。
+Autoware 通常根据自身决策驾驶车辆，但在实验或复杂情境中，操作员可能希望自行决策。
 
-For example, in the situation in the diagram below, vehicle is expected to make two lane changes and turning left at the intersection.
-Therefore the planning component generates three scene instances for each required action, and each scene instance will wait for the decision to be made, in this case "changing or keeping lane" and "turning left or waiting at the intersection".
-Here Autoware decides not to change lanes a second time due to the obstacle, so the vehicle will stop there.
-However, operator could overwrite that decision through RTC function and force the lane change so that vehicle could reach to it's goal.
-Using RTC, the operator can override these decisions to continue driving the vehicle to the goal.
+规划组件将每个需要决策的情境作为一个场景进行管理。
+每个场景都有一个 ID，在场景完成或取消前保持不变。
+操作员可使用该 ID 覆盖目标场景的决策。
+实际使用中，用户界面应用可隐藏指定 ID 的细节，为操作员提供抽象后的操作界面。
 
-![cooperation-scenes](cooperation/scenes.drawio.svg)
+例如，在下图所示情境中，车辆预计需要变道两次，并在路口左转。
+因此，规划组件会为每个所需动作分别生成场景实例，共三个。每个实例等待决策，本例中分别是“变道或保持车道”以及“左转或在路口等待”。
+此时，Autoware 因存在障碍物而决定不进行第二次变道，因此车辆会停在那里。
+但操作员可以通过 RTC 功能覆盖这一决策并强制变道，使车辆能够到达目标位置。
+使用 RTC，操作员可以覆盖这些决策，让车辆继续驶向目标位置。
 
-## Architecture
+![协作场景](cooperation/scenes.drawio.svg)
 
-Modules that support RTC have the operator decision and cooperation policy in addition to the module decision as shown below.
-These modules use the merged decision that is determined by these values when planning vehicle behavior.
-See decisions section for details of these values.
-The cooperation policy is used when there is no operator decision and has a default value set by the system settings.
-If the module supports RTC, these information are available in [velocity factors or steering factors](planning-factors.md) as [cooperation status](../types/autoware_adapi_v1_msgs/msg/CooperationStatus.md).
+<a id="architecture"></a>
 
-![cooperation-architecture](cooperation/architecture.drawio.svg)
+## 架构
 
-## Sequence
+如下图所示，支持 RTC 的模块除了模块决策外，还包含操作员决策和协作策略。
+这些模块在规划车辆行为时，使用由上述值共同确定的合并决策。
+关于这些值的详细信息，请参阅决策章节。
+在没有操作员决策时使用协作策略，其默认值由系统设置确定。
+如果模块支持 RTC，则可在[速度因素或转向因素](planning-factors.md)中以[协作状态](../types/autoware_adapi_v1_msgs/msg/CooperationStatus.md)的形式获取这些信息。
 
-This is an example sequence that overrides the scene decision to force a lane change. It is for the second scene in the diagram in the architecture section.
-Here let's assume the cooperation policy is set to optional, see the decisions section described later for details.
+![协作架构](cooperation/architecture.drawio.svg)
 
-1. A planning module creates a scene instance with unique ID when approaching a place where a lane change is needed.
-2. The scene instance generates the module decision from the current situation. In this case, the module decision is not to do a lane change due to the obstacle.
-3. The scene instance generates the merged decision. At this point, there is no operator decision yet, so it is based on the module decision.
-4. The scene instance plans the vehicle to keep the lane according to the merged decision.
-5. The scene instance sends a cooperation status.
-6. The operator receives the cooperation status.
-7. The operator sends a cooperation command to override the module decision and to do a lane change.
-8. The scene instance receives the cooperation command and update the operator decision.
-9. The scene instance updates the module decision from the current situation.
-10. The scene instance updates the merged decision. It is based on the operator decision received.
-11. The scene instance plans the vehicle to change the lane according to the merged decision.
+<a id="sequence"></a>
 
-## Decisions
+## 时序
 
-The merged decision is determined by the module decision, operator decision, and cooperation policy, each of which takes the value shown in the table below.
+以下示例展示如何覆盖场景决策以强制变道，对应架构章节图中的第二个场景。
+这里假定协作策略设置为 optional，详细信息请参阅后文的决策章节。
 
-| Status             | Values                                 |
+1. 接近需要变道的位置时，规划模块创建一个具有唯一 ID 的场景实例。
+2. 场景实例根据当前情况生成模块决策。本例中，由于存在障碍物，模块决定不变道。
+3. 场景实例生成合并决策。此时尚无操作员决策，因此以模块决策为依据。
+4. 场景实例根据合并决策，规划车辆保持当前车道。
+5. 场景实例发送协作状态。
+6. 操作员收到协作状态。
+7. 操作员发送协作命令，覆盖模块决策并要求变道。
+8. 场景实例收到协作命令，并更新操作员决策。
+9. 场景实例根据当前情况更新模块决策。
+10. 场景实例更新合并决策，此时以收到的操作员决策为依据。
+11. 场景实例根据合并决策，规划车辆变道。
+
+<a id="decisions"></a>
+
+## 决策
+
+合并决策由模块决策、操作员决策和协作策略共同确定，各项可取值如下表所示。
+
+| 状态 | 取值 |
 | ------------------ | -------------------------------------- |
-| merged decision    | deactivate, activate                   |
-| module decision    | deactivate, activate                   |
-| operator decision  | deactivate, activate, autonomous, none |
-| cooperation policy | required, optional                     |
+| 合并决策 | deactivate, activate |
+| 模块决策 | deactivate, activate |
+| 操作员决策 | deactivate, activate, autonomous, none |
+| 协作策略 | required, optional |
 
-The meanings of these values are as follows. Note that the cooperation policy is common per module, so changing it will affect all scenes in the same module.
+各值的含义如下。注意，协作策略在同一模块内共用，因此修改策略会影响该模块中的所有场景。
 
-| Value      | Description                                                                                |
+| 值 | 说明 |
 | ---------- | ------------------------------------------------------------------------------------------ |
-| deactivate | An operator/module decision to plan vehicle behavior with priority on safety.              |
-| activate   | An operator/module decision to plan vehicle behavior with priority on driving.             |
-| autonomous | An operator decision that follows the module decision.                                     |
-| none       | An initial value for operator decision, indicating that there is no operator decision yet. |
-| required   | A policy that requires the operator decision to continue driving.                          |
-| optional   | A policy that does not require the operator decision to continue driving.                  |
+| deactivate | 操作员／模块作出的决策，优先保证安全来规划车辆行为。 |
+| activate | 操作员／模块作出的决策，优先保证行驶来规划车辆行为。 |
+| autonomous | 操作员决定遵循模块决策。 |
+| none | 操作员决策的初始值，表示尚无操作员决策。 |
+| required | 要求操作员决策后才能继续行驶的策略。 |
+| optional | 无需操作员决策即可继续行驶的策略。 |
 
-The following flow is how the merged decision is determined.
+合并决策的确定流程如下。
 
-![cooperation-decisions](cooperation/decisions.drawio.svg)
+![协作决策](cooperation/decisions.drawio.svg)
 
-## Examples
+<a id="examples"></a>
 
-This is an example of cooperation for lane change module. The behaviors by the combination of decisions are as follows.
+## 示例
 
-| Operator decision | Policy   | Module decision | Description                                                                                                                     |
+以下是变道模块的协作示例。不同决策组合对应的行为如下。
+
+| 操作员决策 | 策略 | 模块决策 | 说明 |
 | ----------------- | -------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| deactivate        | -        | -               | The operator instructs to keep lane regardless the module decision. So the vehicle keeps the lane by the operator decision.     |
-| activate          | -        | -               | The operator instructs to change lane regardless the module decision. So the vehicle changes the lane by the operator decision. |
-| autonomous        | -        | deactivate      | The operator instructs to follow the module decision. So the vehicle keeps the lane by the module decision.                     |
-| autonomous        | -        | activate        | The operator instructs to follow the module decision. So the vehicle changes the lane by the module decision.                   |
-| none              | required | -               | The required policy is used because no operator instruction. So the vehicle keeps the lane by the cooperation policy.           |
-| none              | optional | deactivate      | The optional policy is used because no operator instruction. So the vehicle keeps the lane by the module decision.              |
-| none              | optional | activate        | The optional policy is used because no operator instruction. So the vehicle change the lane by the module decision.             |
+| deactivate | - | - | 操作员要求保持车道，不考虑模块决策。因此，车辆根据操作员决策保持车道。 |
+| activate | - | - | 操作员要求变道，不考虑模块决策。因此，车辆根据操作员决策变道。 |
+| autonomous | - | deactivate | 操作员要求遵循模块决策。因此，车辆根据模块决策保持车道。 |
+| autonomous | - | activate | 操作员要求遵循模块决策。因此，车辆根据模块决策变道。 |
+| none | required | - | 没有操作员指令，因此使用 required 策略。车辆根据协作策略保持车道。 |
+| none | optional | deactivate | 没有操作员指令，因此使用 optional 策略。车辆根据模块决策保持车道。 |
+| none | optional | activate | 没有操作员指令，因此使用 optional 策略。车辆根据模块决策变道。 |

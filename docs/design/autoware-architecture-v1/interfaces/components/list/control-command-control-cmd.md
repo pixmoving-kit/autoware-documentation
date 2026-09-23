@@ -12,65 +12,85 @@ qos_depth: 1
 
 # {{ interface_name }}
 
-## Specifications
+<a id="specifications"></a>
+
+## 规格
 
 {% include 'design/autoware-architecture-v1/interfaces/templates/topic.jinja2' %}
 
-## Description
+<a id="description"></a>
 
-Send the control command to the vehicle. This is the command format that can be used universally in vehicles based on the [Ackermann kinematic model][ackermann-kinematic-model].
-At this stage, do not expect anything other than simple control such as smoothly approaching the target value.
-For example, the time-series control involving acceleration and deceleration to reach a target speed must have been completed in a previous stage.
-Therefore, it is generally assumed that the target value will be sent at a time close enough that linear interpolation is possible.
-If your vehicle interface would like to support time series data directly, please join the discussion of the [ControlHorizon](https://github.com/autowarefoundation/autoware_msgs/blob/main/autoware_control_msgs/msg/ControlHorizon.msg) message.
+## 说明
+
+向车辆发送控制指令。这是一种可通用于基于[阿克曼运动学模型][ackermann-kinematic-model]的车辆的指令格式。
+此阶段仅执行平滑接近目标值等简单控制，不应期望其他控制行为。
+例如，为达到目标速度而进行加速和减速的时序控制，应在前一个阶段完成。
+因此，通常假定目标值的发送时间间隔足够短，可以进行线性插值。
+如果您的车辆接口希望直接支持时序数据，请参与 [ControlHorizon](https://github.com/autowarefoundation/autoware_msgs/blob/main/autoware_control_msgs/msg/ControlHorizon.msg) 消息的讨论。
 
 [ackermann-kinematic-model]: ../../../../../tutorials/integrating-autoware/creating-vehicle-interface-package/ackermann-kinematic-model.md
 
-## Message
+<a id="message"></a>
 
-For details about the message, [see the readme of autoware_control_msgs](https://github.com/autowarefoundation/autoware_msgs/blob/main/autoware_control_msgs/README.md).
+## 消息
 
-The velocity, acceleration, and jerk values ​​at a given time must be planned in advance and must be consistent, which is typically done by the planning/control component.
-If these values ​​are inconsistent, which value takes priority depends on the vehicle implementation.
+消息详情请参阅 [autoware_control_msgs 的 README](https://github.com/autowarefoundation/autoware_msgs/blob/main/autoware_control_msgs/README.md)。
 
-Sending the latest command will invalidate previous commands, which means that commands from different time stamps are not kept as a time series.
-Only the latest command, not the latest time stamp command, is valid.
+给定时刻的速度、加速度和加加速度必须预先规划，并且彼此一致；通常由规划或控制组件完成。
+如果这些值不一致，哪个值优先取决于车辆的实现。
 
-## Errors
+发送最新指令会使之前的指令失效，因此不同时间戳的指令不会作为时序数据保留。
+仅最新收到的指令有效，而不是时间戳最新的指令。
 
-Command Timeout: If the command is not sent frequently enough to control the current vehicle speed, the vehicle executes an emergency stop.
+<a id="errors"></a>
 
-Out of Range: If the command exceeds the given physical limit, the value is clamped to the maximum.
+## 错误
 
-## Support
+指令超时：如果指令的发送频率不足以控制车辆当前速度，车辆将执行紧急停车。
 
-This interface is required. If there is only a vehicle-specific interface, provide a converter.
-For vehicles controlled by typical accelerator and brake pedals, consider using the [autoware_raw_vehicle_cmd_converter](https://github.com/autowarefoundation/autoware_universe/tree/main/vehicle/autoware_raw_vehicle_cmd_converter).
+超出范围：如果指令超出给定的物理限制，其值将被限制为允许的最大值。
 
-## Limitations
+<a id="support"></a>
 
-Command filter: The commands may be filtered by a rate limiter to prevent physically impossible or unsafe rapid acceleration or steering.
+## 支持要求
 
-## Use Cases
+此接口是必需的。如果车辆仅提供专用接口，应提供转换器。
+对于使用常规油门踏板和制动踏板控制的车辆，可考虑使用 [autoware_raw_vehicle_cmd_converter](https://github.com/autowarefoundation/autoware_universe/tree/main/vehicle/autoware_raw_vehicle_cmd_converter)。
 
-- Control the vehicle for autonomous driving.
-- Relay commands from the operator.
+<a id="limitations"></a>
 
-## Requirement
+## 限制
 
-- Support sending the control command to the vehicle.
-- Ignore the control command depending on the control mode.
-- Report the error as diagnostics in the following cases:
-  - Topic rate is too low or too high.
-  - An unacceptable target value is sent.
-  - It fails to achieve the target value.
+指令过滤：可使用变化率限制器过滤指令，以防止物理上无法实现或不安全的急加速、急转向。
 
-## Design
+<a id="use-cases"></a>
 
-TODO: Explanation of the basis for setting the topic frequency.
+## 使用场景
 
-## History
+- 控制车辆进行自动驾驶。
+- 转发操作员的指令。
 
-| Date       | Description                      |
+<a id="requirement"></a>
+
+## 要求
+
+- 支持向车辆发送控制指令。
+- 根据控制模式忽略控制指令。
+- 在以下情况下通过诊断信息报告错误：
+  - 话题频率过低或过高。
+  - 收到不可接受的目标值。
+  - 无法达到目标值。
+
+<a id="design"></a>
+
+## 设计
+
+待补充：话题频率设置依据的说明。
+
+<a id="history"></a>
+
+## 历史记录
+
+| 日期 | 说明 |
 | ---------- | -------------------------------- |
-| 2026-01-21 | First release in the new format. |
+| 2026-01-21 | 首次以新格式发布。 |

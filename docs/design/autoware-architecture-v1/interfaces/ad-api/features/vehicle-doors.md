@@ -1,38 +1,50 @@
-# Vehicle doors
+<a id="vehicle-doors"></a>
 
-## Related API
+# 车门
+
+<a id="related-api"></a>
+
+## 相关 API
 
 - {{ link_ad_api('/api/vehicle/doors/layout') }}
 - {{ link_ad_api('/api/vehicle/doors/status') }}
 - {{ link_ad_api('/api/vehicle/doors/command') }}
 
-## Description
+<a id="description"></a>
 
-This feature is available if the vehicle provides a software interface for the doors.
-It can be used to create user interfaces for passengers or to control sequences at bus stops.
+## 说明
 
-## Layout
+如果车辆提供车门的软件接口，即可使用此功能。
+可以用它创建面向乘客的用户界面，或控制公交站点的操作流程。
 
-Each door in a vehicle is assigned an array index. This assignment is vehicle dependent.
-The layout API returns this information.
-The description field is a string to display in the user interface, etc.
-This is an arbitrary string and is not recommended to use for processing in applications.
-Use the roles field to know doors for getting on and off.
-Below is an example of the information returned by the layout API.
+<a id="layout"></a>
 
-| Index | Description | Roles           |
+## 布局
+
+车辆的每扇门都分配有一个数组索引，具体分配方式取决于车辆。
+layout API 返回这些信息。
+description 字段是用于用户界面显示等用途的字符串。
+该字符串可任意设置，因此不建议应用将其用于处理逻辑。
+使用 roles 字段识别用于上车和下车的车门。
+以下是 layout API 返回信息的示例。
+
+| 索引 | 描述 | 角色 |
 | ----- | ----------- | --------------- |
-| 0     | front right | -               |
-| 1     | front left  | GET_ON          |
-| 2     | rear right  | GET_OFF         |
-| 3     | rear left   | GET_ON, GET_OFF |
+| 0 | 右前 | - |
+| 1 | 左前 | GET_ON |
+| 2 | 右后 | GET_OFF |
+| 3 | 左后 | GET_ON, GET_OFF |
 
-## Status
+<a id="status"></a>
 
-The status API provides an array of door status. This array order is consistent with the layout API.
+## 状态
 
-## Control
+status API 提供车门状态数组，其顺序与 layout API 一致。
 
-Use the command API to control doors.
-Unlike the status and layout APIs, array index do not correspond to doors.
-The command has a field to specify the target door index.
+<a id="control"></a>
+
+## 控制
+
+使用 command API 控制车门。
+与 status 和 layout API 不同，此处的数组索引不与车门一一对应。
+命令中有专门字段用于指定目标车门索引。

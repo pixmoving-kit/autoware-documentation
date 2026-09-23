@@ -1,123 +1,149 @@
-# Autonomous Driving Stack Architecture
+<a id="autonomous-driving-stack-architecture"></a>
 
-## Traditional Robotics Stack
+# 自动驾驶软件栈架构
 
-![Architecture diagram of traditional robotics stack for autonomous driving](media/architecture_figure01.png)
+<a id="traditional-robotics-stack"></a>
 
-<p align="center"><strong>Figure 1:</strong> Architecture diagram of traditional robotics stack for autonomous driving</p>
+## 传统机器人软件栈
 
-Early architectures for autonomous driving were architected as per a traditional robotics stack comprising hand-coded algorithms for perception, localization and planning, as illustrated in Figure 1. Whilst such approaches are able to achieve robust performance in known scenarios and constrained Operational Design Domains, there are certain drawbacks of this classical architecture.
+![传统机器人自动驾驶软件栈架构图](media/architecture_figure01.png)
 
-These include difficulty in handling previously unseen scenarios, challenges in code upgrades for new features, driving behaviour which doesn’t match natural human driving styles, and challenges in addressing negotiated driving maneuvers such as merges, nudges, giving way and taking way.
+<p align="center"><strong>图 1：</strong>传统机器人自动驾驶软件栈架构图</p>
 
-## Introduction to Autoware E2E
+如图 1 所示，早期自动驾驶架构遵循传统机器人软件栈，感知、定位和规划均采用人工编写的算法。虽然这些方法在已知场景和受限的设计运行域中能够获得稳健性能，但这种经典架构也存在一些缺点。
 
-Autoware E2E (End-to-End) describes the next evolution in the autonomous driving implementation of the Autoware project, from a traditional robotics stack towards an AI-first, data-centric stack powered by End-to-End autonomous driving features.
+例如，难以处理从未见过的场景，为新功能升级代码比较困难，驾驶行为与人类自然驾驶风格不一致，以及难以处理汇入、微调避让、让行和争取通行等需要与其他交通参与者互动协调的驾驶操作。
 
-This evolution is being driven by our core value of developing ‘cutting edge’ technologies, as well as our desire to offer the autonomous driving community with a new open-source technology paradigm, powered by data-centric AI.
+<a id="introduction-to-autoware-e2e"></a>
 
-The Autoware E2E stack aims to achieve global scalability across (Operational Design Domains) ODDs by utilizing data-centric End-to-End AI through which hand-coded modules will be replaced in a modular and incremental fashion by neural networks - which have shown great promise in being able to handle diverse and complex driving scenarios across domains.
+## Autoware E2E 简介
 
-![Definition of SAE Level 4+ autonomous driving](media/architecture_figure02.png)
+Autoware E2E（端到端）描述了 Autoware 项目自动驾驶实现的下一阶段演进：从传统机器人软件栈转向以 AI 为先、以数据为中心、由端到端自动驾驶功能驱动的软件栈。
 
-<p align="center"><strong>Figure 2:</strong> Definition of SAE Level 4+ autonomous driving</p>
+这一演进源于我们开发“前沿”技术的核心价值观，以及为自动驾驶社区提供由数据驱动 AI 支撑的新开源技术范式的愿望。
 
-In particular, we aim to achieve SAE Level 4+ autonomous driving functionality through Autoware E2E, in which the autonomous system is able to operate without any human intervention and is able to dynamically adapt to new scenarios which the system has not previously encountered - as illustrated in Figure 2.
+Autoware E2E 软件栈旨在利用以数据为中心的端到端 AI，实现跨设计运行域（ODD）的全球扩展。人工编写的模块将以模块化、渐进方式被神经网络替换；神经网络在处理跨域的多样化复杂驾驶场景方面已展现出很大潜力。
 
-## Autoware E2E Architecture Description
+![SAE L4+ 自动驾驶的定义](media/architecture_figure02.png)
 
-The Autoware E2E architecture will be implemented in an evolutionary fashion in three key steps, wherein each subsequent step builds on top of the technology capabilities developed in earlier steps. This stepwise approach is being utilized to ensure that a smooth transition can be implemented without introducing breaking changes and allowing for thorough evaluation and testing of learned AI-based modules as they are introduced.
+<p align="center"><strong>图 2：</strong>SAE L4+ 自动驾驶的定义</p>
 
-### Step 1 - Learned Planner
+具体而言，我们希望通过 Autoware E2E 实现 SAE L4+ 自动驾驶功能，使自主系统无需任何人工干预即可运行，并能动态适应此前从未遇到的新场景，如图 2 所示。
 
-Step 1 aims to introduce a learned planning module which is able to ingest a world state consisting of the ego-vehicle’s localized position with respect to an HD map, alongside key perception information including elements such as 3D bounding boxes of other foreground objects, traffic light state etc.
+<a id="autoware-e2e-architecture-description"></a>
 
-![Learned planner](media/architecture_figure03.png)
+## Autoware E2E 架构说明
 
-<p align="center"><strong>Figure 3:</strong> Autoware E2E - Learned Planning architecture</p>
+Autoware E2E 架构将通过三个关键步骤渐进实现，后续步骤均建立在前序步骤形成的技术能力之上。采用这种分步方式，是为了在不引入破坏性变更的前提下平稳过渡，并在引入学习型 AI 模块时进行充分评估和测试。
 
-The learned planning module is able to take this ‘local world representation’ from upstream perception and localization processes and devises an optimal trajectory which aligns with the overall navigation goal as determined by the mission plan.
+<a id="step-1-learned-planner"></a>
 
-The advantages of a learned local planner are that complex negotiated traffic scenarios such as merges, nudges and giving way can be learned from human driving data and do not need to be hand-coded. Additionally, the model can be trained on data from different cities to better learn local driving styles which match the temperament of drivers - for example, driving in London is very different from driving in Mumbai.
+### 步骤 1：学习型规划器
 
-### Step 2 - Component Based End-to-End AI - Learned Perception & Learned Planner
+步骤 1 旨在引入学习型规划模块。它接收的世界状态包括自车相对于高精地图的定位位置，以及其他前景目标的三维包围盒、交通信号灯状态等关键感知信息。
 
-Step 2 builds on top of the milestone achievement of Step 1 and introduces learned perception, such that the ‘local world representation’ is also learned rather than based on hand-coded algorithms. At this stage, an HD map and localizer can be used (option A), or, the vehicle can create a ‘local map’ implicitly through Learned Perception which estimates the potential driving corridors and localizes key scene elements with respect to the ego-vehicle, most often utilizing a 2D map (option B).
+![学习型规划器](media/architecture_figure03.png)
 
-Option A:
+<p align="center"><strong>图 3：</strong>Autoware E2E——学习型规划架构</p>
 
-![Learned Perception and Learned Planning supported by an HD-map](media/architecture_figure04.png)
+学习型规划模块从上游感知和定位流程接收这一“局部世界表示”，并生成符合任务规划所确定的整体导航目标的最优轨迹。
 
-<p align="center"><strong>Figure 4:</strong> Autoware E2E - Learned Perception and Learned Planning supported by an HD-map</p>
+学习型局部规划器的优势在于，汇入、微调避让和让行等复杂交通互动场景可以从人类驾驶数据中学习，无需手工编写规则。此外，还可以使用不同城市的数据训练模型，使其更好地学习符合当地驾驶员习惯的驾驶风格，例如伦敦的驾驶方式与孟买有很大差异。
 
-Option B:
+<a id="step-2-component-based-end-to-end-ai-learned-perception-learned-planner"></a>
 
-![Learned Perception and Learned Planning supported by a standard 2D-map](media/architecture_figure05.png)
+### 步骤 2：基于组件的端到端 AI——学习型感知与学习型规划器
 
-<p align="center"><strong>Figure 5:</strong> Autoware E2E - Learned Perception and Learned Planning supported by a standard 2D-map</p>
+步骤 2 建立在步骤 1 的里程碑成果之上，引入学习型感知，使“局部世界表示”也通过学习获得。此阶段可以使用高精地图和定位器（方案 A），也可以由车辆通过学习型感知隐式创建“局部地图”，估计潜在的行驶通道，并确定关键场景元素相对于自车的位置，通常结合二维地图使用（方案 B）。
 
-In Step 2, the entire autonomous driving stack is learned and trainable End-to-End, however, there is an interface between the learned perception module and the learned planning module, where the outputs of the learned perception modules need to satisfy the requirements of the learned planning module. This approach decouples perception and planning and allows for introspection of the full End-to-End stack, allowing for easier debugging and testing.
+方案 A：
 
-The advantage of Option B is that the system will be available wherever a 2D map is present, allowing for larger geographic coverage from the outset since HD-map construction and maintenance is not required. However, Option A would benefit from increased robustness by the inclusion of the HD-map, providing the vehicle with additional information about the shape of the road, key infrastructure elements, and potential driving corridors of other road actors.
+![高精地图支持的学习型感知与学习型规划](media/architecture_figure04.png)
 
-### Step 3 - Learned driving
+<p align="center"><strong>图 4：</strong>Autoware E2E——高精地图支持的学习型感知与学习型规划</p>
 
-Step 3 builds on top of the developments in Step 2 to create a single Learned Driving, monolithic neural network, which internally learns a ‘local world representation’ without any explicit learned perception or planning modules - there is no traffic light detection, semantic segmentation, or lane detection - all these factors are represented implicitly in the model’s feature space. The earlier features are fed to a decoder which estimates a single ideal driving trajectory which is tracked by a closed loop controller. The motivation of such monolithic approaches is that they do not constrain the perceptual elements that should be extracted for optimal local planning - allowing the stack to learn unique scene level features and their interdependent relationships for full End-to-End driving.
+方案 B：
 
-Similar to Step 2, there are two options which can be leveraged to implement Step 3. In Option A, an HD map is utilized to provide the vehicle with detailed scene information - almost acting as a non-line-of-sight capable sensor for the static environment, encoding data such as positions of traffic lights, road geometry, lane topologies, rights of way etc. In option B, a sat-nav style 2D/ADAS map is utilized, which forces the Learned Driving model to build an internal feature-level representation of the same information as would be encoded with the HD map.
+![标准二维地图支持的学习型感知与学习型规划](media/architecture_figure05.png)
 
-Option A:
+<p align="center"><strong>图 5：</strong>Autoware E2E——标准二维地图支持的学习型感知与学习型规划</p>
 
-![Monolithic Learned Driving model supported by an HD-map](media/architecture_figure06.png)
+在步骤 2 中，整个自动驾驶软件栈均通过学习获得，且可以进行端到端训练。不过，学习型感知模块与学习型规划模块之间仍存在接口，感知模块的输出必须满足规划模块的要求。这种方式将感知与规划解耦，使完整端到端软件栈的内部行为能够被检查，便于调试和测试。
 
-<p align="center"><strong>Figure 6:</strong> Autoware E2E - Monolithic Learned Driving model supported by an HD-map</p>
+方案 B 的优势在于，只要有二维地图，系统即可使用。由于无需构建和维护高精地图，从一开始就能覆盖更大的地理范围。方案 A 则可借助高精地图提升稳健性，为车辆提供道路形状、关键基础设施以及其他交通参与者潜在行驶通道等额外信息。
 
-Option B:
+<a id="step-3-learned-driving"></a>
 
-![Monolithic Learned Driving model supported by a standard 2D-map](media/architecture_figure07.png)
+### 步骤 3：学习型驾驶
 
-<p align="center"><strong>Figure 7:</strong> Autoware E2E - Monolithic Learned Driving model supported by a standard 2D-map</p>
+步骤 3 在步骤 2 的基础上，构建单一的整体式学习型驾驶神经网络。该网络在内部学习“局部世界表示”，没有显式的学习型感知或规划模块，也没有独立的交通信号灯检测、语义分割或车道检测；这些因素都隐式地表示在模型的特征空间中。前段提取的特征输入解码器，用于估计一条理想驾驶轨迹，再由闭环控制器跟踪。这种整体式方法不预先限定最优局部规划应提取哪些感知元素，使软件栈能够学习独特的场景级特征及其相互依赖关系，实现完整的端到端驾驶。
 
-Multiple Neural network architectures can be applied for ‘Learned Driving’ models, however, they can broadly be categorised as belonging to two types; convolutional neural network models and vision-language-action models.
+与步骤 2 类似，步骤 3 也有两种实现方案。方案 A 使用高精地图为车辆提供详细的场景信息，几乎相当于一个能够获取静态环境非视距信息的传感器，编码交通信号灯位置、道路几何、车道拓扑和通行权等数据。方案 B 使用卫星导航式的二维／ADAS 地图，要求学习型驾驶模型在内部特征层面表示原本由高精地图编码的同类信息。
 
-#### Convolutional Neural Network Models
+方案 A：
 
-Convolutional Neural Network models usually rely upon two stages within the model. In the first stage, sensor data is passed through a ‘Feature Backbone’ which is responsible for extracting and capturing general-purpose image features which represent the content of the scene. These features are then fed into a second stage, often referred to as a ‘Policy Model’, which usually consists of fully-connected neural network layers which are responsible for predicting the future trajectory of the vehicle.
+![高精地图支持的整体式学习型驾驶模型](media/architecture_figure06.png)
 
-The advantage of Convolutional Neural Network models is that, based on careful selection of the feature backbone and policy model design, the model can be deployed on embedded edge hardware devices and be trained on a smaller set of data samples compared to larger, more complex models. However, a significant limitation of Convolutional Neural Network models is that they may not be able to capture the overall scene context and relationship between scene elements, and instead can only capture higher level features corresponding to the presence of shapes, or object elements - leading to a potential drop in performance and model generalizability.
+<p align="center"><strong>图 6：</strong>Autoware E2E——高精地图支持的整体式学习型驾驶模型</p>
 
-#### Vision Language Action Models
+方案 B：
 
-An alternative architecture for Learned Driving is based on Vision-Language-Action models. These models utilize a combination of Vision Transformers and Large Language Models to jointly learn image features, scene context and reason about driving decisions.
+![标准二维地图支持的整体式学习型驾驶模型](media/architecture_figure07.png)
 
-The model can be conditioned on learned queries or text inputs, for example ‘continue straight along the road’ and the model can execute a driving policy to follow these commands. A diffusion transformer model decodes the network features to output the driving action in the form of a trajectory and can also optionally output text, which aims to explain the reasoning through which the model predicted the trajectory - helping with model introspection and explainability.
+<p align="center"><strong>图 7：</strong>Autoware E2E——标准二维地图支持的整体式学习型驾驶模型</p>
 
-#### Open Challenges with Learned Driving
+多种神经网络架构均可用于“学习型驾驶”模型，但大体可以分为两类：卷积神经网络模型和视觉—语言—动作模型。
 
-Although both Convolutional Neural Network architectures and Vision-Language-Action models present viable options at executing Learned Driving, and demonstrate great promise and potential, there still remain challenges with these approaches. One of the most important challenges is that the entire autonomous driving stack is learned and executed in a single forward pass of a large monolithic neural network, which can be difficult to train and debug, since there are no explicit scene level representations - only representations inside the neural network’s feature space. Such Learned Driving networks are also difficult to validate, since it is challenging to truly understand ‘what the network has learned’ in feature space. Such approaches are also limited by the quality of training data - for example, a naive approach which simply applies Imitation Learning may learn to follow human drivers which disobey traffic rules, such as not stopping at a stop sign - making data cleanliness of utmost importance.
+<a id="convolutional-neural-network-models"></a>
 
-### Step 4 - Learned Hybrid approach - (Under development by industry)
+#### 卷积神经网络模型
 
-In order to have the best of both worlds, in Step 4, a Learned Hybrid approach can be adopted which combines a Learned Driving model alongside complementary Safety Perception modules allowing for redundancy and greater built-in safety and introspection as well as diversity in sensing. Similar to prior steps, there are options to support either an HD-map or a 2D-map interface.
+卷积神经网络模型通常包含两个阶段。第一阶段将传感器数据输入“特征骨干网络”，提取并捕捉表示场景内容的通用图像特征。随后，这些特征输入第二阶段，通常称为“策略模型”，一般由全连接神经网络层组成，负责预测车辆未来轨迹。
 
-#### Safety Perception
+卷积神经网络模型的优势在于，通过仔细选择特征骨干网络和策略模型设计，可以将模型部署到嵌入式边缘硬件上；与更大、更复杂的模型相比，也可以使用更少的样本训练。然而，其重要局限是可能无法捕捉整体场景上下文和场景元素之间的关系，只能捕捉与形状或物体元素是否存在相关的高层特征，从而可能导致性能和泛化能力下降。
 
-Safety Perception comprises dedicated perception modules which play a key role in helping to ensure that rare edge case scenarios which may not be appropriately handled by a Learned Driving model, do not result in collisions.While the Learned Driving model can rely upon camera-based sensing, Safety Perception modules can leverage physics-based 3D sensors such as LIDAR and RADAR. To improve introspectability, Safety Perception modules can utilize rule-based implementations allowing for complete transparency, or alternatively, they can also be Learned Perception models.
+<a id="vision-language-action-models"></a>
 
-The motivation of this is to help autonomous vehicles achieve a super-human capability by leveraging sensing modalities not available to human drivers, who rely upon vision based driving alone. LIDAR and RADAR provide excellent perceptual redundancy and robustness in adverse weather conditions such as fog, rain, heavy snow, and dust storms as well as challenging lighting conditions such as pitch-black, or sun glare.
+#### 视觉—语言—动作模型
 
-#### Safety Guardian
+学习型驾驶的另一种架构基于视觉—语言—动作模型。这类模型结合视觉 Transformer 和大语言模型，共同学习图像特征、场景上下文，并对驾驶决策进行推理。
 
-A Safety Guardian module is responsible for cross-referencing the Safety Perception outputs with the Learned Driving predictions to avoid safety-critical edge-case scenarios where, for example, the Learned Driving model may not be able to see an obstacle due to adverse weather or occlusion, and the Safety Perception modules can fill this safety gap. Additionally, the Safety Guardian can utilize infrastructure-based scene perception data or other connected vehicle data via V2X (vehicle to infrastructure communication) if it is available to further enhance safety of the self-driving system. Similar to Steps 2, 3 - Step 4 can also be implemented with optional support for either an HD map or a standard 2D/ADAS map.
+模型可以以学习得到的查询或文本输入为条件，例如“沿道路直行”，并执行驾驶策略以遵循这些命令。扩散 Transformer 模型对网络特征进行解码，以轨迹形式输出驾驶动作；还可以选择输出文本，解释模型预测该轨迹的推理过程，帮助检查模型内部行为并提高可解释性。
 
-Option A:
+<a id="open-challenges-with-learned-driving"></a>
 
-![Learned Hybrid model supported by an HD-map](media/architecture_figure08.png)
+#### 学习型驾驶尚待解决的挑战
 
-<p align="center"><strong>Figure 8:</strong> Autoware E2E - Learned Hybrid model supported by an HD-map</p>
+卷积神经网络架构和视觉—语言—动作模型都是实现学习型驾驶的可行选项，展现了很大潜力，但仍面临挑战。其中一个主要挑战是，整个自动驾驶软件栈通过单个大型整体式神经网络的一次前向传播来学习和执行；由于没有显式的场景级表示，只有神经网络特征空间中的内部表示，训练和调试可能很困难。此类网络也难以验证，因为很难真正理解网络在特征空间中“学到了什么”。这些方法还受训练数据质量限制。例如，简单应用模仿学习，可能使模型模仿人类驾驶员违反交通规则的行为，如不在停车标志前停车，因此数据清洁度至关重要。
 
-Option B:
+<a id="step-4-learned-hybrid-approach-under-development-by-industry"></a>
 
-![Learned Hybrid model supported by a standard 2D-map](media/architecture_figure09.png)
+### 步骤 4：学习型混合方法（业界正在开发）
 
-<p align="center"><strong>Figure 9:</strong> Autoware E2E - Learned Hybrid model supported by a standard 2D-map</p>
+为结合两类方法的优势，步骤 4 可采用学习型混合方法，将学习型驾驶模型与互补的安全感知模块结合，提供冗余、更强的内置安全性、内部可检查性以及多样化的传感器手段。与此前步骤类似，可以选择支持高精地图或二维地图接口。
+
+<a id="safety-perception"></a>
+
+#### 安全感知
+
+安全感知由专用感知模块组成，关键作用是防止学习型驾驶模型可能无法妥善处理的罕见边界场景导致碰撞。学习型驾驶模型可以依赖相机，而安全感知模块可以利用激光雷达和毫米波雷达等基于物理测量的三维传感器。为提高内部可检查性，安全感知模块可以采用完全透明的规则实现，也可以采用学习型感知模型。
+
+这一设计旨在利用人类驾驶员不具备的传感器模态，帮助自动驾驶车辆实现超越人类的能力，因为人类驾驶员只能依赖视觉驾驶。在雾、雨、大雪和沙尘暴等恶劣天气，以及漆黑或阳光眩光等困难光照条件下，激光雷达和毫米波雷达能够提供出色的感知冗余和稳健性。
+
+<a id="safety-guardian"></a>
+
+#### 安全守护模块
+
+安全守护模块（Safety Guardian）负责交叉核对安全感知输出与学习型驾驶预测，以避免涉及安全的关键边界情况。例如，学习型驾驶模型可能因恶劣天气或遮挡而看不到障碍物，此时安全感知模块可以弥补这一缺口。此外，如果可以获取相关数据，安全守护模块还可通过 V2X（车与基础设施通信）利用基础设施场景感知数据或其他联网车辆数据，进一步增强自动驾驶系统的安全性。与步骤 2、3 类似，步骤 4 也可以选择支持高精地图或标准二维／ADAS 地图。
+
+方案 A：
+
+![高精地图支持的学习型混合模型](media/architecture_figure08.png)
+
+<p align="center"><strong>图 8：</strong>Autoware E2E——高精地图支持的学习型混合模型</p>
+
+方案 B：
+
+![标准二维地图支持的学习型混合模型](media/architecture_figure09.png)
+
+<p align="center"><strong>图 9：</strong>Autoware E2E——标准二维地图支持的学习型混合模型</p>

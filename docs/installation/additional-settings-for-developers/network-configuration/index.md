@@ -1,10 +1,16 @@
-# Network settings for ROS 2 and Autoware
+<a id="network-settings-for-ros-2-and-autoware"></a>
 
-## Single computer setup
+# ROS 2 与 Autoware 网络设置
 
-- [DDS settings for ROS 2 and Autoware](./dds-settings.md)
-- [Zenoh settings for ROS 2 and Autoware](./zenoh-settings.md)
+<a id="single-computer-setup"></a>
 
-## Multi computer setup
+## 单机配置
 
-- [Communicating across multiple computers with CycloneDDS](./multiple-computers.md)
+- [ROS 2 与 Autoware 的 DDS 设置](./dds-settings.md)
+- [ROS 2 与 Autoware 的 Zenoh 设置](./zenoh-settings.md)
+
+<a id="multi-computer-setup"></a>
+
+## 多机配置
+
+- [使用 CycloneDDS 实现多机通信](./multiple-computers.md)

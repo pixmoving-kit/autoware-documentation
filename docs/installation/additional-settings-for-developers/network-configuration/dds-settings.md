@@ -1,26 +1,34 @@
-# DDS settings for ROS 2 and Autoware
+<a id="dds-settings-for-ros-2-and-autoware"></a>
 
-## Enable localhost-only communication
+# ROS 2 与 Autoware 的 DDS 设置
 
-1. [Enable `multicast` for `lo`](./enable-multicast-for-lo.md)
-2. Make sure `export ROS_LOCALHOST_ONLY=1` **is NOT** present in `.bashrc`.
-   - See [About `ROS_LOCALHOST_ONLY` environment variable](#about-ros_localhost_only-environment-variable) for more information.
+<a id="enable-localhost-only-communication"></a>
 
-## Tune DDS settings
+## 启用仅限本机的通信
 
-Autoware uses DDS for internode communication. [ROS 2 documentation](https://docs.ros.org/en/humble/How-To-Guides/DDS-tuning.html) recommends users to tune DDS to utilize its capability.
+1. [为 `lo` 启用 `multicast`](./enable-multicast-for-lo.md)
+2. 确保 `.bashrc` 中**没有** `export ROS_LOCALHOST_ONLY=1`。
+   - 更多信息请参阅[关于 `ROS_LOCALHOST_ONLY` 环境变量](#about-ros_localhost_only-environment-variable)。
+
+<a id="tune-dds-settings"></a>
+
+## 调整 DDS 设置
+
+Autoware 使用 DDS 进行节点间通信。[ROS 2 文档](https://docs.ros.org/en/humble/How-To-Guides/DDS-tuning.html)建议用户调整 DDS 设置，以充分发挥其能力。
 
 !!! note
 
-    CycloneDDS is the recommended and most tested DDS implementation for Autoware.
+    CycloneDDS 是 Autoware 推荐使用且测试最充分的 DDS 实现。
 
 !!! warning
 
-    If you don't tune these settings, Autoware will fail to receive large data like point clouds or images.
+    如果不调整这些设置，Autoware 将无法接收点云或图像等大体积数据。
 
-### Tune system-wide network settings
+<a id="tune-system-wide-network-settings"></a>
 
-Set the config file path and enlarge the Linux kernel maximum buffer size before launching Autoware.
+### 调整系统级网络设置
+
+启动 Autoware 前，设置配置文件路径，并增大 Linux 内核的最大缓冲区大小。
 
 ```bash
 # Increase the maximum receive buffer size for network packets
@@ -31,13 +39,13 @@ sudo sysctl -w net.ipv4.ipfrag_time=3  # in seconds, default is 30 s
 sudo sysctl -w net.ipv4.ipfrag_high_thresh=134217728  # 128 MiB, default is 256 KiB
 ```
 
-To make it permanent,
+如需永久生效，执行：
 
 ```bash
 sudo nano /etc/sysctl.d/10-cyclone-max.conf
 ```
 
-Paste the following into the file:
+将以下内容粘贴到文件中：
 
 ```bash
 # Increase the maximum receive buffer size for network packets
@@ -48,9 +56,11 @@ net.ipv4.ipfrag_time=3  # in seconds, default is 30 s
 net.ipv4.ipfrag_high_thresh=134217728  # 128 MiB, default is 256 KiB
 ```
 
-Details of each parameter here is explained in the [ROS 2 documentation](https://docs.ros.org/en/humble/How-To-Guides/DDS-tuning.html#cross-vendor-tuning).
+各参数的详细说明见 [ROS 2 文档](https://docs.ros.org/en/humble/How-To-Guides/DDS-tuning.html#cross-vendor-tuning)。
 
-#### Validate the sysctl settings
+<a id="validate-the-sysctl-settings"></a>
+
+#### 验证 sysctl 设置
 
 ```console
 user@pc$ sysctl net.core.rmem_max net.ipv4.ipfrag_time net.ipv4.ipfrag_high_thresh
@@ -59,9 +69,11 @@ net.ipv4.ipfrag_time = 3
 net.ipv4.ipfrag_high_thresh = 134217728
 ```
 
-### CycloneDDS Configuration
+<a id="cyclonedds-configuration"></a>
 
-Save the following file as `~/cyclonedds.xml`.
+### CycloneDDS 配置
+
+将以下内容保存为 `~/cyclonedds.xml`。
 
 ```xml
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -87,11 +99,11 @@ Save the following file as `~/cyclonedds.xml`.
 </CycloneDDS>
 ```
 
-!!! note "When using CycloneDDS on ROS 2 Jazzy (Ubuntu 24.04)"
+!!! note "在 ROS 2 Jazzy（Ubuntu 24.04）中使用 CycloneDDS 时"
 
-    On ROS 2 Jazzy, the default maximum Participant Index in rmw_cyclonedds_cpp is limited to around 32, which can cause a "Failed to find a free participant index for domain 0" error when running many nodes (e.g. planning simulator). Adding the `<Discovery>` section above with `ParticipantIndex` set to `none` avoids this error. For more details, see [Runtime Troubleshooting: CycloneDDS failed to find a free participant index](../../../community/support/troubleshooting/runtime-troubleshooting.md#cyclonedds-failed-to-find-a-free-participant-index).
+    在 ROS 2 Jazzy 中，rmw_cyclonedds_cpp 的默认最大 Participant Index 约为 32，运行大量节点（例如规划仿真器）时可能出现“Failed to find a free participant index for domain 0”错误。添加上面的 `<Discovery>` 配置段，并将 `ParticipantIndex` 设置为 `none`，即可避免此错误。详情请参阅[运行时故障排查：CycloneDDS 无法找到空闲 participant index](../../../community/support/troubleshooting/runtime-troubleshooting.md#cyclonedds-failed-to-find-a-free-participant-index)。
 
-Then add the following lines to your `~/.bashrc` file.
+然后在 `~/.bashrc` 文件中添加以下内容。
 
 ```bash
 export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
@@ -101,35 +113,41 @@ export CYCLONEDDS_URI=file:///absolute/path/to/cyclonedds.xml
 # Example: export CYCLONEDDS_URI=file:///home/user/cyclonedds.xml
 ```
 
-You can refer to [Eclipse Cyclone DDS: Run-time configuration documentation](https://github.com/eclipse-cyclonedds/cyclonedds/tree/a10ced3c81cc009e7176912190f710331a4d6caf#run-time-configuration) for more details.
+更多详情可参阅 [Eclipse Cyclone DDS：运行时配置文档](https://github.com/eclipse-cyclonedds/cyclonedds/tree/a10ced3c81cc009e7176912190f710331a4d6caf#run-time-configuration)。
 
 !!! warning
 
-    `RMW_IMPLEMENTATION` variable might be already set with [Ansible/RMW Implementation](https://github.com/autowarefoundation/autoware/tree/main/ansible/roles/rmw_implementation#manual-installation).
+    `RMW_IMPLEMENTATION` 变量可能已通过 [Ansible/RMW Implementation](https://github.com/autowarefoundation/autoware/tree/main/ansible/roles/rmw_implementation#manual-installation) 设置。
 
-    Check and remove the duplicate line if necessary.
+    请检查并在必要时删除重复行。
 
-## Additional information
+<a id="additional-information"></a>
 
-### About `ROS_LOCALHOST_ONLY` environment variable
+## 补充信息
 
-Previously, we used to set `export ROS_LOCALHOST_ONLY=1` to enable localhost-only communication.
-But because of [an ongoing issue](https://github.com/ros2/rmw_cyclonedds/issues/370), this method doesn't work.
+<a id="about-ros_localhost_only-environment-variable"></a>
+
+### 关于 `ROS_LOCALHOST_ONLY` 环境变量
+
+以前，我们通过设置 `export ROS_LOCALHOST_ONLY=1` 来启用仅限本机的通信。
+但由于[一个尚未解决的问题](https://github.com/ros2/rmw_cyclonedds/issues/370)，此方法目前无法正常工作。
 
 !!! warning
 
-    Do not set `export ROS_LOCALHOST_ONLY=1` in `~/.bashrc`.
+    请勿在 `~/.bashrc` 中设置 `export ROS_LOCALHOST_ONLY=1`。
 
-    If you do so, it will cause an error with RMW.
+    这样做会导致 RMW 错误。
 
-    Remove it from `~/.bashrc` if you have set it.
+    如果已经设置，请从 `~/.bashrc` 中删除。
 
-### About `ROS_DOMAIN_ID` environment variable
+<a id="about-ros_domain_id-environment-variable"></a>
 
-We can also set `export ROS_DOMAIN_ID=3(or any number 1 to 255)` (`0` by default) to avoid interference with other ROS 2 nodes on the same network.
+### 关于 `ROS_DOMAIN_ID` 环境变量
 
-But since `255` is a very small number, it might interfere with other computers on the same network unless you make sure everyone has a unique domain ID.
+也可以设置 `export ROS_DOMAIN_ID=3(or any number 1 to 255)`（默认值为 `0`），以避免同一网络中其他 ROS 2 节点的干扰。
 
-Another problem is that if someone runs a test that uses ROS 2 [launch_testing](https://github.com/ros2/launch/blob/a317c54bbbf2dfeec35fbb6d2b5913939d02750d/launch_testing/README.md) framework,
-by default it will use a random domain ID to isolate between tests even on the same machine.
-See [this PR](https://github.com/ros2/launch/pull/251) for more details.
+但由于可用范围只有 `255` 这么大，除非确保每个参与者的 domain ID 都唯一，否则仍可能与同一网络中的其他计算机互相干扰。
+
+另一个问题是，使用 ROS 2 [launch_testing](https://github.com/ros2/launch/blob/a317c54bbbf2dfeec35fbb6d2b5913939d02750d/launch_testing/README.md) 框架运行测试时，
+默认会使用随机 domain ID 隔离不同测试，即使这些测试运行在同一台计算机上。
+更多详情请参阅[此 PR](https://github.com/ros2/launch/pull/251)。

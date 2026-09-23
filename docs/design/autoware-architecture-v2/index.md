@@ -1,43 +1,51 @@
-# Autoware 2.0 Architecture
+<a id="autoware-20-architecture"></a>
+
+# Autoware 2.0 架构
 
 !!! warning
 
-    Under Construction
+    编写中
 
-## Generator - Selector architecture: conceptual overview
+<a id="generator-selector-architecture-conceptual-overview"></a>
 
-![generator-selector-simple.svg](images/generator-selector-simple.svg)
+## 生成器—选择器架构：概念概述
 
-Traditional autonomous driving follows a fixed pipeline:
+![生成器—选择器简图](images/generator-selector-simple.svg)
 
-> **Sensing → Perception → Localization → Planning → Trajectory**
+传统自动驾驶采用固定的处理流水线：
 
-This works well for rule-based planners, but newer approaches like E2E or diffusion models don’t fit neatly into that structure.
-They may skip or replace parts of the pipeline, making integration difficult.
+> **传感器处理 → 感知 → 定位 → 规划 → 轨迹**
 
-To support both classical and modern approaches, we **abstracted away the front half of the pipeline**.
+这种方式适合基于规则的规划器，但端到端（E2E）或扩散模型等新方法难以直接融入这一结构。
+它们可能跳过或替换流水线中的部分环节，增加集成难度。
 
-### Generators: Flexible trajectory producers
+为同时支持传统方法和新方法，我们**对流水线的前半部分进行了抽象**。
 
-A **Generator** is any module that outputs trajectories. It could be one or more:
+<a id="generators-flexible-trajectory-producers"></a>
 
-- rule-based or optimization planners using perception and maps
-- E2E models using raw sensor input
-- learned or sampling-based planners
+### 生成器：灵活的轨迹生成模块
 
-Generators can reuse Autoware’s sensing, perception, localization, and control. Or bypass them.
-Multiple generators can run in parallel.
+**生成器（Generator）**是任何能够输出轨迹的模块，可以采用以下一种或多种方式：
 
-### Selector: Safety + final choice
+- 利用感知和地图的规则规划器或优化规划器
+- 使用原始传感器输入的 E2E 模型
+- 学习型规划器或基于采样的规划器
 
-The **Selector** receives candidate trajectories and:
+生成器可以复用 Autoware 的传感器处理、感知、定位和控制，也可以绕过这些组件。
+多个生成器可以并行运行。
 
-- **Safety-checks** them (e.g., rule compliance, drivable area)
-- **Ranks and selects** the best one based on context or driving policies
+<a id="selector-safety-final-choice"></a>
 
-!!! tip "This enables:"
+### 选择器：安全检查与最终选择
 
-    * Seamless integration of both robotics-based and E2E planners
-    * Safe use of black-box models through explicit checks
-    * Flexible experimentation with new planning methods
-    * Robust decision-making by comparing multiple trajectory proposals
+**选择器（Selector）**接收候选轨迹，并执行以下操作：
+
+- 对轨迹进行**安全检查**（例如是否遵守规则、是否位于可行驶区域）
+- 根据情境或驾驶策略进行**排序并选出**最佳轨迹
+
+!!! tip "这使系统能够："
+
+    * 无缝集成基于机器人技术的规划器和 E2E 规划器
+    * 通过明确的检查安全地使用黑盒模型
+    * 灵活试验新的规划方法
+    * 通过比较多个候选轨迹进行稳健决策

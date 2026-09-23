@@ -1,6 +1,10 @@
-# Lane driving scenario
+<a id="lane-driving-scenario"></a>
 
-## 1. Launch Autoware
+# 车道内行驶场景
+
+<a id="1-launch-autoware"></a>
+
+## 1. 启动 Autoware
 
 ```bash
 source ~/autoware/install/setup.bash
@@ -9,44 +13,50 @@ ros2 launch autoware_launch planning_simulator.launch.xml map_path:=$HOME/autowa
 
 !!! warning
 
-    Note that you cannot use `~` instead of `$HOME` here.
+    注意，此处不能用 `~` 代替 `$HOME`。
 
-    If `~` is used, the map will fail to load.
+    如果使用 `~`，地图将无法加载。
 
-![after-autoware-launch](images/lane-following/after-autoware-launch.png)
+![启动 Autoware 后](images/lane-following/after-autoware-launch.png)
 
-## 2. Set an initial pose for the ego vehicle
+<a id="2-set-an-initial-pose-for-the-ego-vehicle"></a>
 
-![set-initial-pose](images/lane-following/set-initial-pose.png)
+## 2. 设置自车的初始位姿
 
-a) Click the `2D Pose estimate` button in the toolbar, or hit the `P` key.
+![设置初始位姿](images/lane-following/set-initial-pose.png)
 
-b) In the 3D View pane, click and hold the left-mouse button, and then drag to set the direction for the initial pose. An image representing the vehicle should now be displayed.
+a) 点击工具栏中的 `2D Pose estimate` 按钮，或按 `P` 键。
+
+b) 在 3D 视图窗格中按住鼠标左键，然后拖动以设置初始位姿的方向。此时应显示代表车辆的图像。
 
 !!! warning
 
-    Remember to set the initial pose of the car in the same direction as the lane.
+    请将车辆初始位姿的方向设置为与车道方向一致。
 
-    To confirm the direction of the lane, check the arrowheads displayed on the map.
+    可通过地图上显示的箭头确认车道方向。
 
-## 3. Set a goal pose for the ego vehicle
+<a id="3-set-a-goal-pose-for-the-ego-vehicle"></a>
 
-a) Click the `2D Goal Pose` button in the toolbar, or hit the `G` key.
+## 3. 设置自车的目标位姿
 
-b) In the 3D View pane, click and hold the left-mouse button, and then drag to set the direction for the goal pose. If done correctly, you will see a planned path from initial pose to goal pose.
+a) 点击工具栏中的 `2D Goal Pose` 按钮，或按 `G` 键。
 
-![set-goal-pose](images/lane-following/set-goal-pose.png)
+b) 在 3D 视图窗格中按住鼠标左键，然后拖动以设置目标位姿的方向。如果设置正确，会显示从初始位姿到目标位姿的规划路径。
 
-## 4. Start the ego vehicle
+![设置目标位姿](images/lane-following/set-goal-pose.png)
 
-Now you can start the ego vehicle driving by clicking the `Auto` button in the `AutowareStatePanel`.
-Alternatively, you can manually start the vehicle by running the following command:
+<a id="4-start-the-ego-vehicle"></a>
+
+## 4. 启动自车
+
+现在可以点击 `AutowareStatePanel` 中的 `Auto` 按钮，让自车开始行驶。
+也可以运行以下命令，手动启动车辆：
 
 ```bash
 source ~/autoware/install/setup.bash
 ros2 service call /api/operation_mode/change_to_autonomous autoware_adapi_v1_msgs/srv/ChangeOperationMode {}
 ```
 
-After that, `Auto` button will be selected and grayed out.
+随后，`Auto` 按钮会处于选中状态并变灰。
 
-![start-driving](images/lane-following/start-driving.png)
+![开始行驶](images/lane-following/start-driving.png)

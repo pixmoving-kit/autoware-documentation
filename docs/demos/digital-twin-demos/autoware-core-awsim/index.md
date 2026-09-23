@@ -1,49 +1,57 @@
-# Autoware Core digital twin simulation with AWSIM
+<a id="autoware-core-digital-twin-simulation-with-awsim"></a>
 
-## Installing Autoware
+# 使用 AWSIM 进行 Autoware Core 数字孪生仿真
 
-This page describes the procedure for an environment where Autoware Core is already installed.
-If you have not yet installed Autoware, please refer to the [Installation](../../../installation/index.md).
+<a id="installing-autoware"></a>
 
-## Download AWSIM
+## 安装 Autoware
 
-1. Download following files from [this page](https://autowarefoundation.github.io/AWSIM/Downloads/).
+本页介绍已安装 Autoware Core 的环境中的操作步骤。
+如果尚未安装 Autoware，请参阅[安装指南](../../../installation/index.md)。
+
+<a id="download-awsim"></a>
+
+## 下载 AWSIM
+
+1. 从[此页面](https://autowarefoundation.github.io/AWSIM/Downloads/)下载以下文件。
    - AWSIM-Demo.zip
    - Shinjuku-Map.zip
 
-2. Extract the downloaded files. This page assumes the files are placed in the following paths.
+2. 解压下载的文件。本页假定文件放置在以下路径。
    - $HOME/Downloads/AWSIM-Demo
    - $HOME/Downloads/Shinjuku-Map
 
-## Start simulation
+<a id="start-simulation"></a>
 
-1. Launch Autoware according to the section below depending on your installation type.
-   - Launch Autoware for Docker installation
-   - Launch Autoware for source installation
-   - Launch Autoware for Debian Package installation
+## 开始仿真
 
-   The map will be displayed in Rviz as shown below.
-   ![rviz](images/rviz.png)
+1. 根据安装方式，按照下方对应章节启动 Autoware。
+   - 启动通过 Docker 安装的 Autoware
+   - 启动通过源码安装的 Autoware
+   - 启动通过 Debian 软件包安装的 Autoware
 
-2. Launch AWSIM.
+   地图会在 RViz 中显示，如下图所示。
+   ![RViz](images/rviz.png)
+
+2. 启动 AWSIM。
 
    ```bash
    cd $HOME/Downloads/AWSIM-Demo
    ./AWSIM-Demo.x86_64
    ```
 
-   The AWSIM will be displayed as shown below.
-   ![awsim](images/awsim.png)
+   AWSIM 界面如下图所示。
+   ![AWSIM](images/awsim.png)
 
-3. Initialize pose. Select "2D Pose Estimate" and drag the mouse as shown by the arrow.
+3. 初始化位姿。选择“2D Pose Estimate”，并沿箭头方向拖动鼠标。
 
-   ![init-pose](images/init-pose.png)
+   ![初始化位姿](images/init-pose.png)
 
-4. Set goal pose. Select "2D Goal Pose" and drag the mouse as shown by the arrow.
+4. 设置目标位姿。选择“2D Goal Pose”，并沿箭头方向拖动鼠标。
 
-   ![goal-pose](images/goal-pose.png)
+   ![目标位姿](images/goal-pose.png)
 
-5. Start autonomous driving.
+5. 开始自动驾驶。
 
    ```bash
    source $HOME/autoware_launch_workspace/install/setup.bash
@@ -56,24 +64,28 @@ If you have not yet installed Autoware, please refer to the [Installation](../..
      --once --qos-durability transient_local
    ```
 
-## Launch Autoware for Docker installation
+<a id="launch-autoware-for-docker-installation"></a>
 
-1. Run the following command.
+## 启动通过 Docker 安装的 Autoware
+
+1. 运行以下命令。
 
    ```bash
    xhost +local:
    docker run --rm -it --net host -e DISPLAY=$DISPLAY -v $HOME/Downloads/Shinjuku-Map/map:/home/aw/autoware_data/maps ghcr.io/autowarefoundation/autoware:core-humble
    ```
 
-2. Run the following command in the docker container.
+2. 在 Docker 容器中运行以下命令。
 
    ```bash
    ros2 launch autoware_core autoware_core.launch.xml use_sim_time:=true map_path:=/home/aw/autoware_data/maps vehicle_model:=autoware_sample_vehicle sensor_model:=autoware_awsim_sensor_kit
    ```
 
-## Launch Autoware for source installation
+<a id="launch-autoware-for-source-installation"></a>
 
-1. Run the following command.
+## 启动通过源码安装的 Autoware
+
+1. 运行以下命令。
 
    ```bash
    cd $HOME/autoware_core_workspace
@@ -81,9 +93,11 @@ If you have not yet installed Autoware, please refer to the [Installation](../..
    ros2 launch autoware_core autoware_core.launch.xml use_sim_time:=true map_path:=$HOME/Downloads/Shinjuku-Map/map vehicle_model:=autoware_sample_vehicle sensor_model:=autoware_awsim_sensor_kit
    ```
 
-## Launch Autoware for Debian Package installation
+<a id="launch-autoware-for-debian-package-installation"></a>
 
-1. Run the following command.
+## 启动通过 Debian 软件包安装的 Autoware
+
+1. 运行以下命令。
 
    ```bash
    source /opt/ros/humble/setup.bash

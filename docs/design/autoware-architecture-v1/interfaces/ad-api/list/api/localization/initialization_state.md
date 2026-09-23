@@ -6,11 +6,11 @@ type:
   name: autoware_adapi_v1_msgs/msg/LocalizationInitializationState
   msg:
     - name: state
-      text: A value of the localization initialization state.
+      text: 定位初始化状态值。
 ---
 
 {% extends 'design/autoware-architecture-v1/interfaces/templates/autoware-interface.jinja2' %}
 {% block description %}
-Get the initialization state of localization.
-For details, see the [localization](../../../features/localization.md).
+获取定位的初始化状态。
+详情请参阅[定位](../../../features/localization.md)。
 {% endblock %}

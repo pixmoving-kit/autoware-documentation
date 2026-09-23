@@ -1,14 +1,20 @@
-# Vehicle operation
+<a id="vehicle-operation"></a>
 
-## Request to intervene
+# 车辆操作
 
-Request to intervene (RTI) is a feature that requires the operator to switch to manual driving mode. It is also called Take Over Request (TOR).
-Interfaces for RTI are currently being discussed. For now assume that manual driving is requested if the MRM state is not NORMAL.
-See [fail-safe](../features/fail-safe.md) for details.
+<a id="request-to-intervene"></a>
 
-## Request to cooperate
+## 接管请求
 
-Request to cooperate (RTC) is a feature that the operator supports the decision in autonomous driving mode.
-Autoware usually drives the vehicle using its own decisions, but the operator may prefer to make their own decisions in complex situations.
-Since RTC only overrides the decision and does not need to change operation mode, the vehicle can continue autonomous driving, unlike RTC.
-See [cooperation](../features/cooperation.md) for details.
+接管请求（RTI）要求操作员切换到手动驾驶模式，也称 Take Over Request（TOR）。
+RTI 接口目前仍在讨论中。现阶段可以认为，当 MRM 状态不是 NORMAL 时，即请求手动驾驶。
+详情请参阅[故障安全](../features/fail-safe.md)。
+
+<a id="request-to-cooperate"></a>
+
+## 协作请求
+
+协作请求（RTC）允许操作员在自动驾驶模式下辅助决策。
+Autoware 通常根据自身决策驾驶车辆，但在复杂情况下，操作员可能希望自行作出决定。
+RTC 只覆盖决策，无需切换操作模式，因此车辆可以继续自动驾驶，与接管请求不同。
+详情请参阅[协作](../features/cooperation.md)。

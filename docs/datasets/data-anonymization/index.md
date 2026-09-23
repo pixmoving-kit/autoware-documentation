@@ -1,23 +1,33 @@
-# Rosbag2 Anonymizer
+<a id="rosbag2-anonymizer"></a>
 
-## Overview
+# Rosbag2 匿名化工具
 
-Autoware provides a tool ([autoware_rosbag2_anonymizer](https://github.com/autowarefoundation/autoware_rosbag2_anonymizer)) to anonymize ROS 2 bag files.
-This tool is useful when you want to share your data with Autoware community but want to keep the privacy of the data.
+<a id="overview"></a>
 
-With this tool you can blur any object (faces, license plates, etc.) in your bag files, and you can get a new bag file
-with the blurred images.
+## 概述
 
-## Installation
+Autoware 提供了一个工具（[autoware_rosbag2_anonymizer](https://github.com/autowarefoundation/autoware_rosbag2_anonymizer)），用于对 ROS 2 bag 文件进行匿名化处理。
+如果希望向 Autoware 社区分享数据，同时保护数据隐私，该工具会很有用。
 
-### Clone the repository
+它可以模糊处理 bag 文件中的任意目标（人脸、车牌等），并生成新的 bag 文件，
+其中包含处理后的图像。
+
+<a id="installation"></a>
+
+## 安装
+
+<a id="clone-the-repository"></a>
+
+### 克隆仓库
 
 ```bash
 git clone https://github.com/autowarefoundation/autoware_rosbag2_anonymizer.git
 cd autoware_rosbag2_anonymizer
 ```
 
-### Download the pretrained models
+<a id="download-the-pretrained-models"></a>
+
+### 下载预训练模型
 
 ```bash
 wget https://dl.fbaipublicfiles.com/segment_anything/sam_vit_h_4b8939.pth
@@ -29,38 +39,44 @@ wget https://github.com/autowarefoundation/autoware_rosbag2_anonymizer/releases/
 wget https://github.com/autowarefoundation/autoware_rosbag2_anonymizer/releases/download/v0.0.0/yolo_config.yaml
 ```
 
-### Install ROS 2 mcap dependencies if you will use mcap files
+<a id="install-ros-2-mcap-dependencies-if-you-will-use-mcap-files"></a>
+
+### 如需使用 mcap 文件，安装 ROS 2 mcap 依赖
 
 !!! warning
 
-    Be sure you have installed the ROS 2 on your system.
+    请确保系统已安装 ROS 2。
 
 ```bash
 sudo apt install ros-humble-rosbag2-storage-mcap
 ```
 
-### Install `autoware_rosbag2_anonymizer` tool
+<a id="install-autoware_rosbag2_anonymizer-tool"></a>
 
-Before installing the tool, you should update the pip package manager.
+### 安装 `autoware_rosbag2_anonymizer` 工具
+
+安装工具前，应先更新 pip 包管理器。
 
 ```bash
 python3 -m pip install pip -U
 ```
 
-Then, you can install the tool with the following command.
+然后可以使用以下命令安装工具。
 
 ```bash
 python3 -m pip install .
 ```
 
-## Configuration
+<a id="configuration"></a>
 
-Define prompts in the `validation.json` file. The tool will use these prompts to detect objects. You can add your prompts
-as dictionaries under the prompts key. Each dictionary should have two keys:
+## 配置
 
-- `prompt`: The prompt that will be used to detect the object. This prompt will be blurred in the anonymization process.
-- `should_inside`: This is a list of prompts that object should be inside. If the object is not inside the prompts, the
-  tool will not blur the object.
+在 `validation.json` 中定义提示词，工具会用这些提示词检测目标。可以在 prompts 键下
+以字典形式添加提示词。每个字典应包含两个键：
+
+- `prompt`：用于检测目标的提示词。该提示词对应的目标将在匿名化过程中被模糊处理。
+- `should_inside`：目标应位于其中的提示词列表。如果目标不在这些提示词对应的区域内，
+  工具就不会对其进行模糊处理。
 
 ```json
 {
@@ -77,8 +93,8 @@ as dictionaries under the prompts key. Each dictionary should have two keys:
 }
 ```
 
-You should set your configuration in the configuration files under config folder according to the usage. Following
-instructions will guide you to set each configuration file.
+应根据使用方式，设置 config 文件夹下的配置文件。以下
+说明将指导你设置各配置文件。
 
 - `config/anonymize_with_unified_model.yaml`
 
@@ -160,106 +176,128 @@ blur:
   sigma_x: 11 # Sigma x for the Gaussian blur (int)
 ```
 
-## Usage
+<a id="usage"></a>
 
-The tool provides two options to anonymize images in ROS 2 bag files.
+## 使用方法
+
+此工具提供两种方式，对 ROS 2 bag 文件中的图像进行匿名化。
 
 !!! warning
 
-    If your ROS 2 bag file includes custom message types from Autoware or any other packages, you should source the
-    their workspaces before running the tool.
+    如果 ROS 2 bag 文件包含来自 Autoware 或其他功能包的自定义消息类型，应在运行工具前 source
+    相应的工作区。
 
-    You can source Autoware workspace with the following command.
+    可以使用以下命令 source Autoware 工作区。
     ```bash
     source /path/to/your/workspace/install/setup.bash
     ```
 
-### Option 1: Anonymize with Unified Model
+<a id="option-1-anonymize-with-unified-model"></a>
 
-You should provide a single rosbag and tool anonymize images in rosbag with a unified model. The model is a combination
-of GroundingDINO, OpenCLIP, YOLOv8 and SegmentAnything. If you don't want to use pre-trained YOLOv8 model, you can
-follow the instructions in the second option to train your own YOLOv8 model.
+### 方式 1：使用统一模型匿名化
 
-You should set your configuration in config/anonymize_with_unified_model.yaml file.
+提供一个 rosbag 后，工具会使用统一模型对其中的图像进行匿名化。该模型结合了
+GroundingDINO、OpenCLIP、YOLOv8 和 SegmentAnything。如果不想使用预训练的 YOLOv8 模型，可以
+按方式 2 的说明训练自己的 YOLOv8 模型。
+
+应在 config/anonymize_with_unified_model.yaml 文件中设置配置。
 
 ```bash
 python3 main.py config/anonymize_with_unified_model.yaml --anonymize_with_unified_model
 ```
 
-### Option 2: Anonymize Using the YOLOv8 Model Trained on a Dataset Created with the Unified Model
+<a id="option-2-anonymize-using-the-yolov8-model-trained-on-a-dataset-created-with-the-unified-model"></a>
 
-#### Step 1: Create a Dataset
+### 方式 2：使用基于统一模型所建数据集训练的 YOLOv8 模型匿名化
 
-Create an initial dataset with the unified model. You can provide multiple ROS 2 bag files to create a dataset. After
-running the following command, the tool will create a dataset in YOLO format.
+<a id="step-1-create-a-dataset"></a>
 
-You should set your configuration in config/yolo_create_dataset.yaml file.
+#### 第 1 步：创建数据集
+
+使用统一模型创建初始数据集。可以提供多个 ROS 2 bag 文件来构建数据集。运行
+以下命令后，工具将创建 YOLO 格式的数据集。
+
+应在 config/yolo_create_dataset.yaml 文件中设置配置。
 
 ```bash
 python3 main.py config/yolo_create_dataset.yaml --yolo_create_dataset
 ```
 
-#### Step 2: Manually Label the Missing Labels
+<a id="step-2-manually-label-the-missing-labels"></a>
 
-The dataset which is created in the first step has some missing labels. You should label the missing labels manually.
-You can use the following example tools to label the missing labels:
+#### 第 2 步：手动补充缺失标注
+
+第 1 步创建的数据集存在部分缺失标注，需要手动补齐。
+可以使用以下工具补充标注：
 
 - [label-studio](https://github.com/HumanSignal/label-studio)
-- [Roboflow](https://roboflow.com/) (You can use the free version)
+- [Roboflow](https://roboflow.com/)（可以使用免费版本）
 
-#### Step 3: Split the Dataset
+<a id="step-3-split-the-dataset"></a>
 
-Split the dataset into training and validation sets. Give the path to the dataset folder which is created in the first
-step.
+#### 第 3 步：划分数据集
+
+将数据集划分为训练集和验证集，并提供第 1 步创建的
+数据集文件夹路径。
 
 ```bash
 autoware-rosbag2-anonymizer-split-dataset /path/to/dataset/folder
 ```
 
-#### Step 4: Train the YOLOv8 Model
+<a id="step-4-train-the-yolov8-model"></a>
 
-Train the YOLOv8 model with the dataset which is created in the first step.
+#### 第 4 步：训练 YOLOv8 模型
 
-You should set your configuration in config/yolo_train.yaml file.
+使用第 1 步创建的数据集训练 YOLOv8 模型。
+
+应在 config/yolo_train.yaml 文件中设置配置。
 
 ```bash
 python3 main.py config/yolo_train.yaml --yolo_train
 ```
 
-#### Step 5: Anonymize Images in ROS 2 Bag Files
+<a id="step-5-anonymize-images-in-ros-2-bag-files"></a>
 
-Anonymize images in ROS 2 bag files with the trained YOLOv8 model. If you want to anonymize your ROS 2 bag file with only
-YOLOv8 model, you should use following command. But we recommend to use the unified model for better results. You can
-follow the Option 1 for the unified model with the YOLOv8 model trained by you.
+#### 第 5 步：对 ROS 2 bag 文件中的图像匿名化
 
-You should set your configuration in config/yolo_anonymize.yaml file.
+使用训练后的 YOLOv8 模型对 ROS 2 bag 文件中的图像进行匿名化。如果只想使用
+YOLOv8 模型，请执行以下命令。但为获得更好的结果，建议使用统一模型。你可以
+按方式 1 操作，在统一模型中使用自己训练的 YOLOv8 模型。
+
+应在 config/yolo_anonymize.yaml 文件中设置配置。
 
 ```bash
 python3 main.py config/yolo_anonymize.yaml --yolo_anonymize
 ```
 
-## Troubleshooting
+<a id="troubleshooting"></a>
 
-- **Error 1**: `torch.OutOfMemoryError: CUDA out of memory`
+## 故障排查
+
+- **错误 1**：`torch.OutOfMemoryError: CUDA out of memory`
 
 ```bash
 torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 1024.00 MiB. GPU 0 has a total capacity of 10.87 GiB of which 1010.88 MiB is free. Including non-PyTorch memory, this process has 8.66 GiB memory in use. Of the allocated memory 8.21 GiB is allocated by PyTorch, and 266.44 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
 ```
 
-This error occurs when the GPU memory is not enough to run the model. You can add the following environment variable to
-avoid this error.
+GPU 显存不足以运行模型时会发生此错误。可以添加以下环境变量
+来避免此错误。
 
 ```bash
 export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
 ```
 
-## Share Your Anonymized Data
+<a id="share-your-anonymized-data"></a>
 
-After anonymizing your data, you can share your anonymized data with the Autoware community. If you want to share your
-data with the Autoware community, you should create an issue and pull request to
-the [Autoware Documentation repository](https://github.com/autowarefoundation/autoware-documentation).
+## 分享匿名化数据
 
-## Citation
+数据匿名化后，可以与 Autoware 社区分享。如果希望向 Autoware 社区分享
+数据，应创建 issue 和拉取请求，提交到
+[Autoware 文档仓库](https://github.com/autowarefoundation/autoware-documentation)。
+
+<a id="citation"></a>
+
+## 引用
 
 ```bibtex
 @article{liu2023grounding,

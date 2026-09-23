@@ -1,14 +1,16 @@
-# ROS 2 Humble to Jazzy transition
+<a id="ros-2-humble-to-jazzy-transition"></a>
 
-Tracked in [Support ROS 2 Jazzy Jalisco #6695](https://github.com/autowarefoundation/autoware/issues/6695).
+# 从 ROS 2 Humble 迁移到 Jazzy
 
-- ROS 2 Humble will reach the end of life on May 2027.
-- ROS 2 Jazzy has been released in May 2024 and will be supported until May 2029.
+进度跟踪见 [支持 ROS 2 Jazzy Jalisco #6695](https://github.com/autowarefoundation/autoware/issues/6695)。
 
-This timeline is for Autoware's transition:
+- ROS 2 Humble 将于 2027 年 5 月结束支持。
+- ROS 2 Jazzy 已于 2024 年 5 月发布，支持将持续到 2029 年 5 月。
 
-- **From:** Ubuntu 22.04 | ROS 2 **Humble**
-- **To:** Ubuntu 24.04 | ROS 2 **Jazzy**
+此时间表用于 Autoware 的平台迁移：
+
+- **原平台：** Ubuntu 22.04 | ROS 2 **Humble**
+- **目标平台：** Ubuntu 24.04 | ROS 2 **Jazzy**
 
 ```mermaid
 timeline

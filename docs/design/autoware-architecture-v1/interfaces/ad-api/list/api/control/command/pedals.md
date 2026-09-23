@@ -6,16 +6,16 @@ type:
   name: autoware_adapi_v1_msgs/msg/PedalsCommand
   msg:
     - name: stamp
-      text: Timestamp when this message was sent.
+      text: 发送此消息时的时间戳。
     - name: throttle
-      text: Target throttle pedal ratio.
+      text: 目标油门踏板比例。
     - name: brake
-      text: Target brake pedal ratio.
+      text: 目标制动踏板比例。
 ---
 
 {% extends 'design/autoware-architecture-v1/interfaces/templates/autoware-interface.jinja2' %}
 {% block description %}
-This is the target pedals that Autoware is sending to the vehicle.
-The pedal value is the ratio with the maximum pedal depression being 1.0.
-This API is not supported if the vehicle is not controlled by pedals.
+Autoware 发送给车辆的目标踏板指令。
+踏板值表示踏下程度的比例，完全踏下时为 1.0。
+如果车辆不是通过踏板指令控制的，则不支持此 API。
 {% endblock %}

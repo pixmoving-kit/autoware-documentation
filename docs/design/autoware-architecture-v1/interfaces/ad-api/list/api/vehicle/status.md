@@ -6,16 +6,16 @@ type:
   name: autoware_adapi_v1_msgs/msg/VehicleStatus
   msg:
     - name: gear
-      text: Gear status.
+      text: 挡位状态。
     - name: turn_indicators
-      text: Turn indicators status, only either left or right will be enabled.
+      text: 转向灯状态，仅左侧或右侧之一会启用。
     - name: hazard_lights
-      text: Hazard lights status.
+      text: 危险警告灯状态。
     - name: steering_tire_angle
-      text: Vehicle current tire angle in radian.
+      text: 车辆当前的车轮转角，单位为弧度。
 ---
 
 {% extends 'design/autoware-architecture-v1/interfaces/templates/autoware-interface.jinja2' %}
 {% block description %}
-Publish vehicle state information.
+发布车辆状态信息。
 {% endblock %}

@@ -6,13 +6,13 @@ type:
   name: autoware_adapi_v1_msgs/msg/MrmState
   msg:
     - name: state
-      text: The state of MRM operation.
+      text: MRM 操作的状态。
     - name: behavior
-      text: The currently selected behavior of MRM.
+      text: 当前选择的 MRM 行为。
 ---
 
 {% extends 'design/autoware-architecture-v1/interfaces/templates/autoware-interface.jinja2' %}
 {% block description %}
-Get the MRM state.
-For details, see the [fail-safe](../../../features/fail-safe.md).
+获取 MRM 状态。
+详情请参阅[故障安全](../../../features/fail-safe.md)。
 {% endblock %}

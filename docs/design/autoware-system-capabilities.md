@@ -1,8 +1,10 @@
-# Autoware system capabilities
+<a id="autoware-system-capabilities"></a>
 
-Autoware offers a complete suite of capabilities for autonomous driving system development including:
+# Autoware 系统能力
 
-- **Key Components for AD Systems:** Autoware provides various algorithms for localization, obstacle detection, path planning, and vehicle control for users to choose depending on their needs.
-- **Hardware Integration:** Autoware provides reference implementation and instructions for integrating with different sensors and vehicles.
-- **Simulation Support:** Autoware works with simulation platforms to validate algorithms and scenarios before real-world deployment.
-- **Tools:** Provides useful tools for development including sensor calibration, mapping, data creation, diagnostic, and scenario tests.
+Autoware 为自动驾驶系统开发提供完整能力，包括：
+
+- **自动驾驶系统的关键组件：** Autoware 提供定位、障碍物检测、路径规划和车辆控制等多种算法，供用户按需选择。
+- **硬件集成：** Autoware 提供与不同传感器和车辆集成的参考实现及说明。
+- **仿真支持：** Autoware 可与仿真平台配合，在实际部署之前验证算法和场景。
+- **工具：** 提供传感器标定、建图、数据创建、诊断和场景测试等实用开发工具。

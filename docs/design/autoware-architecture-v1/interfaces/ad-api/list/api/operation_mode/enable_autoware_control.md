@@ -6,12 +6,12 @@ type:
   name: autoware_adapi_v1_msgs/srv/ChangeOperationMode
   res:
     - name: status
-      text: response status
+      text: 响应状态
 ---
 
 {% extends 'design/autoware-architecture-v1/interfaces/templates/autoware-interface.jinja2' %}
 {% block description %}
-Enable vehicle control by Autoware.
-For details, see the [operation mode](../../../features/operation_mode.md).
-This API fails if the vehicle does not support mode change by software.
+启用 Autoware 对车辆的控制。
+详情请参阅[操作模式](../../../features/operation_mode.md)。
+如果车辆不支持通过软件切换模式，此 API 调用会失败。
 {% endblock %}

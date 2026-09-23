@@ -6,16 +6,16 @@ type:
   name: autoware_adapi_v1_msgs/srv/SetCooperationCommands
   req:
     - name: commands.uuid
-      text: The ID in the cooperation status.
+      text: 协作状态中的 ID。
     - name: commands.cooperator
-      text: The operator's decision.
+      text: 操作员的决策。
   res:
     - name: status
-      text: response status
+      text: 响应状态
 ---
 
 {% extends 'design/autoware-architecture-v1/interfaces/templates/autoware-interface.jinja2' %}
 {% block description %}
-Set the operator's decision for cooperation.
-For details, see the [cooperation](../../../../features/cooperation.md).
+设置操作员对协作请求的决策。
+详情请参阅[协作](../../../../features/cooperation.md)。
 {% endblock %}

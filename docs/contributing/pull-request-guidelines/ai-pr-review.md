@@ -1,31 +1,39 @@
-# AI PR Review
+<a id="ai-pr-review"></a>
 
-We have [Codium-ai/pr-agent](https://github.com/Codium-ai/pr-agent/tree/main) enabled for Autoware Universe repository.
+# AI PR 审查
 
-## The workflow
+我们已在 Autoware Universe 仓库中启用 [Codium-ai/pr-agent](https://github.com/Codium-ai/pr-agent/tree/main)。
 
-Workflow: [pr-agent.yaml](https://github.com/autowarefoundation/autoware_universe/blob/main/.github/workflows/pr-agent.yaml)
+<a id="the-workflow"></a>
 
-### Additional links for the workflow maintainers
+## 工作流
 
-- [Available models list](https://github.com/Codium-ai/pr-agent/blob/main/pr_agent/algo/__init__.py)
+工作流：[pr-agent.yaml](https://github.com/autowarefoundation/autoware_universe/blob/main/.github/workflows/pr-agent.yaml)
 
-## How to use
+<a id="additional-links-for-the-workflow-maintainers"></a>
 
-When you create the PR, or within the PR add the label `tag:pr-agent`.
+### 面向工作流维护者的其他链接
 
-Wait until both PR-Agent jobs are completed successfully:
+- [可用模型列表](https://github.com/Codium-ai/pr-agent/blob/main/pr_agent/algo/__init__.py)
+
+<a id="how-to-use"></a>
+
+## 使用方法
+
+创建 PR 时或创建后，在 PR 中添加 `tag:pr-agent` 标签。
+
+等待以下两个 PR-Agent 作业均成功完成：
 
 - `prevent-no-label-execution-pr-agent / prevent-no-label-execution`
 - `Run pr agent on every pull request, respond to user comments`
 
 !!! warning
 
-    If you add multiple labels at the same time, `prevent-no-label-execution` can get confused.
+    如果同时添加多个标签，`prevent-no-label-execution` 可能无法正确处理。
 
-    For example, first add `tag:pr-agent`, wait until it is ready, then add `tag:run-build-and-test-differential` if you need it.
+    例如，先添加 `tag:pr-agent`，等待其就绪后，再根据需要添加 `tag:run-build-and-test-differential`。
 
-Then you can pick one of the following commands:
+然后，你可以选择使用以下文档中的命令：
 
 ```text
 /review: Request a review of your Pull Request.
@@ -37,15 +45,15 @@ Then you can pick one of the following commands:
 /help: Get a list of all available PR-Agent tools and their descriptions.
 ```
 
-- [Here is the official documentation](https://pr-agent-docs.codium.ai/tools/).
-- [Usage Guide](https://pr-agent-docs.codium.ai/usage-guide/automations_and_usage/#online-usage)
+- [官方文档](https://pr-agent-docs.codium.ai/tools/)
+- [使用指南](https://pr-agent-docs.codium.ai/usage-guide/automations_and_usage/#online-usage)
 
-To use it, [drop a comment post within your PR like this](https://github.com/Codium-ai/pr-agent/pull/229#issuecomment-1695021901).
+使用时，[像这样在 PR 中发表评论](https://github.com/Codium-ai/pr-agent/pull/229#issuecomment-1695021901)。
 
-Within a minute, you should see 👀 reaction under your comment post.
+一分钟内，你应该会看到评论下出现 👀 表情回应。
 
-Then the bot will drop a response with reviews, description or an answer.
+随后机器人会回复审查意见、描述或答案。
 
 !!! info
 
-    Please drop a single PR-Agent related comment at a time.
+    请每次只发布一条与 PR-Agent 相关的评论。

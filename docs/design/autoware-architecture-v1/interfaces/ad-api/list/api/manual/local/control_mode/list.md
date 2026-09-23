@@ -6,13 +6,13 @@ type:
   name: autoware_adapi_v1_msgs/srv/ListManualControlMode
   res:
     - name: status
-      text: response status
+      text: 响应状态
     - name: modes
-      text: List of available modes.
+      text: 可用模式列表。
 ---
 
 {% extends 'design/autoware-architecture-v1/interfaces/templates/autoware-interface.jinja2' %}
 {% block description %}
-List the available manual control modes as described in [manual control](../../../../../features/manual-control.md).
-The disabled mode is not included in the available modes.
+按照[手动控制](../../../../../features/manual-control.md)中的说明，列出可用的手动控制模式。
+可用模式列表不包含已禁用的模式。
 {% endblock %}

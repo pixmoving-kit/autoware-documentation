@@ -1,13 +1,19 @@
-# Control
+<a id="control"></a>
 
-## Related API
+# 控制
+
+<a id="related-api"></a>
+
+## 相关 API
 
 - {{ link_ad_api('/api/control/command/acceleration') }}
 - {{ link_ad_api('/api/control/command/pedals') }}
 - {{ link_ad_api('/api/control/command/steering') }}
 - {{ link_ad_api('/api/control/command/velocity') }}
 
-## Commands
+<a id="commands"></a>
 
-The control commands are target values that Autoware is sending to the vehicle. Note that unlike vehicle status, this does not represent the actual vehicle status.
-Some commands may not be supported depending on the vehicle control method.
+## 指令
+
+控制指令是 Autoware 发送给车辆的目标值。请注意，与车辆状态不同，这些值并不代表车辆的实际状态。
+根据车辆控制方式的不同，某些指令可能不受支持。

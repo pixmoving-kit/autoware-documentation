@@ -6,10 +6,10 @@ type:
   name: autoware_adapi_v1_msgs/msg/DoorStatusArray
   msg:
     - name: doors.status
-      text: current door status
+      text: 当前车门状态
 ---
 
 {% extends 'design/autoware-architecture-v1/interfaces/templates/autoware-interface.jinja2' %}
 {% block description %}
-The status of each door such as opened or closed.
+各车门的状态，例如开启或关闭。
 {% endblock %}

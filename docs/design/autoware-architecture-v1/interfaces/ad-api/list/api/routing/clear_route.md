@@ -6,10 +6,10 @@ type:
   name: autoware_adapi_v1_msgs/srv/ClearRoute
   res:
     - name: status
-      text: response status
+      text: 响应状态
 ---
 
 {% extends 'design/autoware-architecture-v1/interfaces/templates/autoware-interface.jinja2' %}
 {% block description %}
-Clear the route. This API fails when the vehicle is using the route.
+清除路线。车辆正在使用该路线时，此 API 调用会失败。
 {% endblock %}

@@ -1,6 +1,10 @@
-# Routing
+<a id="routing"></a>
 
-## Related API
+# 路线规划
+
+<a id="related-api"></a>
+
+## 相关 API
 
 - {{ link_ad_api('/api/routing/state') }}
 - {{ link_ad_api('/api/routing/route') }}
@@ -10,28 +14,34 @@
 - {{ link_ad_api('/api/routing/change_route_points') }}
 - {{ link_ad_api('/api/routing/change_route') }}
 
-## Description
+<a id="description"></a>
 
-This API manages destination and waypoints. Note that waypoints are not like stops and just points passing through.
-In other words, Autoware does not support the route with multiple stops, the application needs to split it up and switch them.
-There are two ways to set the route. The one is a generic method that uses pose, another is a map-dependent.
+## 说明
 
-## States
+此 API 管理目的地和途经点。注意，途经点只表示经过的位置，并不代表停车点。
+换言之，Autoware 不支持包含多个停车点的路线，应用需要将其拆分并依次切换。
+设置路线有两种方式：一种是使用位姿的通用方法，另一种则依赖具体地图。
 
-![route-state](routing/state.drawio.svg)
+<a id="states"></a>
 
-| State    | Description                                        |
+## 状态
+
+![路线状态](routing/state.drawio.svg)
+
+| 状态 | 说明 |
 | -------- | -------------------------------------------------- |
-| UNSET    | The route is not set. Waiting for a route request. |
-| SET      | The route is set.                                  |
-| ARRIVED  | The vehicle has arrived at the destination.        |
-| CHANGING | Trying to change the route.                        |
+| UNSET | 尚未设置路线，等待路线请求。 |
+| SET | 已设置路线。 |
+| ARRIVED | 车辆已到达目的地。 |
+| CHANGING | 正在尝试更改路线。 |
 
-## Options
+<a id="options"></a>
 
-The route set and change APIs have route options that allow applications to choose several behaviors regarding route planning.
-See the sections below for supported options and details.
+## 选项
+
+路线设置和更改 API 提供路线选项，允许应用选择与路线规划相关的不同行为。
+支持的选项及详情请参阅以下章节。
 
 ### allow_goal_modification
 
-**[v1.1.0]** Autoware tries to look for an alternate goal when goal is unreachable (e.g., when there is an obstacle on the given goal). When setting a route from the API, applications can choose whether they allow Autoware to adjust goal pose in such situation. When set false, Autoware may get stuck until the given goal becomes reachable.
+**[v1.1.0]** 当目标位置不可达时（例如指定目标位置上存在障碍物），Autoware 会尝试寻找替代目标。应用通过 API 设置路线时，可以选择是否允许 Autoware 在这种情况下调整目标位姿。如果设为 false，Autoware 可能会停滞，直到指定目标位置重新变得可达。

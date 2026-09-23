@@ -1,63 +1,83 @@
-# Performance Troubleshooting
+<a id="performance-troubleshooting"></a>
 
-Overall symptoms:
+# 性能故障排查
 
-- Autoware is running slower than expected
-- Messages show up late in RViz2
-- Point clouds are lagging
-- Camera images are lagging behind
-- Point clouds or markers flicker on RViz2
-- When multiple subscribers use the same publishers, the message rate drops
+总体症状：
 
-## Diagnostic Steps
+- Autoware 运行速度低于预期。
+- 消息延迟出现在 RViz2 中。
+- 点云滞后。
+- 相机图像滞后。
+- 点云或标记在 RViz2 中闪烁。
+- 多个订阅者使用同一发布者时，消息频率下降。
 
-### Check if multicast is enabled
+<a id="diagnostic-steps"></a>
 
-#### Target symptoms
+## 诊断步骤
 
-- When multiple subscribers use the same publishers, the message rate drops
+<a id="check-if-multicast-is-enabled"></a>
 
-#### Diagnosis
+### 检查是否启用组播
 
-Make sure that the multicast is enabled for your interface.
+<a id="target-symptoms"></a>
 
-For example when you run following:
+#### 目标症状
+
+- 多个订阅者使用同一发布者时，消息频率下降。
+
+<a id="diagnosis"></a>
+
+#### 诊断
+
+确认网络接口已启用组播。
+
+例如，运行以下命令时：
 
 ```bash
 source /opt/ros/humble/setup.bash
 ros2 run demo_nodes_cpp talker
 ```
 
-If you get the error message `selected interface "{your-interface-name}" is not multicast-capable: disabling multicast`, this should be fixed.
+如果出现错误消息 `selected interface "{your-interface-name}" is not multicast-capable: disabling multicast`，则需要修复。
 
-#### Solution
+<a id="solution"></a>
 
-Follow [DDS settings for ROS 2 and Autoware](../../../installation/additional-settings-for-developers/network-configuration/dds-settings.md)
+#### 解决办法
 
-Especially the [Enable `multicast` on `lo`](../../../installation/additional-settings-for-developers/network-configuration/enable-multicast-for-lo.md) section.
+请按照 [ROS 2 和 Autoware 的 DDS 设置](../../../installation/additional-settings-for-developers/network-configuration/dds-settings.md)操作，
 
-### Check the compilation flags
+尤其是[在 `lo` 上启用 `multicast`](../../../installation/additional-settings-for-developers/network-configuration/enable-multicast-for-lo.md) 一节。
 
-#### Target symptoms
+<a id="check-the-compilation-flags"></a>
 
-- Autoware is running slower than expected
-- Point clouds are lagging
-- When multiple subscribers use the same publishers, the message rate drops even further
+### 检查编译选项
 
-#### Diagnosis
+<a id="target-symptoms_1"></a>
 
-Check the `~/.bash_history` file to see if there are any `colcon build` directives without `-DCMAKE_BUILD_TYPE=Release` or `-DCMAKE_BUILD_TYPE=RelWithDebInfo` flags at all.
+#### 目标症状
 
-Even if a build starts with these flags but same workspace gets compiled without these flags, it will still be a slow build in the end.
+- Autoware 运行速度低于预期。
+- 点云滞后。
+- 多个订阅者使用同一发布者时，消息频率进一步下降。
 
-In addition, the nodes will run slow in general, especially the `pointcloud_preprocessor` nodes.
+<a id="diagnosis_1"></a>
 
-Example issue: [issue2597](https://github.com/autowarefoundation/autoware_universe/issues/2597#issuecomment-1491789081)
+#### 诊断
 
-#### Solution
+检查 `~/.bash_history`，查看是否存在未带 `-DCMAKE_BUILD_TYPE=Release` 或 `-DCMAKE_BUILD_TYPE=RelWithDebInfo` 选项的 `colcon build` 命令。
 
-- Remove the `build`, `install` and optionally `log` folders in the main `autoware` folder.
-- Compile the Autoware with either `Release` or `RelWithDebInfo` tags:
+即使一开始使用了这些选项，如果之后在同一工作区编译时省略了这些选项，最终构建结果仍会较慢。
+
+此外，各节点整体运行较慢，尤其是 `pointcloud_preprocessor` 节点。
+
+问题示例：[issue2597](https://github.com/autowarefoundation/autoware_universe/issues/2597#issuecomment-1491789081)
+
+<a id="solution_1"></a>
+
+#### 解决办法
+
+- 删除 `autoware` 主目录中的 `build`、`install` 文件夹，也可选择删除 `log`。
+- 使用 `Release` 或 `RelWithDebInfo` 构建类型编译 Autoware：
 
   ```bash
   colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release
@@ -65,102 +85,132 @@ Example issue: [issue2597](https://github.com/autowarefoundation/autoware_univer
   colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=RelWithDebInfo
   ```
 
-### Check the DDS settings
+<a id="check-the-dds-settings"></a>
 
-#### Target symptoms
+### 检查 DDS 设置
 
-- Autoware is running slower than expected
-- Messages show up late in RViz2
-- Point clouds are lagging
-- Camera images are lagging behind
-- When multiple subscribers use the same publishers, the message rate drops
+<a id="target-symptoms_2"></a>
 
-#### Check the RMW (ROS Middleware) implementation
+#### 目标症状
 
-##### Diagnosis
+- Autoware 运行速度低于预期。
+- 消息延迟出现在 RViz2 中。
+- 点云滞后。
+- 相机图像滞后。
+- 多个订阅者使用同一发布者时，消息频率下降。
 
-Run following to check the middleware used:
+<a id="check-the-rmw-ros-middleware-implementation"></a>
+
+#### 检查 RMW（ROS 中间件）实现
+
+<a id="diagnosis_2"></a>
+
+##### 诊断
+
+运行以下命令，检查使用的中间件：
 
 ```bash
 echo $RMW_IMPLEMENTATION
 ```
 
-The return line should be `rmw_cyclonedds_cpp`. If not, apply the solution.
+返回结果应为 `rmw_cyclonedds_cpp`。如果不是，请执行下述解决办法。
 
-If you are using a different DDS middleware, we might not have official support for it just yet.
+如果使用其他 DDS 中间件，我们可能尚未提供官方支持。
 
-##### Solution
+<a id="solution_2"></a>
 
-Add `export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp` as a separate line in you `~/.bashrc` file.
+##### 解决办法
 
-More details in: [CycloneDDS Configuration](../../../installation/additional-settings-for-developers/network-configuration/dds-settings.md#cyclonedds-configuration)
+在 `~/.bashrc` 文件中单独添加一行 `export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp`。
 
-#### Check if the CycloneDDS is configured correctly
+详情请参阅 [CycloneDDS 配置](../../../installation/additional-settings-for-developers/network-configuration/dds-settings.md#cyclonedds-configuration)。
 
-##### Diagnosis
+<a id="check-if-the-cyclonedds-is-configured-correctly"></a>
 
-Run following to check the configuration `.xml` file of the `CycloneDDS`:
+#### 检查 CycloneDDS 配置是否正确
+
+<a id="diagnosis_3"></a>
+
+##### 诊断
+
+运行以下命令，检查 `CycloneDDS` 的 `.xml` 配置文件：
 
 ```bash
 echo $CYCLONEDDS_URI
 ```
 
-The return line should be a valid path pointing to an `.xml` file with `CycloneDDS` configuration.
+返回结果应为指向 `CycloneDDS` `.xml` 配置文件的有效路径。
 
-Also check if the file is configured correctly:
-
-```bash
-cat ${CYCLONEDDS_URI#file://}
-```
-
-This should print the `.xml` file on the terminal.
-
-##### Solution
-
-Follow [CycloneDDS Configuration](../../../installation/additional-settings-for-developers/network-configuration/dds-settings.md#cyclonedds-configuration) and make sure:
-
-- you have `export CYCLONEDDS_URI=file:///absolute_path_to_your/cyclonedds.xml` as a line on your `~/.bashrc` file.
-- you have the `cyclonedds.xml` with the configuration provided in the documentation.
-
-#### Check the Linux kernel maximum buffer size
-
-##### Diagnosis
-
-[Validate the sysctl settings](../../../installation/additional-settings-for-developers/network-configuration/dds-settings.md#validate-the-sysctl-settings)
-
-##### Solution
-
-[Tune system-wide network settings](../../../installation/additional-settings-for-developers/network-configuration/dds-settings.md#tune-system-wide-network-settings)
-
-### Check if localhost only communication for DDS is enabled
-
-- If you are using multi computer setup, please skip this check.
-- Enabling localhost only communication for DDS can help improve the performance of ROS by reducing network traffic and avoiding potential conflicts with other devices on the network.
-
-#### Target symptoms
-
-- You see topics that shouldn't exist
-- You see point clouds that don't belong to your machine
-  - They might be from another computer running ROS 2 on your network
-- Point clouds or markers flicker on RViz2
-  - Another publisher (on another machine) may be publishing on the same topic as your node does.
-  - Causing the flickering.
-
-#### Diagnosis
-
-Run:
+还要检查文件内容是否配置正确：
 
 ```bash
 cat ${CYCLONEDDS_URI#file://}
 ```
 
-And it should return [DDS settings for ROS 2 and Autoware: CycloneDDS Configuration](../../../installation/additional-settings-for-developers/network-configuration/dds-settings.md#cyclonedds-configuration) this file.
+这应会在终端中打印 `.xml` 文件内容。
 
-#### Solution
+<a id="solution_3"></a>
 
-Follow [DDS settings for ROS 2 and Autoware: Enable localhost-only communication](../../../installation/additional-settings-for-developers/network-configuration/dds-settings.md#enable-localhost-only-communication).
+##### 解决办法
 
-Also make sure the following returns an empty line:
+按照 [CycloneDDS 配置](../../../installation/additional-settings-for-developers/network-configuration/dds-settings.md#cyclonedds-configuration)操作，并确认：
+
+- `~/.bashrc` 中包含一行 `export CYCLONEDDS_URI=file:///absolute_path_to_your/cyclonedds.xml`。
+- `cyclonedds.xml` 使用文档提供的配置。
+
+<a id="check-the-linux-kernel-maximum-buffer-size"></a>
+
+#### 检查 Linux 内核的最大缓冲区大小
+
+<a id="diagnosis_4"></a>
+
+##### 诊断
+
+[验证 sysctl 设置](../../../installation/additional-settings-for-developers/network-configuration/dds-settings.md#validate-the-sysctl-settings)
+
+<a id="solution_4"></a>
+
+##### 解决办法
+
+[调整系统级网络设置](../../../installation/additional-settings-for-developers/network-configuration/dds-settings.md#tune-system-wide-network-settings)
+
+<a id="check-if-localhost-only-communication-for-dds-is-enabled"></a>
+
+### 检查 DDS 是否启用仅本机通信
+
+- 如果使用多机配置，请跳过此检查。
+- 为 DDS 启用仅本机通信，可以减少网络流量，并避免与网络中其他设备的潜在冲突，从而改善 ROS 性能。
+
+<a id="target-symptoms_3"></a>
+
+#### 目标症状
+
+- 看到不应存在的话题。
+- 看到不属于本机的点云。
+  - 它们可能来自同一网络中另一台运行 ROS 2 的计算机。
+- 点云或标记在 RViz2 中闪烁。
+  - 另一台机器上的发布者可能在与你的节点相同的话题上发布。
+  - 从而导致闪烁。
+
+<a id="diagnosis_5"></a>
+
+#### 诊断
+
+运行：
+
+```bash
+cat ${CYCLONEDDS_URI#file://}
+```
+
+返回结果应指向 [ROS 2 和 Autoware 的 DDS 设置：CycloneDDS 配置](../../../installation/additional-settings-for-developers/network-configuration/dds-settings.md#cyclonedds-configuration)中所述的文件。
+
+<a id="solution_5"></a>
+
+#### 解决办法
+
+按照 [ROS 2 和 Autoware 的 DDS 设置：启用仅本机通信](../../../installation/additional-settings-for-developers/network-configuration/dds-settings.md#enable-localhost-only-communication)操作。
+
+同时确认以下命令返回空行：
 
 ```bash
 echo $ROS_LOCALHOST_ONLY

@@ -1,88 +1,114 @@
-# Radar based 3D detector
+<a id="radar-based-3d-detector"></a>
 
-## Overview
+# 基于雷达的 3D 检测器
 
-### Features
+<a id="overview"></a>
 
-Radar based 3D detector aims for the following:
+## 概述
 
-- Detecting objects farther than the range of LiDAR-based 3D detection.
+<a id="features"></a>
 
-Since radar can acquire data from a longer distance than LiDAR (> 100m), when the distance of LiDAR-based 3D detection is insufficient, the radar base 3D detector can be applied.
-The detection distance of radar based 3D detection depends on the radar device specification.
+### 功能
 
-- Improving velocity estimation for dynamic objects
+基于雷达的 3D 检测器旨在实现：
 
-Radar can get velocity information and estimate more precise twist information by fused between the objects from LiDAR-based 3D detection radar information.
-This can lead to improve for the performance of object tracking/prediction and planning like adaptive cruise control.
+- 检测超出基于 LiDAR 的 3D 检测范围的目标。
 
-### Whole pipeline
+雷达能在比 LiDAR 更远的距离获取数据（> 100m），因此，当 LiDAR 3D 检测距离不足时，可采用基于雷达的 3D 检测器。
+基于雷达的 3D 检测距离取决于雷达设备规格。
 
-Radar based 3D detector with radar objects consists of
+- 改善动态目标的速度估计
 
-- 3D object detection with Radar pointcloud
-- Noise filter
-- Faraway dynamic 3D object detection
-- Radar fusion to LiDAR-based 3D object detection
-- Radar object tracking
-- Merger of tracked object
+雷达可获取速度信息，通过融合 LiDAR 3D 检测目标与雷达信息，能够估计更精确的速度旋量信息。
+这有助于提升目标跟踪/预测以及自适应巡航控制等规划功能的性能。
+
+<a id="whole-pipeline"></a>
+
+### 完整处理流程
+
+使用雷达目标的雷达 3D 检测器包括：
+
+- 使用雷达点云进行 3D 目标检测
+- 噪声过滤器
+- 远距离动态 3D 目标检测
+- 将雷达信息融合到基于 LiDAR 的 3D 目标检测中
+- 雷达目标跟踪
+- 跟踪目标合并
 
 ![Radar based 3D detector](image/radar-based-3d-detector.drawio.svg)
 
-### Interface
+<a id="interface"></a>
 
-- Input
-  - Message type for pointcloud is `ros-perception/radar_msgs/msg/RadarScan.msg`
-  - Message type for radar objects is `autoware_auto_perception_msgs/msg/DetectedObject`.
-    - Input objects need to be concatenated.
-    - Input objects need to be compensated with ego motion.
-    - Input objects need to be transformed to `base_link`.
-- Output
-  - Tracked objects
+### 接口
 
-## Module
+- 输入
+  - 点云消息类型为 `ros-perception/radar_msgs/msg/RadarScan.msg`
+  - 雷达目标消息类型为 `autoware_auto_perception_msgs/msg/DetectedObject`。
+    - 输入目标需要拼接。
+    - 输入目标需要补偿自车运动。
+    - 输入目标需要转换到 `base_link`。
+- 输出
+  - 跟踪目标
 
-### Radar pointcloud 3D detection
+<a id="module"></a>
+
+## 模块
+
+<a id="radar-pointcloud-3d-detection"></a>
+
+### 雷达点云 3D 检测
 
 !!! warning
 
-    Under Construction
+    编写中
 
-### Noise filter and radar faraway dynamic 3D object detection
+<a id="noise-filter-and-radar-faraway-dynamic-3d-object-detection"></a>
+
+### 噪声过滤与雷达远距离动态 3D 目标检测
 
 ![faraway object detection](image/faraway-object-detection.drawio.svg)
 
-This function filters noise objects and detects faraway (> 100m) dynamic vehicles.
-The main idea is that in the case where LiDAR is used, near range can be detected accurately using LiDAR pointcloud and the main role of radar is to detect distant objects that cannot be detected with LiDAR alone.
-In detail, please see [this document](faraway-object-detection.md)
+此功能过滤噪声目标，并检测远距离（> 100m）的动态车辆。
+主要思路是：使用 LiDAR 时，可通过 LiDAR 点云准确检测近距离区域，而雷达主要负责检测仅靠 LiDAR 无法检测的远距离目标。
+详情请参阅[此文档](faraway-object-detection.md)
 
-### Radar fusion to LiDAR-based 3D object detection
+<a id="radar-fusion-to-lidar-based-3d-object-detection"></a>
+
+### 将雷达信息融合到基于 LiDAR 的 3D 目标检测中
 
 - [radar_fusion_to_detected_object](https://github.com/autowarefoundation/autoware_universe/tree/main/perception/autoware_radar_fusion_to_detected_object)
 
-This package contains a sensor fusion module for radar-detected objects and 3D detected objects. The fusion node can:
+此软件包包含雷达检测目标与 3D 检测目标的传感器融合模块。融合节点能够：
 
-- Attach velocity to 3D detections when successfully matching radar data. The tracking modules use the velocity information to enhance the tracking results while planning modules use it to execute actions like adaptive cruise control.
-- Improve the low confidence 3D detections when corresponding radar detections are found.
+- 成功匹配雷达数据时，为 3D 检测结果添加速度。跟踪模块利用速度信息改善跟踪结果，规划模块则利用它执行自适应巡航控制等操作。
+- 找到对应雷达检测结果时，改善低置信度的 3D 检测结果。
 
-### Radar object tracking
+<a id="radar-object-tracking"></a>
 
-!!! warning
-
-    Under Construction
-
-### Merger of tracked object
+### 雷达目标跟踪
 
 !!! warning
 
-    Under Construction
+    编写中
 
-## Appendix
+<a id="merger-of-tracked-object"></a>
 
-### Customize own radar interface
+### 跟踪目标合并
 
-The perception interface of Autoware is defined to `DetectedObjects`, `TrackedObjects`, and `PredictedObjects`, however, other message is defined by own cases. For example, [DetectedObjectWithFeature](https://github.com/tier4/tier4_autoware_msgs/tree/tier4/universe/tier4_perception_msgs/msg/object_recognition) is used by customized message in perception module.
+!!! warning
 
-Same as that, you can adjust new radar interface.
-For example, `RadarTrack` doesn't have orientation information [from past discussions](https://github.com/ros-perception/radar_msgs/pull/3), especially [this discussion](https://github.com/ros-perception/radar_msgs/pull/3#issuecomment-661599741).
-If you want orientation information, you can adapt radar ROS driver to publish directly to `TrackedObject`.
+    编写中
+
+<a id="appendix"></a>
+
+## 附录
+
+<a id="customize-own-radar-interface"></a>
+
+### 自定义雷达接口
+
+Autoware 感知接口定义为 `DetectedObjects`、`TrackedObjects` 和 `PredictedObjects`，其他消息则按具体情况定义。例如，感知模块使用自定义消息 [DetectedObjectWithFeature](https://github.com/tier4/tier4_autoware_msgs/tree/tier4_perception_msgs/msg/object_recognition)。
+
+同样，你也可以调整新的雷达接口。
+例如，根据[过去的讨论](https://github.com/ros-perception/radar_msgs/pull/3)，尤其是[这条讨论](https://github.com/ros-perception/radar_msgs/pull/3#issuecomment-661599741)，`RadarTrack` 不包含朝向信息。
+如果需要朝向信息，可调整雷达 ROS 驱动，使其直接发布 `TrackedObject`。

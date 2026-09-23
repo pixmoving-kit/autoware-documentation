@@ -1,19 +1,27 @@
-# Vision, Mission, and Core Values
+<a id="vision-mission-and-core-values"></a>
 
-On this page, we define the vision, mission, and core values of Autoware which reflect our open-source philosophy.
-These will inform our goal setting and will drive our strategic planning and execution going forward.
+# 愿景、使命与核心价值观
 
-## Vision Statement
+本页阐述 Autoware 的愿景、使命和核心价值观，它们体现了我们的开源理念。
+这些理念将指导我们的目标制定，并推动未来的战略规划与执行。
 
-“Build open-source software for globally trusted autonomous driving systems that engage and advance society”
+<a id="vision-statement"></a>
 
-## Mission Statement
+## 愿景
 
-“Co-create a neutral, trusted hub that advances safety and beyond in mobility and society”
+“构建开源软件，打造全球信赖的自动驾驶系统，融入社会并推动社会进步。”
 
-## Core Values
+<a id="mission-statement"></a>
 
-- **Open Source:** 100% open source software supporting research and commercialization, as a complete software stack or through component integration with third parties
-- **Collaborative:** Built in collaboration and cooperation through multi-disciplinary ecosystems and alliances, welcome to individual developers all the way up to large organizations
-- **Deployment Ready:** Turn-key technology that can be deployed out-of-the-box with ease, and scale from single vehicles to large global fleets achieving mass adoption
-- **Cutting Edge:** Reliable and safe systems using state-of-the-art technologies enabling advanced autonomous features
+## 使命
+
+“共同打造中立、可信的协作中心，提升出行与社会的安全，并创造更广泛的价值。”
+
+<a id="core-values"></a>
+
+## 核心价值观
+
+- **开源：** 软件完全开源，可作为完整软件栈使用，也可通过与第三方进行组件集成，支持研究与商业化。
+- **协作：** 通过跨学科生态系统和联盟开展合作建设，欢迎从个人开发者到大型组织的各类参与者。
+- **可部署：** 提供开箱即用、易于部署的完整技术方案，支持从单车扩展到全球大型车队，实现规模化应用。
+- **前沿：** 使用先进技术构建可靠、安全的系统，实现高级自动驾驶功能。

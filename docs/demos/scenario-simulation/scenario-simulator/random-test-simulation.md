@@ -1,20 +1,24 @@
-# Random test simulation
+<a id="random-test-simulation"></a>
+
+# 随机测试仿真
 
 !!! note
 
-    Running the Scenario Simulator requires some additional steps on top of building and installing Autoware, so make sure that [Scenario Simulator installation](installation.md) has been completed first before proceeding.
+    运行 Scenario Simulator 除了构建和安装 Autoware，还需要额外步骤。因此，继续之前请先完成 [Scenario Simulator 安装](installation.md)。
 
-## Running steps
+<a id="running-steps"></a>
 
-1. Move to the workspace directory where Autoware and the Scenario Simulator have been built.
+## 运行步骤
 
-2. Source the workspace setup script:
+1. 进入已构建 Autoware 和 Scenario Simulator 的工作空间目录。
+
+2. 加载工作空间的环境设置脚本：
 
    ```bash
    source install/setup.bash
    ```
 
-3. Run the simulation:
+3. 运行仿真：
 
    ```bash
    ros2 launch random_test_runner random_test.launch.py \
@@ -25,4 +29,4 @@
 
 ![random_test_runner](images/random_test_runner.png)
 
-For more information about supported parameters, refer to the [random_test_runner documentation](https://tier4.github.io/scenario_simulator_v2-docs/user_guide/random_test_runner/Usage/#node-parameters).
+有关支持参数的更多信息，请参阅 [random_test_runner 文档](https://tier4.github.io/scenario_simulator_v2-docs/user_guide/random_test_runner/Usage/#node-parameters)。

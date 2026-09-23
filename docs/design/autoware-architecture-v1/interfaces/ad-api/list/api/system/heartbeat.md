@@ -6,12 +6,12 @@ type:
   name: autoware_adapi_v1_msgs/msg/Heartbeat
   msg:
     - name: stamp
-      text: Timestamp in Autoware for delay checking.
+      text: Autoware 内部时间戳，用于检查延迟。
     - name: seq
-      text: Sequence number for order verification, wraps at 65535.
+      text: 用于验证顺序的序列号，达到 65535 后回绕。
 ---
 
 {% extends 'design/autoware-architecture-v1/interfaces/templates/autoware-interface.jinja2' %}
 {% block description %}
-The heartbeat frequency is 10 Hz.
+心跳频率为 10 Hz。
 {% endblock %}

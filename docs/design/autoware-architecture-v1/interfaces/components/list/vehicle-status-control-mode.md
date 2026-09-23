@@ -12,76 +12,96 @@ qos_depth: 1
 
 # {{ interface_name }}
 
-## Specifications
+<a id="specifications"></a>
+
+## 规格
 
 {% include 'design/autoware-architecture-v1/interfaces/templates/topic.jinja2' %}
 
-## Description
+<a id="description"></a>
 
-Get the current control mode status of the vehicle. The status are listed in the table below.
-It is recommended to set QoS to transient_local and publish only when the status changes, but currently many implementations publish the status periodically.
-Therefore, ensure consistency across the entire system.
+## 说明
 
-Please note that ignoring a command does not mean stopping the vehicle.
-The vehicle may drive in any behavior, by manual control interfaces such as the driver's seat.
+获取车辆当前的控制模式状态。可用状态见下表。
+建议将 QoS 设置为 transient_local，并仅在状态发生变化时发布；但目前许多实现会周期性发布状态。
+因此，请确保整个系统保持一致。
 
-- velocity group
-  - /control/command/control_cmd (longitudinal field)
+请注意，忽略指令并不意味着车辆停止。
+车辆仍可通过驾驶席等手动控制接口执行各种驾驶行为。
+
+- 速度组
+  - /control/command/control_cmd（longitudinal 字段）
   - /control/command/gear_cmd
-- steering group
-  - /control/command/control_cmd (lateral field)
+- 转向组
+  - /control/command/control_cmd（lateral 字段）
   - /control/command/turn_indicators_cmd
-- others group
+- 其他组
   - /control/command/hazard_lights_cmd
   - /vehicle/doors/command
 
-| control mode             | velocity group | steering group | others group |
+| 控制模式 | 速度组 | 转向组 | 其他组 |
 | ------------------------ | -------------- | -------------- | ------------ |
-| AUTONOMOUS               | accept         | accept         | accept       |
-| AUTONOMOUS_STEER_ONLY    | ignore         | accept         | accept       |
-| AUTONOMOUS_VELOCITY_ONLY | accept         | ignore         | accept       |
-| MANUAL                   | ignore         | ignore         | ignore       |
-| DISENGAGED               | T.B.D.         | T.B.D.         | T.B.D.       |
-| NO_COMMAND               | T.B.D.         | T.B.D.         | T.B.D.       |
-| NOT_READY                | T.B.D.         | T.B.D.         | T.B.D.       |
+| AUTONOMOUS | 接受 | 接受 | 接受 |
+| AUTONOMOUS_STEER_ONLY | 忽略 | 接受 | 接受 |
+| AUTONOMOUS_VELOCITY_ONLY | 接受 | 忽略 | 接受 |
+| MANUAL | 忽略 | 忽略 | 忽略 |
+| DISENGAGED | 待确定 | 待确定 | 待确定 |
+| NO_COMMAND | 待确定 | 待确定 | 待确定 |
+| NOT_READY | 待确定 | 待确定 | 待确定 |
 
-## Message
+<a id="message"></a>
 
-The `stamp` field is the status received time or hardware time such as VCU. In the case of periodic publication, use the latest time, not the last status change.
-For the `mode` field, use the valid values listed above.
+## 消息
 
-## Errors
+`stamp` 字段表示状态接收时间或 VCU 等硬件的时间。周期性发布时，应使用最新时间，而不是上次状态改变的时间。
+`mode` 字段应使用上述有效值。
 
-Unknown status: If the vehicle interface cannot get the status due to connection loss, etc., the status is stopped and a diagnostic error is reported.
+<a id="errors"></a>
 
-Invalid status: If the vehicle interface receives an undefined status, stop publishing status and report as diagnostics.
+## 错误
 
-## Support
+未知状态：如果车辆接口因连接丢失等原因无法获取状态，则停止发布状态并报告诊断错误。
 
-Support for `MANUAL` and `AUTONOMOUS` modes is required.
+无效状态：如果车辆接口收到未定义的状态，则停止发布状态并通过诊断信息报告。
 
-## Limitations
+<a id="support"></a>
 
-Latency: There is an inevitable latency between sending a mode change request and this interface updating to the new state. Autoware must handle this transition period.
+## 支持要求
 
-Override detection: Some vehicle platforms do not explicitly report override activation. In such cases, the vehicle interface calculates this state by comparing command and feedback, which may introduce detection delay.
+必须支持 `MANUAL` 和 `AUTONOMOUS` 模式。
 
-## Use Cases
+<a id="limitations"></a>
 
-- Control the vehicle for autonomous driving.
-- Display current control mode status to the operator.
+## 限制
 
-## Requirement
+延迟：从发送模式切换请求到此接口更新为新状态之间，必然存在延迟。Autoware 必须处理这一过渡阶段。
 
-- Support getting the current control mode status of the vehicle.
-- Report the error as diagnostics if the status cannot be received or an unknown status is received.
+人工接管检测：某些车辆平台不会明确报告人工接管是否启用。在这种情况下，车辆接口通过比较指令和反馈来判断该状态，这可能引入检测延迟。
 
-## Design
+<a id="use-cases"></a>
 
-None.
+## 使用场景
 
-## History
+- 控制车辆进行自动驾驶。
+- 向操作员显示当前控制模式状态。
 
-| Date       | Description                      |
+<a id="requirement"></a>
+
+## 要求
+
+- 支持获取车辆当前的控制模式状态。
+- 无法接收状态或收到未知状态时，通过诊断信息报告错误。
+
+<a id="design"></a>
+
+## 设计
+
+无。
+
+<a id="history"></a>
+
+## 历史记录
+
+| 日期 | 说明 |
 | ---------- | -------------------------------- |
-| 2026-01-21 | First release in the new format. |
+| 2026-01-21 | 首次以新格式发布。 |

@@ -1,24 +1,28 @@
-# Unit testing
+<a id="unit-testing"></a>
 
-Unit testing is the first phase of testing and is used to validate units of source code such as classes and functions.
-Typically, a unit of code is tested by validating its output for various inputs.
-Unit testing helps ensure that the code behaves as intended and prevents accidental changes of behavior.
+# 单元测试
 
-Autoware uses the `ament_cmake` framework to build and run tests.
-The same framework is also used to analyze the test results.
+单元测试是测试的第一个阶段，用于验证类、函数等源代码单元。
+通常，通过验证某个代码单元在不同输入下的输出来测试它。
+单元测试有助于确保代码按预期运行，并防止意外的行为变化。
 
-`ament_cmake` provides several convenience functions to make it easy to register tests in a CMake-based package and to ensure that JUnit-compatible result files are generated.
-It currently supports a few different testing frameworks like `pytest`, `gtest`, and `gmock`.
+Autoware 使用 `ament_cmake` 框架构建和运行测试。
+同一框架也用于分析测试结果。
 
-In order to prevent tests running in parallel from interfering with each other when publishing and subscribing to ROS topics,
-it is recommended to use commands from [`ament_cmake_ros`](https://github.com/ros2/ament_cmake_ros/tree/master/ament_cmake_ros/cmake) to run tests in isolation.
+`ament_cmake` 提供了一系列便捷函数，方便在基于 CMake 的功能包中注册测试，并确保生成与 JUnit 兼容的结果文件。
+它目前支持 `pytest`、`gtest` 和 `gmock` 等多种测试框架。
 
-See below for an example of using `ament_add_ros_isolated_gtest` with `colcon test`.
-All other tests follow a similar pattern.
+为防止并行运行的测试在发布和订阅 ROS 话题时相互干扰，
+建议使用 [`ament_cmake_ros`](https://github.com/ros2/ament_cmake_ros/tree/master/ament_cmake_ros/cmake) 中的命令，在隔离环境中运行测试。
 
-## Create a unit test with gtest
+下文提供了结合 `colcon test` 使用 `ament_add_ros_isolated_gtest` 的示例。
+其他测试均遵循类似模式。
 
-In `my_cool_pkg/test`, create the `gtest` code file `test_my_cool_pkg.cpp`:
+<a id="create-a-unit-test-with-gtest"></a>
+
+## 使用 gtest 创建单元测试
+
+在 `my_cool_pkg/test` 中创建 `gtest` 代码文件 `test_my_cool_pkg.cpp`：
 
 ```cpp
 #include "gtest/gtest.h"
@@ -28,13 +32,13 @@ TEST(TestMyCoolPkg, TestHello) {
 }
 ```
 
-In `package.xml`, add the following line:
+在 `package.xml` 中添加以下行：
 
 ```xml
 <test_depend>ament_cmake_ros</test_depend>
 ```
 
-Next add an entry under `BUILD_TESTING` in the `CMakeLists.txt` to compile the test source files:
+接下来，在 `CMakeLists.txt` 的 `BUILD_TESTING` 下添加条目，以编译测试源文件：
 
 ```cmake
 if(BUILD_TESTING)
@@ -46,43 +50,47 @@ if(BUILD_TESTING)
 endif()
 ```
 
-This automatically links the test with the default main function provided by `gtest`.
-The code under test is usually in a different CMake target (`${PROJECT_NAME}` in the example) and its shared object for linking needs to be added.
-If the test source files include private headers from the `src` directory, the directory needs to be added to the include path using `target_include_directories()` function.
+这会自动将测试与 `gtest` 提供的默认 main 函数链接。
+被测代码通常位于另一个 CMake 目标中（示例中为 `${PROJECT_NAME}`），需要添加其共享对象以进行链接。
+如果测试源文件包含 `src` 目录中的私有头文件，则需要使用 `target_include_directories()` 函数将该目录添加到头文件搜索路径中。
 
-To register a new `gtest` item, wrap the test code with the macro `TEST ()`.
-`TEST ()` is a predefined macro that helps generate the final test code,
-and also registers a `gtest` item to be available for execution.
-The test case name should be in CamelCase, since gtest inserts an underscore between the fixture name and the class case name when creating the test executable.
+要注册新的 `gtest` 测试项，请使用宏 `TEST ()` 包裹测试代码。
+`TEST ()` 是一个预定义宏，用于帮助生成最终测试代码，
+同时注册一个可供执行的 `gtest` 测试项。
+测试用例名称应使用 CamelCase，因为 gtest 在创建测试可执行程序时，会在测试夹具名称和测试用例类名之间插入下划线。
 
-`gtest/gtest.h` also contains predefined macros of `gtest` like `ASSERT_TRUE(condition)`,
-`ASSERT_FALSE(condition)`, `ASSERT_EQ(val1,val2)`, `ASSERT_STREQ(str1,str2)`, `EXPECT_EQ()`, etc.
-`ASSERT_*` will abort the test if the condition is not satisfied,
-while `EXPECT_*` will mark the test as failed but continue on to the next test condition.
+`gtest/gtest.h` 还包含 `gtest` 的预定义宏，例如 `ASSERT_TRUE(condition)`、
+`ASSERT_FALSE(condition)`、`ASSERT_EQ(val1,val2)`、`ASSERT_STREQ(str1,str2)`、`EXPECT_EQ()` 等。
+如果条件不满足，`ASSERT_*` 会中止测试，
+而 `EXPECT_*` 会将测试标记为失败，但继续检查下一个测试条件。
 
 !!! info
 
-    More information about `gtest` and its features can be found in the [gtest repo](https://github.com/google/googletest).
+    有关 `gtest` 及其功能的更多信息，请参阅 [gtest 仓库](https://github.com/google/googletest)。
 
-In the demo `CMakeLists.txt`, `ament_add_ros_isolated_gtest` is a predefined macro in `ament_cmake_ros` that helps simplify adding `gtest` code.
-Details can be viewed in [ament_add_gtest.cmake](https://github.com/ros2/ament_cmake_ros/tree/master/ament_cmake_ros/cmake).
+在示例 `CMakeLists.txt` 中，`ament_add_ros_isolated_gtest` 是 `ament_cmake_ros` 中的预定义宏，用于简化 `gtest` 代码的添加。
+详细信息可参阅 [ament_add_gtest.cmake](https://github.com/ros2/ament_cmake_ros/tree/master/ament_cmake_ros/cmake)。
 
-## Build test
+<a id="build-test"></a>
+
+## 构建测试
 
 <!-- cspell:ignore Testfile -->
 
-By default, all necessary test files (`ELF`, `CTestTestfile.cmake`, etc.) are compiled by `colcon`:
+默认情况下，`colcon` 会编译所有必需的测试文件（`ELF`、`CTestTestfile.cmake` 等）：
 
 ```console
 cd ~/workspace/
 colcon build --packages-select my_cool_pkg
 ```
 
-Test files are generated under `~/workspace/build/my_cool_pkg`.
+测试文件生成在 `~/workspace/build/my_cool_pkg` 下。
 
-## Run test
+<a id="run-test"></a>
 
-To run all tests for a specific package, call:
+## 运行测试
+
+要运行某个功能包的全部测试，请执行：
 
 ```console
 $ colcon test --packages-select my_cool_pkg
@@ -93,9 +101,9 @@ Finished <<< my_cool_pkg [7.80s]
 Summary: 1 package finished [9.27s]
 ```
 
-The test command output contains a brief report of all the test results.
+测试命令的输出中包含所有测试结果的简要报告。
 
-To get job-wise information of all executed tests, call:
+要获取所有已执行测试按作业划分的信息，请执行：
 
 ```console
 $ colcon test-result --all
@@ -110,10 +118,10 @@ build/my_cool_pkg/test_results/my_cool_pkg/xmllint.xunit.xml: 1 test, 0 errors, 
 Summary: 18 tests, 0 errors, 0 failures, 0 skipped
 ```
 
-Look in the `~/workspace/log/test_<date>/<package_name>` directory for all the raw test commands, `std_out`, and `std_err`.
-There is also the `~/workspace/log/latest_*/` directory containing symbolic links to the most recent package-level build and test output.
+在 `~/workspace/log/test_<date>/<package_name>` 目录中可以找到所有原始测试命令、`std_out` 和 `std_err`。
+此外，`~/workspace/log/latest_*/` 目录中还包含指向最近一次功能包级构建和测试输出的符号链接。
 
-To print the tests' details while the tests are being run, use the `--event-handlers console_cohesion+` option to print the details directly to the console:
+要在测试运行时打印详细信息，请使用 `--event-handlers console_cohesion+` 选项，将详细信息直接输出到控制台：
 
 ```console
 $ colcon test --event-handlers console_cohesion+ --packages-select my_cool_pkg
@@ -158,11 +166,13 @@ Total Test time (real) =   7.91 sec
 ...
 ```
 
-## Code coverage
+<a id="code-coverage"></a>
 
-Loosely described,
-a code coverage metric is a measure of how much of the program code has been exercised (covered) during testing.
+## 代码覆盖率
 
-In the Autoware repositories, [Codecov](https://app.codecov.io/gh/autowarefoundation/autoware_universe/) is used to automatically calculate coverage of any open pull request.
+简单来说，
+代码覆盖率指标衡量的是测试期间执行（覆盖）了多少程序代码。
 
-More details about the code coverage metrics can be found in the [Codecov documentation](https://docs.codecov.com/docs/about-code-coverage).
+在 Autoware 仓库中，[Codecov](https://app.codecov.io/gh/autowarefoundation/autoware_universe/) 用于自动计算每个未关闭拉取请求的覆盖率。
+
+有关代码覆盖率指标的更多信息，请参阅 [Codecov 文档](https://docs.codecov.com/docs/about-code-coverage)。

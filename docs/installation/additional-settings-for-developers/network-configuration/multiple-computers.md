@@ -1,12 +1,18 @@
-# Communicating across multiple computers with CycloneDDS
+<a id="communicating-across-multiple-computers-with-cyclonedds"></a>
 
-## Configuring CycloneDDS
+# 使用 CycloneDDS 实现多机通信
 
-Within the `~/cyclonedds.xml` file, Interfaces section can be set in various ways to communicate across multiple computers within a network.
+<a id="configuring-cyclonedds"></a>
 
-### Automatically determine the network interface (convenient)
+## 配置 CycloneDDS
 
-With this setting, CycloneDDS will automatically determine the most suitable network interface to use.
+可以通过多种方式设置 `~/cyclonedds.xml` 文件中的 Interfaces 配置段，实现同一网络内多台计算机之间的通信。
+
+<a id="automatically-determine-the-network-interface-convenient"></a>
+
+### 自动选择网络接口（便捷方式）
+
+使用此设置时，CycloneDDS 会自动选择最合适的网络接口。
 
 ```xml
 <Interfaces>
@@ -14,9 +20,11 @@ With this setting, CycloneDDS will automatically determine the most suitable net
 </Interfaces>
 ```
 
-### Manually set the network interface (recommended)
+<a id="manually-set-the-network-interface-recommended"></a>
 
-With this setting, you can manually set the network interface to use.
+### 手动设置网络接口（推荐）
+
+使用此设置时，您可以手动指定要使用的网络接口。
 
 ```xml
 <Interfaces>
@@ -26,20 +34,22 @@ With this setting, you can manually set the network interface to use.
 
 !!! warning
 
-    You should replace `enp38s0` with the actual network interface name.
+    请将 `enp38s0` 替换为实际的网络接口名称。
 
 !!! note
 
-    `ifconfig` command can be used to find the network interface name.
+    可以使用 `ifconfig` 命令查找网络接口名称。
 
-## Time synchronization
+<a id="time-synchronization"></a>
 
-To ensure that the nodes on different computers are synchronized, you should synchronize the time between the computers.
+## 时间同步
 
-You can use the `chrony` to synchronize the time between computers.
+为确保不同计算机上的节点保持同步，需要同步各计算机的时间。
 
-Please refer to this post for more information: [Multi PC AWSIM + Autoware Tests #3813](https://github.com/orgs/autowarefoundation/discussions/3813)
+可以使用 `chrony` 同步计算机之间的时间。
+
+更多信息请参阅此帖子：[多机 AWSIM + Autoware 测试 #3813](https://github.com/orgs/autowarefoundation/discussions/3813)
 
 !!! warning
 
-    Under Construction
+    正在编写

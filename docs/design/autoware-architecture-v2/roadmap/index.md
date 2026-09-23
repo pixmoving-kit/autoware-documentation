@@ -1,18 +1,24 @@
-# Autoware Architecture
+<a id="autoware-architecture"></a>
 
-## Executive Summary
+# Autoware 架构
 
-This document presents a framework for the evolution of the Autoware Project from Autoware 1.0, a traditional robotics-based autonomous driving stack, to Autoware 2.0, a data-centric AI-based autonomous driving stack which can power safe and globally scalable End-to-End autonomous driving across multiple use-cases
+<a id="executive-summary"></a>
 
-## Overview
+## 执行摘要
 
-The Autonomous Driving industry has experienced rapid technological developments powered by advancements in Artificial Intelligence.
+本文提出 Autoware 项目的演进框架：从采用传统机器人技术的自动驾驶软件栈 Autoware 1.0，发展为以数据为中心、基于 AI 的自动驾驶软件栈 Autoware 2.0，为多种使用场景提供安全且可在全球扩展的端到端自动驾驶能力。
 
-The emergence of neural networks have helped transform self-driving technologies from hand-coded software modules which follow a traditional robotics paradigm, to neural-network based components powered by machine learning.
-By leveraging such data-driven approaches, self-driving technology developers have been able to rapidly scale and deploy autonomy around the world.
+<a id="overview"></a>
 
-One of the latest such technological breakthroughs is the introduction of End-to-End autonomous driving, in which a single monolithic neural network can map sensing data to safe driving trajectories - essentially learning the entire driving task.
+## 概述
 
-While this approach has great promise, there are important considerations around safety, explainability and model training which must be addressed.
+在人工智能进步的推动下，自动驾驶行业的技术迅速发展。
 
-Here, we present our framework for adopting End-to-End autonomous within the open-source Autoware project.
+神经网络的出现，推动自动驾驶技术从遵循传统机器人范式的人工编写软件模块，转向由机器学习驱动的神经网络组件。
+借助这些数据驱动的方法，自动驾驶技术开发者得以在全球快速扩展和部署自动驾驶能力。
+
+最新的技术突破之一是端到端自动驾驶：单个整体式神经网络即可将传感器数据映射为安全驾驶轨迹，本质上是学习完整的驾驶任务。
+
+尽管这种方法前景广阔，但仍必须解决安全性、可解释性和模型训练方面的重要问题。
+
+本文介绍我们在开源 Autoware 项目中采用端到端自动驾驶的框架。

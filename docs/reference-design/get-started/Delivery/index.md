@@ -1,7 +1,11 @@
-# Autoware Delivery Vehicle
+<a id="autoware-delivery-vehicle"></a>
 
-This section describes the design of delivery vehicles based on Autoware.
+# Autoware 配送车辆
 
-## Documentation
+本节介绍基于 Autoware 的配送车辆设计。
 
-- [Autoware Delivery Vehicle Prototype (PDF)](Autoware_Delivery_Vehicle_Prototype.pdf)
+<a id="documentation"></a>
+
+## 文档
+
+- [Autoware 配送车辆原型（PDF）](Autoware_Delivery_Vehicle_Prototype.pdf)

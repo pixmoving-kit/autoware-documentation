@@ -12,63 +12,83 @@ qos_depth: 1
 
 # {{ interface_name }}
 
-## Specifications
+<a id="specifications"></a>
+
+## 规格
 
 {% include 'design/autoware-architecture-v1/interfaces/templates/topic.jinja2' %}
 
-## Description
+<a id="description"></a>
 
-Get the current gear status of the vehicle. The statuses are listed in the table below.
-It is recommended to set QoS to transient_local and publish only when the status changes, but currently many implementations publish the status periodically.
-Therefore, ensure consistency across the entire system.
+## 说明
 
-| Value   | Description                                                                                 |
+获取车辆当前的挡位状态。可用状态见下表。
+建议将 QoS 设置为 transient_local，并仅在状态发生变化时发布；但目前许多实现会周期性发布状态。
+因此，请确保整个系统保持一致。
+
+| 值 | 说明 |
 | ------- | ------------------------------------------------------------------------------------------- |
-| PARKING | The engine or motor is disconnected from the tires and the stopping mechanism is activated. |
-| NEUTRAL | The engine or motor is disconnected from the tires.                                         |
-| DRIVE   | The engine or motor is connected to the tires in the forward direction.                     |
-| REVERSE | The engine or motor is connected to the tires in the backward direction.                    |
+| PARKING | 发动机或电机与车轮断开连接，并启用驻车机构。 |
+| NEUTRAL | 发动机或电机与车轮断开连接。 |
+| DRIVE | 发动机或电机与车轮连接，驱动车辆向前行驶。 |
+| REVERSE | 发动机或电机与车轮连接，驱动车辆向后行驶。 |
 
-## Message
+<a id="message"></a>
 
-The `stamp` field is the status received time or hardware time such as VCU. In the case of periodic publication, use the latest time, not the last status change.
-For the `report` field, use the valid values listed above. The `NONE` value can be used internally by programs, but will never be sent as a topic.
-Values ​​such as `LOW` and `DRIVE_2` ​​can be used if the vehicle has its own special gear types, but a dedicated implementation is required to handle this.
+## 消息
 
-## Errors
+`stamp` 字段表示状态接收时间或 VCU 等硬件的时间。周期性发布时，应使用最新时间，而不是上次状态改变的时间。
+`report` 字段应使用上述有效值。程序内部可以使用 `NONE`，但不会通过话题发送此值。
+如果车辆具有特殊挡位类型，可以使用 `LOW`、`DRIVE_2` 等值，但需要专门的实现进行处理。
 
-Unknown status: If the vehicle interface cannot get the status due to connection loss, etc., the status is stopped and a diagnostic error is reported.
+<a id="errors"></a>
 
-Invalid status: If the vehicle interface receives an undefined status, stop publishing status and report as diagnostics.
+## 错误
 
-Hardware Fault: If the vehicle platform reports a sensor fault, a diagnostic error is reported.
+未知状态：如果车辆接口因连接丢失等原因无法获取状态，则停止发布状态并报告诊断错误。
 
-## Support
+无效状态：如果车辆接口收到未定义的状态，则停止发布状态并通过诊断信息报告。
 
-This interface is required. If the vehicle does not have gear, simulate the gear behavior.
+硬件故障：如果车辆平台报告传感器故障，则报告诊断错误。
 
-## Limitations
+<a id="support"></a>
 
-Latency: Gear shifting is a mechanical process that takes time (typically 0.5s to 2.0s). The status reported here reflects the actual engaged gear, so there will be a delay after sending a command. Autoware must handle this transition period.
+## 支持要求
 
-## Use Cases
+此接口是必需的。如果车辆没有挡位，应模拟挡位行为。
 
-- Control the vehicle for autonomous driving.
-- Display current gear status to the operator.
+<a id="limitations"></a>
 
-## Requirement
+## 限制
 
-- Support getting the current gear status of the vehicle.
-- Support vehicle-specific gear status if necessary.
+延迟：换挡是需要时间的机械过程，通常耗时 0.5s 到 2.0s。此处报告的状态反映实际接合的挡位，因此发送指令后会有延迟。Autoware 必须处理这一过渡阶段。
 
-## Design
+<a id="use-cases"></a>
 
-- Support four typical gear types: PARKING, NEUTRAL, DRIVE, and REVERSE.
-- Unused values ​​can be used for special gear types.
-- Simulate gear if necessary to increase reusability.
+## 使用场景
 
-## History
+- 控制车辆进行自动驾驶。
+- 向操作员显示当前挡位状态。
 
-| Date       | Description                      |
+<a id="requirement"></a>
+
+## 要求
+
+- 支持获取车辆当前的挡位状态。
+- 必要时支持车辆特有的挡位状态。
+
+<a id="design"></a>
+
+## 设计
+
+- 支持四种常见挡位类型：PARKING、NEUTRAL、DRIVE 和 REVERSE。
+- 未使用的值可用于特殊挡位类型。
+- 必要时模拟挡位，以提高复用性。
+
+<a id="history"></a>
+
+## 历史记录
+
+| 日期 | 说明 |
 | ---------- | -------------------------------- |
-| 2026-01-21 | First release in the new format. |
+| 2026-01-21 | 首次以新格式发布。 |

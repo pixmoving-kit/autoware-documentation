@@ -6,12 +6,12 @@ type:
   name: autoware_adapi_v1_msgs/srv/GetVehicleDimensions
   res:
     - name: status
-      text: response status
+      text: 响应状态
     - name: dimensions
-      text: vehicle dimensions
+      text: 车辆尺寸
 ---
 
 {% extends 'design/autoware-architecture-v1/interfaces/templates/autoware-interface.jinja2' %}
 {% block description %}
-Get the vehicle dimensions. See [here](../../../../components/vehicle-dimensions.md) for the definition of each value.
+获取车辆尺寸。各数值的定义见[此处](../../../../components/vehicle-dimensions.md)。
 {% endblock %}

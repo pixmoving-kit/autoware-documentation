@@ -1,29 +1,33 @@
-# Point cloud type transition
+<a id="point-cloud-type-transition"></a>
 
-Tracked under [this issue](https://github.com/autowarefoundation/autoware/issues/6708).
+# 点云类型迁移
 
-Autoware transitions from using raw memcpy operations and using [PointCloud2Iterator<>](https://github.com/ros2/common_interfaces/blob/jazzy/sensor_msgs/include/sensor_msgs/point_cloud2_iterator.hpp) to using [Point Cloud Message Wrapper](https://gitlab.com/ApexAI/point_cloud_msg_wrapper).
+进度跟踪见[此议题](https://github.com/autowarefoundation/autoware/issues/6708)。
 
-This way the point cloud messages can be edited in-place with a `std::vector<>`-like wrapper.
+Autoware 将从直接使用 memcpy 操作和 [PointCloud2Iterator<>](https://github.com/ros2/common_interfaces/blob/jazzy/sensor_msgs/include/sensor_msgs/point_cloud2_iterator.hpp)，迁移到使用 [Point Cloud Message Wrapper](https://gitlab.com/ApexAI/point_cloud_msg_wrapper)。
 
-The only downside is that this requires strong type definitions for the point cloud message fields.
+这样就可以通过类似 `std::vector<>` 的封装器原地编辑点云消息。
 
-We have already made the compatibility requirements for `PointXYZIRC` and `PointXYZIRCAEDT` types with [this PR](https://github.com/autowarefoundation/autoware_universe/pull/6996).
+唯一的缺点是需要为点云消息字段提供强类型定义。
 
-Now we need to start using this wrapper in the rest of the codebase.
+我们已通过[此 PR](https://github.com/autowarefoundation/autoware_universe/pull/6996)规定了 `PointXYZIRC` 和 `PointXYZIRCAEDT` 类型的兼容性要求。
 
-We also need to provide a tool to convert point cloud messages from outside types to the Autoware expected types.
+接下来需要在代码库的其他部分开始使用此封装器。
 
-Reference implementation of [Point Type Adapter Node can be found here](https://gitlab.com/autowarefoundation/autoware.auto/AutowareAuto/-/blob/master/src/tools/point_type_adapter/src/point_type_adapter_node.cpp).
+还需要提供工具，将外部类型的点云消息转换为 Autoware 期望的类型。
 
-## Transition
+点类型适配节点的参考实现[见此处](https://gitlab.com/autowarefoundation/autoware.auto/AutowareAuto/-/blob/master/src/tools/point_type_adapter/src/point_type_adapter_node.cpp)。
 
-1. **2026 May:** Switch all memcpy usages to `PointCloud2Iterator<>`.
-2. **2026 June:** Add two paths for the codebase: check the full compatibility of the point type with the expected point type.
-   - If compatible, use the wrapper.
-   - If not compatible, use `PointCloud2Iterator<>` and print warnings.
-3. **2026 June:** Add a node that converts point cloud messages from outside types to the Autoware expected types.
-4. **2026 December:** Drop the `PointCloud2Iterator<>` usage.
+<a id="transition"></a>
+
+## 迁移计划
+
+1. **2026 年 5 月：** 将所有 memcpy 的使用改为 `PointCloud2Iterator<>`。
+2. **2026 年 6 月：** 为代码库增加两条处理路径：检查点类型与期望点类型是否完全兼容。
+   - 如果兼容，使用封装器。
+   - 如果不兼容，使用 `PointCloud2Iterator<>` 并输出警告。
+3. **2026 年 6 月：** 增加节点，将外部类型的点云消息转换为 Autoware 期望的类型。
+4. **2026 年 12 月：** 停止使用 `PointCloud2Iterator<>`。
 
 ```mermaid
 timeline
@@ -60,4 +64,4 @@ gantt
 
 !!! warning
 
-    Under construction.
+    正在编写。

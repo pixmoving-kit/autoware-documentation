@@ -1,10 +1,12 @@
-# Review guidelines
+<a id="review-guidelines"></a>
+
+# 审查指南
 
 !!! warning
 
-    Under Construction
+    正在编写
 
-Refer to the following links for now:
+目前请参考以下链接：
 
 - <https://google.github.io/eng-practices/review/>
 - <https://docs.gitlab.com/ee/development/code_review.html>

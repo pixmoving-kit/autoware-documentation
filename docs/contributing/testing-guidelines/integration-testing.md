@@ -1,47 +1,55 @@
-# Integration testing
+<a id="integration-testing"></a>
 
-An integration test is defined as the phase in software testing where individual software modules are combined and tested as a group.
-Integration tests occur after unit tests, and before validation tests.
+# 集成测试
 
-The input to an integration test is a set of independent modules that have been unit tested.
-The set of modules is tested against the defined integration test plan,
-and the output is a set of properly integrated software modules that is ready for system testing.
+集成测试是软件测试中的一个阶段，将各个软件模块组合起来作为一个整体进行测试。
+集成测试在单元测试之后、确认测试之前进行。
 
-## Value of integration testing
+集成测试的输入是一组已经通过单元测试的独立模块。
+根据定义的集成测试计划对这组模块进行测试，
+输出是一组已正确集成、可进入系统测试的软件模块。
 
-Integration tests determine if independently developed software modules work correctly when the modules are connected to each other.
-In ROS 2, the software modules are called nodes.
-Testing a single node is a special type of integration test that is commonly referred to as component testing.
+<a id="value-of-integration-testing"></a>
 
-Integration tests help to find the following types of errors:
+## 集成测试的价值
 
-- Incompatible interactions between nodes, such as non-matching topics, different message types, or incompatible QoS settings.
-- Edge cases that were not touched by unit testing, such as a critical timing issue, network communication delays, disk I/O failures, and other such problems that can occur in production environments.
-- Issues that can occur while the system is under high CPU/memory load, such as `malloc` failures. This can be tested using tools like `stress` and `udpreplay` to test the performance of nodes with real data.
+集成测试用于确定独立开发的软件模块相互连接后能否正常工作。
+在 ROS 2 中，软件模块称为节点。
+对单个节点进行测试是一种特殊的集成测试，通常称为组件测试。
 
-With ROS 2, it is possible to program complex autonomous-driving applications with a large number of nodes.
-Therefore, a lot of effort has been made to provide an integration-test framework that helps developers test the interaction of ROS 2 nodes.
+集成测试有助于发现以下类型的错误：
 
-## Integration-test framework
+- 节点间的交互不兼容，例如话题不匹配、消息类型不同，或 QoS 设置不兼容。
+- 单元测试未覆盖的边界情况，例如关键时序问题、网络通信延迟、磁盘 I/O 故障，以及其他可能在生产环境中出现的问题。
+- 系统在 CPU 或内存负载较高时可能出现的问题，例如 `malloc` 失败。可以使用 `stress` 和 `udpreplay` 等工具，结合真实数据测试节点的性能。
 
-A typical integration-test framework has three parts:
+ROS 2 支持编写包含大量节点的复杂自动驾驶应用。
+因此，人们投入了大量工作来提供集成测试框架，帮助开发者测试 ROS 2 节点之间的交互。
 
-1. A series of executables with arguments that work together and generate outputs.
-2. A series of expected outputs that should match the output of the executables.
-3. A launcher that starts the tests, compares the outputs to the expected outputs, and determines if the test passes.
+<a id="integration-test-framework"></a>
 
-In Autoware, we use the [launch_testing](https://github.com/ros2/launch/tree/master/launch_testing) framework.
+## 集成测试框架
 
-### Smoke tests
+典型的集成测试框架包括三个部分：
 
-Autoware has a dedicated API for smoke testing.
-To use this framework, in `package.xml` add:
+1. 一组带参数的可执行程序，它们协同工作并产生输出。
+2. 一组预期输出，用于与可执行程序的实际输出进行匹配。
+3. 一个启动器，用于启动测试、将输出与预期输出比较，并判断测试是否通过。
+
+在 Autoware 中，我们使用 [launch_testing](https://github.com/ros2/launch/tree/master/launch_testing) 框架。
+
+<a id="smoke-tests"></a>
+
+### 冒烟测试
+
+Autoware 提供了专门用于冒烟测试的 API。
+要使用此框架，请在 `package.xml` 中添加：
 
 ```xml
 <test_depend>autoware_testing</test_depend>
 ```
 
-And in `CMakeLists.txt` add:
+并在 `CMakeLists.txt` 中添加：
 
 ```cmake
 if(BUILD_TESTING)
@@ -50,37 +58,39 @@ if(BUILD_TESTING)
 endif()
 ```
 
-Doing so adds smoke tests that ensure that a node can be:
+这样会添加冒烟测试，以确保节点可以：
 
-1. Launched with a default parameter file.
-2. Terminated with a standard `SIGTERM` signal.
+1. 使用默认参数文件启动。
+2. 通过标准 `SIGTERM` 信号终止。
 
-For the full API documentation,
-refer to the [package design page](https://github.com/autowarefoundation/autoware_core/blob/main/testing/autoware_testing/design/autoware_testing-design.md).
+完整的 API 文档，
+请参阅[功能包设计页面](https://github.com/autowarefoundation/autoware_core/blob/main/testing/autoware_testing/design/autoware_testing-design.md)。
 
 !!! note
 
-    This API is not suitable for all smoke test cases.
-    It cannot be used when a specific file location (eg: for a map) is required to be passed to the node, or if some preparation needs to be conducted before node launch.
-    In such cases use the manual solution from the [component test section below](#integration-test-with-a-single-node-component-test).
+    此 API 并不适用于所有冒烟测试场景。
+    如果需要向节点传入特定文件位置（例如地图文件），或需要在节点启动前执行准备工作，则无法使用此 API。
+    这种情况下，请使用[下方组件测试章节](#integration-test-with-a-single-node-component-test)中的手动方案。
 
-### Integration test with a single node: component test
+<a id="integration-test-with-a-single-node-component-test"></a>
 
-The simplest scenario is a single node.
-In this case, the integration test is commonly referred to as a component test.
+### 单节点集成测试：组件测试
 
-To add a component test to an existing node,
-you can follow the example of the `lanelet2_map_loader` in the [`autoware_map_loader` package](https://github.com/autowarefoundation/autoware_core/tree/main/map/autoware_map_loader)
-(added in [this PR](https://github.com/autowarefoundation/autoware_universe/pull/1056)).
+最简单的场景是单个节点。
+在这种情况下，集成测试通常称为组件测试。
 
-In [`package.xml`](https://github.com/autowarefoundation/autoware_core/blob/main/map/autoware_map_loader/package.xml), add:
+要为现有节点添加组件测试，
+可以参考 [`autoware_map_loader` 功能包](https://github.com/autowarefoundation/autoware_core/tree/main/map/autoware_map_loader)中 `lanelet2_map_loader` 的示例
+（在[此 PR](https://github.com/autowarefoundation/autoware_universe/pull/1056) 中添加）。
+
+在 [`package.xml`](https://github.com/autowarefoundation/autoware_core/blob/main/map/autoware_map_loader/package.xml) 中添加：
 
 ```xml
 <test_depend>ros_testing</test_depend>
 ```
 
-In [`CMakeLists.txt`](https://github.com/autowarefoundation/autoware_core/blob/main/map/autoware_map_loader/CMakeLists.txt),
-add or modify the `BUILD_TESTING` section:
+在 [`CMakeLists.txt`](https://github.com/autowarefoundation/autoware_core/blob/main/map/autoware_map_loader/CMakeLists.txt) 中，
+添加或修改 `BUILD_TESTING` 部分：
 
 ```cmake
 if(BUILD_TESTING)
@@ -95,19 +105,19 @@ if(BUILD_TESTING)
 endif()
 ```
 
-In addition to the command `add_ros_test`, we also install any data that is required by the test using the `install` command.
+除了使用 `add_ros_test` 命令，我们还使用 `install` 命令安装测试所需的数据。
 
 !!! note
 
-    - The `TIMEOUT` argument is given in seconds; see the [add_ros_test.cmake file](https://github.com/ros2/ros_testing/blob/master/ros_testing/cmake/add_ros_test.cmake) for details.
-    - The `add_ros_test` command will run the test in a unique `ROS_DOMAIN_ID` which avoids interference between tests running in parallel.
+    - `TIMEOUT` 参数以秒为单位；详细信息请参阅 [add_ros_test.cmake 文件](https://github.com/ros2/ros_testing/blob/master/ros_testing/cmake/add_ros_test.cmake)。
+    - `add_ros_test` 命令会在独立的 `ROS_DOMAIN_ID` 中运行测试，避免并行运行的测试相互干扰。
 
-To create a test,
-either read the [launch_testing quick-start example](https://github.com/ros2/launch/tree/master/launch_testing#quick-start-example),
-or follow the steps below.
+要创建测试，
+可以阅读 [launch_testing 快速入门示例](https://github.com/ros2/launch/tree/master/launch_testing#quick-start-example)，
+也可以按照以下步骤操作。
 
-Taking [`test/lanelet2_map_loader_launch.test.py`](https://github.com/autowarefoundation/autoware_core/blob/main/map/autoware_map_loader/test/lanelet2_map_loader_launch.test.py) as an example,
-first dependencies are imported:
+以 [`test/lanelet2_map_loader_launch.test.py`](https://github.com/autowarefoundation/autoware_core/blob/main/map/autoware_map_loader/test/lanelet2_map_loader_launch.test.py) 为例，
+首先导入依赖项：
 
 ```python
 import os
@@ -121,9 +131,9 @@ import launch_testing
 import pytest
 ```
 
-Then a launch description is created to launch the node under test.
-Note that the [`test_map.osm`](https://github.com/autowarefoundation/autoware_core/blob/main/map/autoware_map_loader/test/data/test_map.osm) file path is found and passed to the node,
-something that cannot be done with the [smoke testing API](#smoke-tests):
+然后创建启动描述，用于启动被测节点。
+请注意，此处会查找 [`test_map.osm`](https://github.com/autowarefoundation/autoware_core/blob/main/map/autoware_map_loader/test/data/test_map.osm) 文件的路径，并将其传递给节点，
+而[冒烟测试 API](#smoke-tests) 无法完成这一操作：
 
 ```python
 @pytest.mark.launch_test
@@ -157,12 +167,12 @@ def generate_test_description():
 
 !!! note
 
-    - Since the node need time to process the input lanelet2 map, we use a `TimerAction` to delay the start of the test by 1s.
-    - In the example above, the `context` is empty but it can be used to pass objects to the test cases.
-    - You can find an example of using the `context` in the [ROS 2 context_launch_test.py](https://github.com/ros2/launch/blob/humble/launch_testing/test/launch_testing/examples/context_launch_test.py) test example.
+    - 由于节点需要时间处理输入的 lanelet2 地图，我们使用 `TimerAction` 将测试启动延迟 1 秒。
+    - 在上面的示例中，`context` 为空，但可以用它向测试用例传递对象。
+    - 你可以在 [ROS 2 context_launch_test.py](https://github.com/ros2/launch/blob/humble/launch_testing/test/launch_testing/examples/context_launch_test.py) 测试示例中找到使用 `context` 的例子。
 
-Finally, a test is executed after the node executable has been shut down (`post_shutdown_test`).
-Here we ensure that the node was launched without error and exited cleanly.
+最后，在节点可执行程序关闭后执行测试（`post_shutdown_test`）。
+这里验证节点启动时没有错误，并且正常退出。
 
 ```python
 @launch_testing.post_shutdown_test()
@@ -172,28 +182,30 @@ class TestProcessOutput(unittest.TestCase):
         launch_testing.asserts.assertExitCodes(proc_info)
 ```
 
-## Running the test
+<a id="running-the-test"></a>
 
-Continuing the example from above, first build your package:
+## 运行测试
+
+接着上面的示例，首先构建功能包：
 
 ```console
 colcon build --packages-up-to autoware_map_loader
 source install/setup.bash
 ```
 
-Then either execute the component test manually:
+然后可以手动执行组件测试：
 
 ```console
 ros2 test src/core/autoware_core/map/autoware_map_loader/test/lanelet2_map_loader_launch.test.py
 ```
 
-Or as part of testing the entire package:
+也可以将其作为整个功能包测试的一部分执行：
 
 ```console
 colcon test --packages-select autoware_map_loader
 ```
 
-Verify that the test is executed; e.g.
+确认测试已经执行，例如：
 
 ```console
 $ colcon test-result --all --verbose
@@ -201,15 +213,19 @@ $ colcon test-result --all --verbose
 build/autoware_map_loader/test_results/autoware_map_loader/test_lanelet2_map_loader_launch.test.py.xunit.xml: 1 test, 0 errors, 0 failures, 0 skipped
 ```
 
-### Next steps
+<a id="next-steps"></a>
 
-The simple test described in [Integration test with a single node: component test](#integration-test-with-a-single-node-component-test) can be extended in numerous directions, such as testing a node's output.
+### 后续步骤
 
-#### Testing the output of a node
+[单节点集成测试：组件测试](#integration-test-with-a-single-node-component-test)中介绍的简单测试可以从多个方向扩展，例如测试节点的输出。
 
-To test while the node is running,
-create an [_active test_](https://github.com/ros2/launch/tree/foxy/launch_testing#active-tests) by adding a subclass of Python's `unittest.TestCase` to `*launch.test.py`.
-Some boilerplate code is required to access output by creating a node and a subscription to a particular topic, e.g.
+<a id="testing-the-output-of-a-node"></a>
+
+#### 测试节点输出
+
+要在节点运行期间进行测试，
+请在 `*launch.test.py` 中添加 Python `unittest.TestCase` 的子类，创建一个[_运行期测试_](https://github.com/ros2/launch/tree/foxy/launch_testing#active-tests)。
+需要编写一些样板代码，创建节点并订阅特定话题，以访问输出，例如：
 
 ```python
 import unittest
@@ -263,8 +279,10 @@ class TestRunningDataPublisher(unittest.TestCase):
         self.assertEqual(msg, "Hello, world")
 ```
 
-## References
+<a id="references"></a>
 
-- [colcon](https://github.com/ros2/ros2/wiki/Colcon-Tutorial) is used to build and run tests.
-- [launch testing](https://github.com/ros2/launch/tree/master/launch_testing) launches nodes and runs tests.
-- [Testing guidelines](index.md) describes the different types of tests performed in Autoware and links to the corresponding guidelines.
+## 参考资料
+
+- [colcon](https://github.com/ros2/ros2/wiki/Colcon-Tutorial) 用于构建和运行测试。
+- [launch testing](https://github.com/ros2/launch/tree/master/launch_testing) 用于启动节点并运行测试。
+- [测试指南](index.md)介绍了 Autoware 中执行的不同测试类型，并提供相应指南的链接。

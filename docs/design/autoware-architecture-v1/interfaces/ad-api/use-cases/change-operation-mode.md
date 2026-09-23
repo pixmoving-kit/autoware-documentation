@@ -1,18 +1,24 @@
-# Change the operation mode
+<a id="change-the-operation-mode"></a>
 
-## Related API
+# 切换操作模式
 
-- [Operation mode](../features/operation_mode.md)
+<a id="related-api"></a>
 
-## Sequence
+## 相关 API
 
-- Change the mode with software switch.
+- [操作模式](../features/operation_mode.md)
+
+<a id="sequence"></a>
+
+## 时序
+
+- 通过软件开关切换模式。
 
   ```plantuml
   {% include 'design/autoware-architecture-v1/interfaces/ad-api/use-cases/sequence/operation-mode-software.plantuml' %}
   ```
 
-- Change the mode with hardware switch.
+- 通过硬件开关切换模式。
 
   ```plantuml
   {% include 'design/autoware-architecture-v1/interfaces/ad-api/use-cases/sequence/operation-mode-hardware.plantuml' %}

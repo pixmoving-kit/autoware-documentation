@@ -1,8 +1,10 @@
-# Open source philosophy
+<a id="open-source-philosophy"></a>
 
-Autoware is an open source software framework for autonomous driving, licensed under the Apache 2.0 license. This permissive licensing model allows users to freely use, modify, and distribute the software, even for commercial purposes, while ensuring proper attribution. This provides the following benefits to the users and developers:
+# 开源理念
 
-- **Transparency & Validation:** Open access to the source code allows researchers, developers, and industry experts to inspect, validate, and improve the software, ensuring robustness and reliability.
-- **Collaboration & Innovation:** A shared development model encourages contributions from a global community, accelerating advancements in autonomous technology.
-- **Interoperability & Standardization:** Autoware adheres to common standards and widely adopted environments, ensuring seamless integration with diverse platforms, sensors, and vehicle architectures.
-- **Cost & Accessibility:** By eliminating proprietary software costs, Autoware lowers the barriers to entry for startups, researchers, and commercial developers, enabling broader adoption and experimentation.
+Autoware 是一个用于自动驾驶的开源软件框架，采用 Apache 2.0 许可证。这种宽松的许可模式允许用户在保留适当署名的前提下自由使用、修改和分发软件，包括用于商业用途。这为用户和开发者带来了以下好处：
+
+- **透明性与验证：**开放的源代码让研究人员、开发者和行业专家能够检查、验证和改进软件，从而保障其稳健性与可靠性。
+- **协作与创新：**共享的开发模式鼓励全球社区参与贡献，加快自动驾驶技术的发展。
+- **互操作性与标准化：**Autoware 遵循通用标准，并采用广泛使用的环境，确保能够与不同的平台、传感器及车辆架构顺利集成。
+- **成本与可及性：**Autoware 消除了专有软件的成本，降低了初创企业、研究人员和商业开发者的入门门槛，从而支持更广泛的应用与实验。

@@ -1,18 +1,24 @@
-# Initialize the pose
+<a id="initialize-the-pose"></a>
 
-## Related API
+# 初始化位姿
 
-- [Localization](../features/localization.md)
+<a id="related-api"></a>
 
-## Sequence
+## 相关 API
 
-- Initialization of the pose using input.
+- [定位](../features/localization.md)
+
+<a id="sequence"></a>
+
+## 时序
+
+- 使用输入信息初始化位姿。
 
   ```plantuml
   {% include 'design/autoware-architecture-v1/interfaces/ad-api/use-cases/sequence/initialize-pose-input.plantuml' %}
   ```
 
-- Initialization of the pose using GNSS.
+- 使用 GNSS 初始化位姿。
 
   ```plantuml
   {% include 'design/autoware-architecture-v1/interfaces/ad-api/use-cases/sequence/initialize-pose-gnss.plantuml' %}

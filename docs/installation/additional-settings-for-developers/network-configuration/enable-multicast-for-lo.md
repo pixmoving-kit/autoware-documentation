@@ -1,8 +1,12 @@
-# Enable `multicast` on `lo`
+<a id="enable-multicast-on-lo"></a>
 
-## Manually (temporary solution)
+# 为 `lo` 启用 `multicast`
 
-You may just call the following command to enable multicast on the loopback interface.
+<a id="manually-temporary-solution"></a>
+
+## 手动启用（临时方案）
+
+执行以下命令，即可在回环接口上启用组播。
 
 ```bash
 sudo ip link set lo multicast on
@@ -10,23 +14,25 @@ sudo ip link set lo multicast on
 
 !!! warning
 
-    This will be reverted once the computer restarts. To make it permanent, follow the steps below.
+    计算机重启后，此设置会恢复。若要永久生效，请按照下文操作。
 
 !!! note
 
-    Here, `lo` is the loopback interface.
+    此处的 `lo` 是回环接口。
 
-    You can check the interfaces with `ip link show`.
+    可以使用 `ip link show` 查看接口。
 
-    You may change `lo` with the interface you want to enable multicast on.
+    您可以将 `lo` 替换为希望启用组播的接口。
 
-## On startup with a service (permanent solution)
+<a id="on-startup-with-a-service-permanent-solution"></a>
+
+## 通过服务在启动时启用（永久方案）
 
 ```bash
 sudo nano /etc/systemd/system/multicast-lo.service
 ```
 
-Paste the following into the file:
+将以下内容粘贴到文件中：
 
 ```service
 [Unit]
@@ -40,7 +46,7 @@ ExecStart=/usr/sbin/ip link set lo multicast on
 WantedBy=multi-user.target
 ```
 
-Press following in order to save with nano:
+在 nano 中依次按以下按键保存：
 
 1. `Ctrl+X`
 2. `Y`
@@ -57,7 +63,9 @@ sudo systemctl enable multicast-lo.service
 sudo systemctl start multicast-lo.service
 ```
 
-### Validate
+<a id="validate"></a>
+
+### 验证
 
 ```console
 you@pc:~$ sudo systemctl status multicast-lo.service
@@ -79,9 +87,11 @@ you@pc:~$ ip link show lo
     link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
 ```
 
-### Uninstalling the service
+<a id="uninstalling-the-service"></a>
 
-If for some reason you want to uninstall the service, you can do so by following these steps:
+### 卸载服务
+
+如果需要卸载此服务，可以按照以下步骤操作：
 
 ```bash
 # Stop the service

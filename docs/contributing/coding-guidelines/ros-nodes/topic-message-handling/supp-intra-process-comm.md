@@ -1,15 +1,21 @@
-# [supplement] Obtain a received message through intra-process communication
+<a id="supplement-obtain-a-received-message-through-intra-process-communication"></a>
 
-## Topic message handling in intra-process communication
+# 【补充】获取通过进程内通信接收的消息
 
-`rclcpp` supports intra-process communication. As explained in [_Topic message handling guideline_](index.md), `take()` method can not be used in the case of intra-process communication. `take()` can not return a topic message which is received through inter-process communication.  
-However, methods for intra-process communication are provided, similar to the methods for inter-process communication described in [_obtain data by calling Subscription->take and then call a callback function_](./index.md#3-obtain-data-by-calling-subscription-take-and-then-call-a-callback-function).
-`take_data()` method is provided to obtain a received data in the case of intra-process communication and the received data must be processed through `execute()` method. The return value of `take_data()` is based on the complicated data structure, `execute()` method should be used along with `take_data()` method.
-Refer to [_Template Class SubscriptionIntraProcess — rclcpp 16.0.8 documentation_](http://docs.ros.org/en/humble/p/rclcpp/generated/classrclcpp_1_1experimental_1_1SubscriptionIntraProcess.html#_CPPv4N6rclcpp12experimental24SubscriptionIntraProcess9take_dataEv) for `take_data()` and `execute()` for more detail.
+<a id="topic-message-handling-in-intra-process-communication"></a>
 
-## Coding manner
+## 进程内通信中的话题消息处理
 
-To handle messages via intra-process communication, call `take_data()` method and then `execute()` method as below.
+`rclcpp` 支持进程内通信。如[_话题消息处理指南_](index.md)所述，进程内通信不能使用 `take()` 方法。`take()` 无法返回通过进程间通信接收的话题消息。  
+不过，系统提供了用于进程内通信的方法，与[_调用 Subscription->take 获取数据后，再调用回调函数_](./index.md#3-obtain-data-by-calling-subscription-take-and-then-call-a-callback-function)中介绍的进程间通信方法类似。
+在进程内通信中，使用 `take_data()` 方法获取接收到的数据，并且必须通过 `execute()` 方法处理这些数据。由于 `take_data()` 的返回值采用复杂的数据结构，应将 `execute()` 与 `take_data()` 配合使用。
+有关 `take_data()` 和 `execute()` 的更多信息，请参阅 [_SubscriptionIntraProcess 模板类 — rclcpp 16.0.8 文档_](http://docs.ros.org/en/humble/p/rclcpp/generated/classrclcpp_1_1experimental_1_1SubscriptionIntraProcess.html#_CPPv4N6rclcpp12experimental24SubscriptionIntraProcess9take_dataEv)。
+
+<a id="coding-manner"></a>
+
+## 编码方式
+
+要处理通过进程内通信传递的消息，请如下先调用 `take_data()`，再调用 `execute()`。
 
 ```c++
 // Execute any entities of the Waitable that may be ready
@@ -17,14 +23,14 @@ std::shared_ptr<void> data = waitable.take_data();
 waitable.execute(data);
 ```
 
-Here is a sample program in [_ros2_subscription_examples/intra_process_talker_listener/src/timer_listener_intra_process.cpp at main · takam5f2/ros2_subscription_examples_](https://github.com/takam5f2/ros2_subscription_examples/blob/main/intra_process_talker_listener/src/timer_listener_intra_process.cpp).
-You can run the program as below. If you set `true` to `use_intra_process_comms`, intra-process communication is performed, while if you set `false`, inter-process communication is performed.
+示例程序位于 [_ros2_subscription_examples/intra_process_talker_listener/src/timer_listener_intra_process.cpp at main · takam5f2/ros2_subscription_examples_](https://github.com/takam5f2/ros2_subscription_examples/blob/main/intra_process_talker_listener/src/timer_listener_intra_process.cpp)。
+可以按以下方式运行程序。如果将 `use_intra_process_comms` 设为 `true`，则执行进程内通信；如果设为 `false`，则执行进程间通信。
 
 ```console
 ros2 intra_process_talker_listener talker_listener_intra_process.launch.py use_intra_process_comms:=true
 ```
 
-Here is a snippet of [_ros2_subscription_examples/intra_process_talker_listener/src/timer_listener_intra_process.cpp at main · takam5f2/ros2_subscription_examples_](https://github.com/takam5f2/ros2_subscription_examples/blob/main/intra_process_talker_listener/src/timer_listener_intra_process.cpp).
+以下是 [_ros2_subscription_examples/intra_process_talker_listener/src/timer_listener_intra_process.cpp at main · takam5f2/ros2_subscription_examples_](https://github.com/takam5f2/ros2_subscription_examples/blob/main/intra_process_talker_listener/src/timer_listener_intra_process.cpp) 中的代码片段。
 
 ```c++
       // check if intra-process communication is enabled.
@@ -45,23 +51,23 @@ Here is a snippet of [_ros2_subscription_examples/intra_process_talker_listener/
           intra_process_sub->execute(data);
 ```
 
-Below is a line-by-line explanation of the above code.
+下面逐行解释上述代码。
 
 - `if (this->get_node_options().use_intra_process_comms()){`
-  - The statement checks whether or not intra-process communication is enabled or not by using `NodeOptions`
+  - 此语句通过 `NodeOptions` 检查是否启用了进程内通信。
 
 - `auto intra_process_sub = sub_->get_intra_process_waitable();`
-  - The statement means to get an embodied object which performs intra-process communication
+  - 此语句获取执行进程内通信的具体对象。
 
 - `if (intra_process_sub->is_ready(nullptr) == true) {`
-  - The statement checks if a message has already been received through intra-process communication
-  - The argument of `is_ready()` is of type `rcl_wait_set_t` type, but because the argument is not used within `is_ready()`, `nullptr` is used for the moment.
-    - Using `nullptr` is currently a workaround, as it has no intent.
+  - 此语句检查是否已通过进程内通信接收到消息。
+  - `is_ready()` 的参数类型为 `rcl_wait_set_t`，但由于该参数在 `is_ready()` 内部未被使用，因此目前传入 `nullptr`。
+    - 使用 `nullptr` 目前只是一种临时处理方式，并无特殊含义。
 
 - `std::shared_ptr<void> data = intra_process_sub->take_data();`
-  - This statement means to obtain a topic message from subscriptions for intra-process communication.
-  - `intra_process_sub->take_data()` does not return a boolean value indicating whether a message is received successfully or not, so it is necessary to check this by calling `is_ready()` beforehand
+  - 此语句从用于进程内通信的订阅中获取话题消息。
+  - `intra_process_sub->take_data()` 不会返回表示是否成功接收消息的布尔值，因此需要先调用 `is_ready()` 进行检查。
 
 - `intra_process_sub->execute(data);`
-  - A callback function corresponding to the received message is called within `execute()`
-  - The callback function is executed by the thread that calls `execute()` without a context switch
+  - 与接收消息对应的回调函数会在 `execute()` 内部调用。
+  - 回调函数由调用 `execute()` 的线程执行，不发生上下文切换。

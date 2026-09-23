@@ -1,27 +1,31 @@
-# Placing dummy objects
+<a id="placing-dummy-objects"></a>
 
-1. Click the `2D Dummy Car` or `2D Dummy Pedestrian` button in the toolbar.
-2. Set the pose of the dummy object by clicking and dragging on the map.
-3. Set the velocity of the object in `Tool Properties -> 2D Dummy Car/Pedestrian` panel.
+# 放置虚拟物体
+
+1. 点击工具栏中的 `2D Dummy Car` 或 `2D Dummy Pedestrian` 按钮。
+2. 在地图上点击并拖动，设置虚拟物体的位姿。
+3. 在 `Tool Properties -> 2D Dummy Car/Pedestrian` 面板中设置物体速度。
 
 !!! note
 
-    Changes to the `velocity` parameter will only affect objects placed after the parameter is changed.
+    对 `velocity` 参数的修改只会影响修改后放置的物体。
 
-![set-dummy-car](images/lane-following/place-dummy-car.png)
+![设置虚拟车辆](images/lane-following/place-dummy-car.png)
 
-!!! tip "Delete all dummy objects"
+!!! tip "删除所有虚拟物体"
 
-    Click the `Delete All Objects` button in the toolbar and then click anywhere in the 3D View pane to complete it.
+    点击工具栏中的 `Delete All Objects` 按钮，然后在 3D 视图窗格中的任意位置点击即可完成删除。
 
-## Placing interactive dummy objects
+<a id="placing-interactive-dummy-objects"></a>
 
-Click the `Interactive` button in the toolbar to create the next dummy object in interactive mode.
+## 放置可交互的虚拟物体
 
-![set-interactive-dummy-car](images/lane-following/check-interactive.png)
+点击工具栏中的 `Interactive` 按钮，下一个虚拟物体将以交互模式创建。
+
+![设置可交互虚拟车辆](images/lane-following/check-interactive.png)
 
 !!! info
 
-    - **Add an interactive dummy object:** ++shift+"🖱️ Right Click"++ on the map.
-    - **Delete an interactive dummy object:** ++alt+"🖱️ Right Click"++ on the object.
-    - **Move an existing interactive dummy object:** ++"🖱️ Right Click"++ and hold on the object. Then drag and drop it to the desired location.
+    - **添加可交互的虚拟物体：** 在地图上按 ++shift+"🖱️ Right Click"++。
+    - **删除可交互的虚拟物体：** 在物体上按 ++alt+"🖱️ Right Click"++。
+    - **移动已有的可交互虚拟物体：** 在物体上按住 ++"🖱️ Right Click"++，然后将其拖放到目标位置。

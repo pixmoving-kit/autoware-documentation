@@ -12,51 +12,71 @@ qos_depth: 1
 
 # {{ interface_name }}
 
-## Specifications
+<a id="specifications"></a>
+
+## 规格
 
 {% include 'design/autoware-architecture-v1/interfaces/templates/topic.jinja2' %}
 
-## Description
+<a id="description"></a>
 
-Send the hazard lights change command to the vehicle. The command is `ENABLE` or `DISABLE`.
-It is recommended to set QoS to transient_local and publish only when the command changes, but currently many implementations publish the command periodically.
-Therefore, ensure consistency across the entire system.
+## 说明
 
-## Message
+向车辆发送危险警告灯切换指令。指令为 `ENABLE` 或 `DISABLE`。
+建议将 QoS 设置为 transient_local，并仅在指令发生变化时发布；但目前许多实现会周期性发布指令。
+因此，请确保整个系统保持一致。
 
-The `stamp` field is the command sent time. In the case of periodic publication, use the latest time, not the last command change.
-For the `command` field, use the valid values listed above. The `NO_COMMAND` value can be used internally by programs, but will never be sent as a topic.
+<a id="message"></a>
 
-## Errors
+## 消息
 
-Invalid command: If the vehicle interface receives an undefined command, it is ignored and a diagnostic error is reported.
+`stamp` 字段表示指令发送时间。周期性发布时，应使用最新时间，而不是上次指令改变的时间。
+`command` 字段应使用上述有效值。程序内部可以使用 `NO_COMMAND`，但不会通过话题发送此值。
 
-## Support
+<a id="errors"></a>
 
-This interface is required. If the vehicle does not have hazard lights, always ignore the command.
+## 错误
 
-## Limitations
+无效指令：如果车辆接口收到未定义的指令，则忽略该指令并报告诊断错误。
 
-None.
+<a id="support"></a>
 
-## Use Cases
+## 支持要求
 
-- Control the vehicle for autonomous driving.
-- Relay commands from the operator.
+此接口是必需的。如果车辆没有危险警告灯，应始终忽略该指令。
 
-## Requirement
+<a id="limitations"></a>
 
-- Support sending the hazard lights command to the vehicle.
-- Report the error as diagnostics if an unsupported or unknown command is sent.
+## 限制
 
-## Design
+无。
 
-Separation from turn indicators: Hazard lights and turn indicators are defined in separate interfaces to allow independent state management. For example, an autonomous stack might request "Turn Left" for routing, but a safety system might simultaneously request "Hazard Enable" due to an emergency. This simplifies the logic because an autonomous stack and safety system no longer have to worry about their states being overwritten by each other's commands.
+<a id="use-cases"></a>
 
-Priority logic: The vehicle interface must prioritize HazardLightsCommand.ENABLE over any TurnIndicatorsCommand. This ensures safety signals (hazards) always take precedence over navigation signals.
+## 使用场景
 
-## History
+- 控制车辆进行自动驾驶。
+- 转发操作员的指令。
 
-| Date       | Description                      |
+<a id="requirement"></a>
+
+## 要求
+
+- 支持向车辆发送危险警告灯指令。
+- 如果发送了不支持或未知的指令，通过诊断信息报告错误。
+
+<a id="design"></a>
+
+## 设计
+
+与转向灯分离：危险警告灯和转向灯使用独立接口，以便分别管理状态。例如，自动驾驶软件栈可能为路线行驶请求“左转”，而安全系统同时因紧急情况请求“启用危险警告灯”。这样可以简化逻辑，使自动驾驶软件栈和安全系统无需担心各自的状态被对方的指令覆盖。
+
+优先级逻辑：车辆接口必须使 HazardLightsCommand.ENABLE 优先于任何 TurnIndicatorsCommand。这可确保安全信号（危险警告灯）始终优先于行驶方向信号。
+
+<a id="history"></a>
+
+## 历史记录
+
+| 日期 | 说明 |
 | ---------- | -------------------------------- |
-| 2026-01-21 | First release in the new format. |
+| 2026-01-21 | 首次以新格式发布。 |

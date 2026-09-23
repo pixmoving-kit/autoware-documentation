@@ -6,13 +6,13 @@ type:
   name: autoware_adapi_v1_msgs/msg/MrmRequestList
   msg:
     - name: requests.sender
-      text: The sender name of the MRM request.
+      text: MRM 请求发送方的名称。
     - name: requests.strategy
-      text: The strategy of the MRM request.
+      text: MRM 请求的策略。
 ---
 
 {% extends 'design/autoware-architecture-v1/interfaces/templates/autoware-interface.jinja2' %}
 {% block description %}
-List the MRM requests from all senders.
-For details, see the [fail-safe](../../../../features/fail-safe.md).
+列出所有发送方的 MRM 请求。
+详情请参阅[故障安全](../../../../features/fail-safe.md)。
 {% endblock %}

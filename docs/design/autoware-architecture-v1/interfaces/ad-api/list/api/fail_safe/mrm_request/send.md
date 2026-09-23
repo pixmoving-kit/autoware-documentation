@@ -6,16 +6,16 @@ type:
   name: autoware_adapi_v1_msgs/srv/SendMrmRequest
   req:
     - name: request.sender
-      text: The sender name of the MRM request.
+      text: MRM 请求发送方的名称。
     - name: request.strategy
-      text: The strategy of the MRM request.
+      text: MRM 请求的策略。
   res:
     - name: status
-      text: response status
+      text: 响应状态
 ---
 
 {% extends 'design/autoware-architecture-v1/interfaces/templates/autoware-interface.jinja2' %}
 {% block description %}
-Send the MRM request.
-For details, see the [fail-safe](../../../../features/fail-safe.md).
+发送 MRM 请求。
+详情请参阅[故障安全](../../../../features/fail-safe.md)。
 {% endblock %}

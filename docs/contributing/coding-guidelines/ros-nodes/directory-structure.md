@@ -1,17 +1,23 @@
-# Directory structure
+<a id="directory-structure"></a>
 
-This document describes the directory structure of ROS nodes within Autoware.
+# 目录结构
 
-We'll use the package `autoware_gnss_poser` as an example.
+本文介绍 Autoware 中 ROS 节点的目录结构。
 
-**Note that this example does not reflect the actual `autoware_gnss_poser` and includes extra files and directories to demonstrate all possible package structures.**
+我们以 `autoware_gnss_poser` 功能包为例。
 
-## C++ package
+**请注意，此示例并不对应实际的 `autoware_gnss_poser`，其中包含额外的文件和目录，以展示所有可能的功能包结构。**
 
-### Entire structure
+<a id="c-package"></a>
 
-- This is a reference on how the entire package might be structured.
-- A package may not have all the directories shown here.
+## C++ 功能包
+
+<a id="entire-structure"></a>
+
+### 整体结构
+
+- 此处提供整个功能包可能采用的结构参考。
+- 功能包不一定包含这里展示的所有目录。
 
 ```txt
 autoware_gnss_poser
@@ -51,19 +57,23 @@ autoware_gnss_poser
     └─ test_foo.cpp
 ```
 
-### Package name
+<a id="package-name"></a>
 
-- All the packages in Autoware should be prefixed with `autoware_`.
-- Even if the package is exports a node, the package name **should NOT** have the `_node` suffix.
-- The package name should be in `snake_case`.
+### 功能包名称
 
-| Package Name                      | OK  | Alternative                  |
+- Autoware 中的所有功能包都应带有 `autoware_` 前缀。
+- 即使功能包导出了节点，其名称也**不应**带有 `_node` 后缀。
+- 功能包名称应使用 `snake_case`。
+
+| 功能包名称                       | 是否合规 | 替代名称                     |
 | --------------------------------- | --- | ---------------------------- |
 | path_smoother                     | ❌  | autoware_path_smoother       |
 | autoware_trajectory_follower_node | ❌  | autoware_trajectory_follower |
 | autoware_geography_utils          | ✅  | -                            |
 
-### Package folder
+<a id="package-folder"></a>
+
+### 功能包文件夹
 
 ```txt
 autoware_gnss_poser
@@ -72,23 +82,25 @@ autoware_gnss_poser
 └─ README.md
 ```
 
-The package folder name should be the same as the package name.
+功能包文件夹的名称应与功能包名称相同。
 
 #### `package.xml`
 
-- The package name should be entered within the `<name>` tag.
+- 应在 `<name>` 标签内填写功能包名称。
   - `<name>autoware_gnss_poser</name>`
 
 #### `CMakeLists.txt`
 
-- The [`project()`](https://cmake.org/cmake/help/latest/command/project.html) command should call the package name.
-  - **Example:** `project(autoware_gnss_poser)`
+- [`project()`](https://cmake.org/cmake/help/latest/command/project.html) 命令应使用功能包名称。
+  - **示例：**`project(autoware_gnss_poser)`
 
-##### Exporting a composable node component executables
+<a id="exporting-a-composable-node-component-executables"></a>
 
-For best practices and system efficiency, it is recommended to primarily use composable node components.
+##### 导出可组合节点组件的可执行程序
 
-This method facilitates easier deployment and maintenance within ROS environments.
+为遵循最佳实践并提高系统效率，建议优先使用可组合节点组件。
+
+这种方式便于在 ROS 环境中部署和维护。
 
 ```cmake
 ament_auto_add_library(${PROJECT_NAME} SHARED
@@ -101,22 +113,24 @@ rclcpp_components_register_node(${PROJECT_NAME}
 )
 ```
 
-- If you are building:
-  - **only a single composable node component,** the executable name should start with `${PROJECT_NAME}`
-  - **multiple composable node components,** the executable name is up to the developer.
-- All composable node component executables should have the `_node` suffix.
+- 如果构建的是：
+  - **仅一个可组合节点组件**，则可执行程序名称应以 `${PROJECT_NAME}` 开头。
+  - **多个可组合节点组件**，则可执行程序名称由开发者自行决定。
+- 所有可组合节点组件的可执行程序都应带有 `_node` 后缀。
 
-##### Exporting a standalone node executable without composition _(discouraged for most cases)_
+<a id="exporting-a-standalone-node-executable-without-composition-discouraged-for-most-cases"></a>
 
-Use of standalone executables **should be limited** to cases where specific needs such as debugging or tooling are required.
+##### 导出不使用组合机制的独立节点可执行程序_（大多数情况下不推荐）_
 
-[Exporting a composable node component executables](#exporting-a-composable-node-component-executables) is generally preferred for standard operational use due its flexibility and scalability within the ROS ecosystem.
+独立可执行程序的使用**应限于**调试或工具等特定需求场景。
 
-Assuming:
+对于常规运行场景，通常优先选择[导出可组合节点组件的可执行程序](#exporting-a-composable-node-component-executables)，因为它在 ROS 生态系统中更具灵活性和可扩展性。
 
-- `src/gnss_poser.cpp` has the `GNSSPoser` class.
-- `src/gnss_poser_node.cpp` has the `main` function.
-- There is no composable node component registration.
+假设：
+
+- `src/gnss_poser.cpp` 包含 `GNSSPoser` 类。
+- `src/gnss_poser_node.cpp` 包含 `main` 函数。
+- 未注册可组合节点组件。
 
 ```cmake
 ament_auto_add_library(${PROJECT_NAME} SHARED
@@ -126,11 +140,13 @@ ament_auto_add_library(${PROJECT_NAME} SHARED
 ament_auto_add_executable(${PROJECT_NAME}_node src/gnss_poser_node.cpp)
 ```
 
-- The node executable:
-  - should have `_node` suffix.
-  - should start with `${PROJECT_NAME}
+- 节点可执行程序：
+  - 应带有 `_node` 后缀。
+  - 应以 `${PROJECT_NAME} 开头。
 
-### `config` and `schema`
+<a id="config-and-schema"></a>
+
+### `config` 和 `schema`
 
 ```txt
 autoware_gnss_poser
@@ -143,14 +159,14 @@ autoware_gnss_poser
 
 #### `config`
 
-- ROS parameters uses the extension `.param.yaml`.
-- Non-ROS parameters use the extension `.yaml`.
+- ROS 参数文件使用 `.param.yaml` 扩展名。
+- 非 ROS 参数文件使用 `.yaml` 扩展名。
 
-**Rationale:** Different linting rules are used for ROS parameters and non-ROS parameters.
+**理由：**ROS 参数与非 ROS 参数使用不同的检查规则。
 
 #### `schema`
 
-Place parameter definition files. See [Parameters](./parameters.md) for details.
+放置参数定义文件。详情请参阅[参数](./parameters.md)。
 
 ### `doc`
 
@@ -161,15 +177,19 @@ autoware_gnss_poser
     └─ foo_diagram.svg
 ```
 
-Place documentation files and link them from the README file.
+放置文档文件，并在 README 文件中添加指向这些文件的链接。
 
-### `include` and `src`
+<a id="include-and-src"></a>
 
-- Unless you specifically need to export headers, you shouldn't have a `include` directory under the package directory.
-- For most cases, follow [Not exporting headers](#not-exporting-headers).
-- Library packages that export headers may follow [Exporting headers](#exporting-headers).
+### `include` 和 `src`
 
-#### Not exporting headers
+- 除非确实需要导出头文件，否则不应在功能包目录下设置 `include` 目录。
+- 大多数情况下，请遵循[不导出头文件](#not-exporting-headers)的结构。
+- 导出头文件的库功能包可以遵循[导出头文件](#exporting-headers)的结构。
+
+<a id="not-exporting-headers"></a>
+
+#### 不导出头文件
 
 ```txt
 autoware_gnss_poser
@@ -190,16 +210,18 @@ autoware_gnss_poser
     └─ bar.cpp
 ```
 
-- The source file exporting the node should:
-  - have `_node` suffix.
-    - **Rationale:** To distinguish from other source files.
-  - **NOT** have `autoware_` prefix.
-    - **Rationale:** To avoid verbosity.
-- See [Class design](./class-design.md) for more details on how to construct `gnss_poser_node.hpp` and `gnss_poser_node.cpp` files.
-- It is up to developer how to organize the source files under `src`.
-  - **Note:** The `include` folder under `src` is optional.
+- 导出节点的源文件：
+  - 应带有 `_node` 后缀。
+    - **理由：**与其他源文件区分。
+  - **不应**带有 `autoware_` 前缀。
+    - **理由：**避免冗长。
+- 有关如何组织 `gnss_poser_node.hpp` 和 `gnss_poser_node.cpp` 文件的更多信息，请参阅[类设计](./class-design.md)。
+- `src` 下源文件的组织方式由开发者自行决定。
+  - **注意：**`src` 下的 `include` 文件夹是可选的。
 
-#### Exporting headers
+<a id="exporting-headers"></a>
+
+#### 导出头文件
 
 ```txt
 autoware_gnss_poser
@@ -209,16 +231,16 @@ autoware_gnss_poser
             └─ exported_header.hpp
 ```
 
-- `autoware_gnss_poser/include` folder should contain **ONLY** the `autoware` folder.
-  - **Rationale:** When installing ROS debian packages, the headers are copied to the `/opt/ros/$ROS_DISTRO/include/` directory. This structure is used to avoid conflicts with non-Autoware packages.
-- `autoware_gnss_poser/include/autoware` folder should contain **ONLY** the `gnss_poser` folder.
-  - **Rationale:** Similarly, this structure is used to avoid conflicts with other packages.
-- `autoware_gnss_poser/include/autoware/gnss_poser` folder should contain the header files to be exported.
+- `autoware_gnss_poser/include` 文件夹应**仅**包含 `autoware` 文件夹。
+  - **理由：**安装 ROS Debian 软件包时，头文件会复制到 `/opt/ros/$ROS_DISTRO/include/` 目录。采用这种结构可避免与非 Autoware 功能包发生冲突。
+- `autoware_gnss_poser/include/autoware` 文件夹应**仅**包含 `gnss_poser` 文件夹。
+  - **理由：**同样，这种结构用于避免与其他功能包发生冲突。
+- `autoware_gnss_poser/include/autoware/gnss_poser` 文件夹应包含需要导出的头文件。
 
-**Note:** If `ament_auto_package()` command is used in the `CMakeLists.txt` file and `autoware_gnss_poser/include` folder exists,
-this `include` folder will be exported to the `install` folder as part of [ament_auto_package.cmake](https://github.com/ament/ament_cmake/blob/79cc237f8eb819edf4c1c624b56451e0a05a45f8/ament_cmake_auto/cmake/ament_auto_package.cmake#L62-L66)
+**注意：**如果在 `CMakeLists.txt` 中使用了 `ament_auto_package()` 命令，并且存在 `autoware_gnss_poser/include` 文件夹，
+则 [ament_auto_package.cmake](https://github.com/ament/ament_cmake/blob/79cc237f8eb819edf4c1c624b56451e0a05a45f8/ament_cmake_auto/cmake/ament_auto_package.cmake#L62-L66) 会将该 `include` 文件夹导出到 `install` 文件夹。
 
-**Reference:** <https://docs.ros.org/en/humble/How-To-Guides/Ament-CMake-Documentation.html#adding-targets>
+**参考资料：**<https://docs.ros.org/en/humble/How-To-Guides/Ament-CMake-Documentation.html#adding-targets>
 
 ### `launch`
 
@@ -229,11 +251,11 @@ autoware_gnss_poser
     └─ gnss_poser.launch.py
 ```
 
-- You may have multiple launch files here.
-- Unless you have a specific reason, use the `.launch.xml` extension.
-  - **Rationale:** While the `.launch.py` extension is more flexible, it comes with a readability cost.
-- Avoid `autoware_` prefix in the launch file names.
-  - **Rationale:** To avoid verbosity.
+- 此处可以放置多个 launch 文件。
+- 除非有特殊原因，否则请使用 `.launch.xml` 扩展名。
+  - **理由：**虽然 `.launch.py` 更灵活，但会降低可读性。
+- launch 文件名避免使用 `autoware_` 前缀。
+  - **理由：**避免冗长。
 
 ### `test`
 
@@ -244,10 +266,12 @@ autoware_gnss_poser
     └─ test_foo.cpp
 ```
 
-Place source files for testing. See [unit testing](../../testing-guidelines/unit-testing.md) for details.
+放置测试源文件。详情请参阅[单元测试](../../testing-guidelines/unit-testing.md)。
 
-## Python package
+<a id="python-package"></a>
+
+## Python 功能包
 
 !!! warning
 
-    Under Construction
+    编写中

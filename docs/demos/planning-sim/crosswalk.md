@@ -1,24 +1,30 @@
-# Driving through a crosswalk
+<a id="driving-through-a-crosswalk"></a>
 
-When driving through a crosswalk, the ego vehicle evaluates **both** the presence of pedestrians/objects **and** the state of any associated traffic lights.
+# 驶过人行横道
 
-!!! info
-
-    For more technical details, refer to the [**autoware_behavior_velocity_crosswalk_module** documentation](https://autowarefoundation.github.io/autoware_universe/main/planning/behavior_velocity_planner/autoware_behavior_velocity_crosswalk_module/).
+驶过人行横道时，自车会**同时**评估行人／物体的存在情况**以及**相关交通信号灯的状态。
 
 !!! info
 
-    These examples use the **Nishishinjuku** map, the same one used in the [lane change scenario](lane-change.md).
+    更多技术细节请参阅 [**autoware_behavior_velocity_crosswalk_module** 文档](https://autowarefoundation.github.io/autoware_universe/main/planning/behavior_velocity_planner/autoware_behavior_velocity_crosswalk_module/)。
+
+!!! info
+
+    这些示例使用 **Nishishinjuku** 地图，与[变道场景](lane-change.md)所用地图相同。
 
 !!! tip
 
-    For these tutorials, it is easier to use **interactive dummy pedestrians** (see [Placing interactive dummy objects](placing-objects.md) above).
+    在这些教程中，使用**可交互的虚拟行人**更方便（参见上文[放置可交互的虚拟物体](placing-objects.md)）。
 
-    This way you can quickly add, move, and delete dummy pedestrians as needed.
+    这样可以按需快速添加、移动和删除虚拟行人。
 
-## Non-signalized crosswalk (no traffic light)
+<a id="non-signalized-crosswalk-no-traffic-light"></a>
 
-### Behavior logic
+## 无信号灯的人行横道
+
+<a id="behavior-logic"></a>
+
+### 行为逻辑
 
 ```mermaid
 flowchart TD
@@ -32,74 +38,76 @@ flowchart TD
     H --> I["Crosswalk passed ➡️ behavior resets when encountering the same crosswalk again"]
 ```
 
-!!! example "Experiment"
+!!! example "实验"
 
-    We will test the expected “single stop then go” behavior:
+    我们将验证预期的“停车一次后继续行驶”行为：
 
-    1. Place a still dummy pedestrian on the crosswalk. (Not on the planned path, just on the crosswalk.)
+    1. 在人行横道上放置一个静止的虚拟行人。（不在规划路径上，只需位于人行横道上。）
 
-    2. The ego vehicle will decelerate and stop before the crosswalk.
+    2. 自车会减速并在人行横道前停车。
 
-    3. After waiting for a few seconds, the ego vehicle will start driving again as usual.
+    3. 等待几秒后，自车会恢复正常行驶。
 
-1. Set an initial pose and a goal pose for the ego vehicle to drive through a non-signalized crosswalk. A path will be planned.
+1. 设置自车的初始位姿和目标位姿，使其经过一个无信号灯的人行横道。系统会规划出一条路径。
 
-   ![initial-setup](images/passing-crosswalk/non-signalized/initial-setup.png)
+   ![初始设置](images/passing-crosswalk/non-signalized/initial-setup.png)
 
-2. Place an interactive dummy pedestrian on the crosswalk and set its pose as if it is crossing the street. It doesn't matter whether the dummy pedestrian is moving or not, as long as it is on the crosswalk.
+2. 在人行横道上放置一个可交互的虚拟行人，并将其位姿设为正在横穿道路的姿态。只要虚拟行人位于人行横道上，是否处于运动状态并不影响本实验。
 
-   ![place-pedestrian](images/passing-crosswalk/non-signalized/place-pedestrian.png)
+   ![放置行人](images/passing-crosswalk/non-signalized/place-pedestrian.png)
 
-3. Engage the ego vehicle by clicking on `Auto`. The ego vehicle will decelerate and stop before the crosswalk. The marked **crosswalk** in the figure indicates that the stopping behavior is caused by the objects on the **crosswalk**.
+3. 点击 `Auto` 启动自车。自车会减速并在人行横道前停车。图中标记的 **crosswalk** 表示停车行为由**人行横道**上的物体触发。
 
-   ![wait-before-crosswalk](images/passing-crosswalk/non-signalized/wait-before-crosswalk.png)
+   ![在人行横道前等待](images/passing-crosswalk/non-signalized/wait-before-crosswalk.png)
 
-4. The ego vehicle will wait for about a few seconds. Then it will start moving again and pass the crosswalk.
+4. 自车会等待几秒，然后重新起步并通过人行横道。
 
-   ![pass-crosswalk](images/passing-crosswalk/non-signalized/pass-crosswalk.png)
+   ![通过人行横道](images/passing-crosswalk/non-signalized/pass-crosswalk.png)
 
-## Signalized crosswalk (with traffic light)
+<a id="signalized-crosswalk-with-traffic-light"></a>
+
+## 有信号灯的人行横道
 
 <figure markdown="span">
-  ![test-location.png](images/passing-crosswalk/signalized/test-location.png)
-  <figcaption>Location for signalized crosswalk experiments</figcaption>
+  ![测试位置](images/passing-crosswalk/signalized/test-location.png)
+  <figcaption>有信号灯的人行横道实验位置</figcaption>
 </figure>
 
-!!! example "Experiment 1: Pedestrian Present While Traffic Light Is GREEN"
+!!! example "实验 1：绿灯时存在行人"
 
-    This experiment mirrors the previous one but at a signalized crosswalk.
+    本实验与上一个实验相似，但在有信号灯的人行横道上进行。
 
-With the pedestrian near the path and the traffic light **GREEN**, the ego behaves **the same as at a non-signalized crosswalk**:
-it slows, stops, waits, then continues.
+当行人位于路径附近且交通信号灯为**绿灯**时，自车的行为**与在无信号灯的人行横道处相同**：
+减速、停车、等待，然后继续行驶。
 
-![wait-for-pedestrian](images/passing-crosswalk/signalized/wait-for-pedestrian.png)
+![等待行人](images/passing-crosswalk/signalized/wait-for-pedestrian.png)
 
-!!! example "Experiment 2: Interaction of Pedestrians and a RED Traffic Light"
+!!! example "实验 2：行人与红灯的共同影响"
 
-    1. Stop before the crosswalk when the traffic light is set to `RED`. (Without pedestrians.)
+    1. 将交通信号灯设为 `RED`，使自车在人行横道前停车。（不放置行人。）
 
-    2. Add a dummy pedestrian on the crosswalk while the traffic light is `RED`. (Both the traffic light and the crosswalk should affect the stopping behavior.)
+    2. 在交通信号灯为 `RED` 时，向人行横道上添加一个虚拟行人。（信号灯和人行横道都应影响停车行为。）
 
-    3. Finally, set the traffic light to `GREEN` again and the vehicle will pass normally.
+    3. 最后，将交通信号灯重新设为 `GREEN`，车辆将正常通过。
 
-1. **Stop at red (no pedestrians).**
-   Remove any existing dummy pedestrians and set the traffic light to **RED**.
-   The ego vehicle will stop before the crosswalk and wait solely because of the **traffic_light** reason.
+1. **红灯停车（无行人）。**
+   移除所有现有虚拟行人，并将交通信号灯设为 **RED**。
+   自车会在人行横道前停车并等待，此时唯一的停车原因是 **traffic_light**。
 
-   ![stop-from-red-light](images/passing-crosswalk/signalized/stop-from-red-light.png)
+   ![因红灯停车](images/passing-crosswalk/signalized/stop-from-red-light.png)
 
-2. **Add a pedestrian while the light is RED.**
-   The ego remains stopped, now influenced by **both** the traffic light and the crosswalk object.
+2. **红灯时添加行人。**
+   自车继续停车，此时**同时**受到信号灯和人行横道上物体的影响。
 
-   ![stop-from-red-and-pedestrian](images/passing-crosswalk/signalized/stop-from-red-and-pedestrian.png)
+   ![因红灯和行人停车](images/passing-crosswalk/signalized/stop-from-red-and-pedestrian.png)
 
-3. **Observe how the stop reasons update.**
-   After a short period, only **traffic_light** may remain displayed.
-   Moving the pedestrian slightly (with ++shift+"🖱️ Right Click"++ drag) reintroduces both markers, but the system stabilizes back to the traffic-light reason during the wait.
+3. **观察停车原因的变化。**
+   短暂等待后，界面可能只显示 **traffic_light**。
+   使用 ++shift+"🖱️ Right Click"++ 拖动行人，使其稍微移动，会再次显示两个标记；但在等待过程中，系统会稳定回到仅显示交通信号灯这一停车原因的状态。
 
-   ![stop-red-light-with-pedestrian.png](images/passing-crosswalk/signalized/stop-red-light-with-pedestrian.png)
+   ![存在行人时的红灯停车](images/passing-crosswalk/signalized/stop-red-light-with-pedestrian.png)
 
-4. **Switch the light to GREEN.**
-   When set to green and `Auto` mode is engaged, the ego vehicle proceeds normally.
+4. **将信号灯切换为 GREEN。**
+   信号灯设为绿灯并启用 `Auto` 模式后，自车会正常行驶。
 
-   ![move-after-red-to-green.png](images/passing-crosswalk/signalized/move-after-red-to-green.png)
+   ![由红灯变为绿灯后起步](images/passing-crosswalk/signalized/move-after-red-to-green.png)

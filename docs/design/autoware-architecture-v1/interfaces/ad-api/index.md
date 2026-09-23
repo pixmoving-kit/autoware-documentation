@@ -1,47 +1,55 @@
 # Autoware AD API
 
-## Overview
+<a id="overview"></a>
 
-Autoware AD API is the interface for operating the vehicle from outside the autonomous driving system.
-[See here for the overall interface design of Autoware.](../index.md)
+## 概述
 
-## User stories
+Autoware AD API 是从自动驾驶系统外部操作车辆的接口。
+[Autoware 的整体接口设计见此处。](../index.md)
 
-The user stories are service scenarios that AD API assumes. AD API is designed based on these scenarios.
-Each scenario is realized by a combination of use cases described later.
-If there are scenarios that cannot be covered, please discuss adding a user story.
+<a id="user-stories"></a>
 
-- [Bus service](stories/bus-service.md)
-- [Taxi service](stories/taxi-service.md)
+## 用户故事
 
-## Use cases
+用户故事是 AD API 所面向的服务场景。AD API 基于这些场景设计。
+每个场景均由后文介绍的用例组合实现。
+如果有无法覆盖的场景，请讨论新增相应的用户故事。
 
-Use cases are partial scenarios derived from the user story and generically designed.
-Service providers can combine these use cases to define user stories and check if AD API can be applied to their own scenarios.
+- [公交服务](stories/bus-service.md)
+- [出租车服务](stories/taxi-service.md)
 
-- [Launch and terminate](use-cases/launch-terminate.md)
-- [Initialize the pose](use-cases/initialize-pose.md)
-- [Change the operation mode](use-cases/change-operation-mode.md)
-- [Drive to the designated position](use-cases/drive-designated-position.md)
-- [Get on and get off](use-cases/get-on-off.md)
-- [Vehicle monitoring](use-cases/vehicle-monitoring.md)
-- [Vehicle operation](use-cases/vehicle-operation.md)
-- [System monitoring](use-cases/system-monitoring.md)
-- [Manual control](use-cases/manual-control/index.md)
+<a id="use-cases"></a>
 
-## Features
+## 用例
 
-- [Interface](features/interface.md)
-- [Operation Mode](features/operation_mode.md)
-- [Routing](features/routing.md)
-- [Localization](features/localization.md)
-- [Motion](features/motion.md)
-- [Planning](features/planning-factors.md)
-- [Perception](features/perception.md)
-- [Fail-safe](features/fail-safe.md)
-- [Vehicle status](features/vehicle-status.md)
-- [Vehicle doors](features/vehicle-doors.md)
-- [Cooperation](features/cooperation.md)
-- [Heartbeat](features/heartbeat.md)
-- [Diagnostics](features/diagnostics.md)
-- [Manual control](features/manual-control.md)
+用例是从用户故事中提炼出的局部场景，并经过通用化设计。
+服务提供方可以组合这些用例来定义用户故事，并检查 AD API 是否适用于自己的场景。
+
+- [启动与终止](use-cases/launch-terminate.md)
+- [初始化位姿](use-cases/initialize-pose.md)
+- [切换运行模式](use-cases/change-operation-mode.md)
+- [驶向指定位置](use-cases/drive-designated-position.md)
+- [上车与下车](use-cases/get-on-off.md)
+- [车辆监控](use-cases/vehicle-monitoring.md)
+- [车辆操作](use-cases/vehicle-operation.md)
+- [系统监控](use-cases/system-monitoring.md)
+- [手动控制](use-cases/manual-control/index.md)
+
+<a id="features"></a>
+
+## 功能
+
+- [接口](features/interface.md)
+- [运行模式](features/operation_mode.md)
+- [路线规划](features/routing.md)
+- [定位](features/localization.md)
+- [运动](features/motion.md)
+- [规划](features/planning-factors.md)
+- [感知](features/perception.md)
+- [故障安全](features/fail-safe.md)
+- [车辆状态](features/vehicle-status.md)
+- [车门](features/vehicle-doors.md)
+- [协作](features/cooperation.md)
+- [心跳](features/heartbeat.md)
+- [诊断](features/diagnostics.md)
+- [手动控制](features/manual-control.md)

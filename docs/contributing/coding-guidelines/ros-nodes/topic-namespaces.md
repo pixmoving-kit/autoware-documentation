@@ -1,19 +1,25 @@
-# Topic namespaces
+<a id="topic-namespaces"></a>
 
-## Overview
+# 话题命名空间
 
-ROS allows topics, parameters and nodes to be namespaced which provides the following benefits:
+<a id="overview"></a>
 
-- Multiple instances of the same node type will not cause naming clashes.
-- Topics published by a node can be automatically namespaced with the node's namespace providing a meaningful and easily-visible connection.
-- Keeps from cluttering the root namespace.
-- Helps to maintain separation-of-concerns.
+## 概述
 
-This page focuses on how to use namespaces in Autoware and shows some useful examples. For basic information on topic namespaces, refer to [this tutorial](https://design.ros2.org/articles/topic_and_service_names.html).
+ROS 支持为话题、参数和节点设置命名空间，具有以下好处：
 
-## How topics should be named in node
+- 同一节点类型的多个实例不会发生命名冲突。
+- 节点发布的话题可以自动采用该节点的命名空间，形成含义明确且直观的关联。
+- 避免根命名空间杂乱。
+- 有助于保持关注点分离。
 
-Autoware divides the node into the following functional categories, and adds the start namespace for the nodes according to the categories.
+本页重点介绍如何在 Autoware 中使用命名空间，并提供实用示例。话题命名空间的基础知识请参阅[此教程](https://design.ros2.org/articles/topic_and_service_names.html)。
+
+<a id="how-topics-should-be-named-in-node"></a>
+
+## 节点中的话题应如何命名
+
+Autoware 按以下功能类别划分节点，并根据类别为节点添加起始命名空间。
 
 - localization
 - perception
@@ -24,13 +30,13 @@ Autoware divides the node into the following functional categories, and adds the
 - map
 - system
 
-When a node is run in a namespace, all topics which that node publishes are given that same namespace. All nodes in the Autoware stack must support namespaces by avoiding practices such as publishing topics in the global namespace.
+当节点在某个命名空间中运行时，它发布的所有话题都会使用相同的命名空间。Autoware 软件栈中的所有节点都必须支持命名空间，应避免在全局命名空间中发布话题等做法。
 
-In general, topics should be namespaced based on the function of the node which produces them and not the node (or nodes) which consume them.
+一般来说，应根据产生话题的节点功能为话题设置命名空间，而非根据使用该话题的一个或多个节点来设置。
 
-Classify topics as input or output topics based on they are subscribed or published by the node. In the node, input topic is named `input/topic_name` and output topic is named `output/topic_name`.
+根据话题是被节点订阅还是发布，将其分为输入话题和输出话题。在节点中，输入话题命名为 `input/topic_name`，输出话题命名为 `output/topic_name`。
 
-Configure the topic in the node's launch file. Take the `joy_controller` node as an example, in the following example, set the input and output topics and remap topics in the `joy_controller.launch.xml` file.
+在节点的 launch 文件中配置话题。以 `joy_controller` 节点为例，在下方示例的 `joy_controller.launch.xml` 文件中设置输入、输出话题，并进行话题重映射。
 
 ```xml
 <launch>
@@ -60,13 +66,15 @@ Configure the topic in the node's launch file. Take the `joy_controller` node as
 </launch>
 ```
 
-## Topic names in the code
+<a id="topic-names-in-the-code"></a>
 
-1. Have `~` so that namespace in launch configuration is applied(should not start from root `/`).
+## 代码中的话题名称
 
-2. Have `~/input` `~/output` namespace before topic name used to communicate with other nodes.
+1. 包含 `~`，以应用 launch 配置中的命名空间（不应以根 `/` 开头）。
 
-   e.g., In node `obstacle_avoidance_planner`, using topic names of type `~/input/topic_name` to subscribe to topics.
+2. 与其他节点通信的话题，应在话题名称前使用 `~/input` 或 `~/output` 命名空间。
+
+   例如，在 `obstacle_avoidance_planner` 节点中，使用 `~/input/topic_name` 形式的话题名称订阅话题。
 
    ```cpp
    objects_sub_ = create_subscription<PredictedObjects>(
@@ -74,15 +82,15 @@ Configure the topic in the node's launch file. Take the `joy_controller` node as
     std::bind(&ObstacleAvoidancePlanner::onObjects, this, std::placeholders::_1));
    ```
 
-   e.g., In node `obstacle_avoidance_planner`, using topic names of type `~/output/topic_name` to publish topic.
+   例如，在 `obstacle_avoidance_planner` 节点中，使用 `~/output/topic_name` 形式的话题名称发布话题。
 
    ```cpp
    traj_pub_ = create_publisher<Trajectory>("~/output/path", 1);
    ```
 
-3. Visualization or debug purpose topics should have `~/debug/` namespace.
+3. 用于可视化或调试的话题应使用 `~/debug/` 命名空间。
 
-   e.g., In node `obstacle_avoidance_planner`, in order to debug or visualizing topics, using topic names of type `~/debug/topic_name` to publish information.
+   例如，在 `obstacle_avoidance_planner` 节点中，为了调试或可视化话题，可使用 `~/debug/topic_name` 形式的话题名称发布信息。
 
    ```cpp
    debug_markers_pub_ =
@@ -92,8 +100,8 @@ Configure the topic in the node's launch file. Take the `joy_controller` node as
     create_publisher<tier4_debug_msgs::msg::StringStamped>("~/debug/calculation_time", 1);
    ```
 
-   The launch configured namespace will be add the topics before, so the topic names will be as following:
+   launch 配置中的命名空间会添加到话题名称之前，因此话题名称如下：
 
    `/planning/scenario_planning/lane_driving/motion_planning/obstacle_avoidance_planner/debug/marker /planning/scenario_planning/lane_driving/motion_planning/obstacle_avoidance_planner/debug/calculation_time`
 
-4. Rationale: we want to make topic names remapped and configurable from launch files.
+4. 理由：我们希望能够在 launch 文件中对话题名称进行重映射和配置。

@@ -1,59 +1,73 @@
-# Documentation guidelines
+<a id="documentation-guidelines"></a>
 
-## Workflow
+# 文档指南
 
-Contributions to Autoware's documentation are welcome, and the same principles [described in the contribution guidelines](../index.md#pull-requests) should be followed. Small, limited changes can be made by forking this repository and submitting a pull request, but larger changes should be discussed with the community and Autoware maintainers via GitHub Discussion first.
+<a id="workflow"></a>
 
-Examples of small changes include:
+## 工作流程
 
-- Fixing spelling or grammatical mistakes
-- Fixing broken links
-- Making an addition to an existing, well-defined page, such as the [Troubleshooting](../../community/support/troubleshooting/index.md) guide.
+欢迎为 Autoware 文档作出贡献，并应遵循[贡献指南中的原则](../index.md#pull-requests)。小型、有限的修改可以通过派生仓库并提交拉取请求完成；较大的修改应先通过 GitHub Discussion 与社区及 Autoware 维护者讨论。
 
-Examples of larger changes include:
+小型修改示例：
 
-- Adding new pages with a large amount of detail, such as a tutorial
-- Re-organization of the existing documentation structure
+- 修正拼写或语法错误
+- 修复失效链接
+- 向已有且范围明确的页面补充内容，例如[故障排查](../../community/support/troubleshooting/index.md)指南。
 
-## Style guide
+较大修改示例：
 
-You should refer to the [Google developer documentation style guide](https://developers.google.com/style) as much as possible. Reading the [Highlights page](https://developers.google.com/style/highlights) of that guide is recommended, but if not then the key points below should be noted.
+- 添加包含大量细节的新页面，例如教程
+- 重新组织现有文档结构
 
-- [Use standard American English spelling](https://developers.google.com/style/spelling) and punctuation.
-- [Use sentence case](https://developers.google.com/style/capitalization) for document titles and section headings.
-- [Use descriptive link text](https://developers.google.com/style/link-text).
-- [Write short sentences](https://developers.google.com/style/translation#write-short,-clear,-and-precise-sentences) that are easy to understand and translate.
+<a id="style-guide"></a>
 
-## Tips
+## 风格指南
 
-### How to preview your modification
+应尽量遵循 [Google 开发者文档风格指南](https://developers.google.com/style)。建议阅读其[要点页面](https://developers.google.com/style/highlights)；即使未阅读，也请注意以下关键事项。
 
-There are two ways to preview your modification on a documentation website.
+- [使用标准美式英语拼写](https://developers.google.com/style/spelling)和标点。
+- 文档标题和章节标题[采用句首大写形式](https://developers.google.com/style/capitalization)。
+- [使用描述性链接文本](https://developers.google.com/style/link-text)。
+- [使用简短的句子](https://developers.google.com/style/translation#write-short,-clear,-and-precise-sentences)，便于理解和翻译。
 
-#### 1. Using GitHub Actions workflow
+<a id="tips"></a>
 
-Follow the steps below.
+## 提示
 
-1. Create a pull request to the repository.
-2. Add the `deploy-docs` label from the sidebar (See below figure).
-3. Wait for a couple of minutes, and the `github-actions` bot will notify the URL for the pull request's preview.
+<a id="how-to-preview-your-modification"></a>
 
-![deploy-docs-label](images/deploy-docs-label-for-pull-request.png){ width="800" }
+### 如何预览修改
 
-#### 2. Running an MkDocs server in your local environment
+有两种方式可以在文档网站上预览修改。
 
-Instead of creating a PR, you can use the `mkdocs` command to build Autoware's documentation websites on your local computer.
-Assuming that you are using Ubuntu OS, run the following to install the required libraries.
+<a id="1-using-github-actions-workflow"></a>
+
+#### 1. 使用 GitHub Actions 工作流
+
+请按以下步骤操作。
+
+1. 向仓库创建拉取请求。
+2. 在侧栏中添加 `deploy-docs` 标签（见下图）。
+3. 等待几分钟，`github-actions` 机器人会通知你该拉取请求的预览网址。
+
+![deploy-docs 标签](images/deploy-docs-label-for-pull-request.png){ width="800" }
+
+<a id="2-running-an-mkdocs-server-in-your-local-environment"></a>
+
+#### 2. 在本地环境运行 MkDocs 服务器
+
+也可以不创建 PR，而是在本机使用 `mkdocs` 命令构建 Autoware 文档网站。
+假设你使用 Ubuntu 操作系统，请运行以下命令安装所需的库。
 
 ```bash
 python3 -m pip install -U $(curl -fsSL https://raw.githubusercontent.com/autowarefoundation/autoware-github-actions/main/deploy-docs/mkdocs-requirements.txt)
 ```
 
-Then, run `mkdocs serve` on your documentation directory.
+然后，在文档目录中运行 `mkdocs serve`。
 
 ```bash
 cd /PATH/TO/YOUR-autoware-documentation
 mkdocs serve
 ```
 
-It will launch the MkDocs server. Access [http://127.0.0.1:8000/](http://127.0.0.1:8000/) to see the preview of the website.
+这将启动 MkDocs 服务器。访问 [http://127.0.0.1:8000/](http://127.0.0.1:8000/) 即可预览网站。

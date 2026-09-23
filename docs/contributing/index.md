@@ -1,103 +1,125 @@
-# Contributing
+<a id="contributing"></a>
 
-Thank you for your interest in contributing! Autoware is supported by people like you, and all types and sizes of contribution are welcome.
+# 参与贡献
 
-As a contributor, here are the guidelines that we would like you to follow for Autoware and its associated repositories.
+感谢你有兴趣参与贡献！Autoware 由像你这样的贡献者共同支持，我们欢迎各种类型、各种规模的贡献。
 
-- [Code of Conduct](#code-of-conduct)
-- [What should I know before I get started?](#what-should-i-know-before-i-get-started)
-  - [Autoware concepts](#autoware-concepts)
-  - [Contributing to open source projects](#contributing-to-open-source-projects)
-- [How can I get help?](#how-can-i-get-help)
-- [How can I contribute?](#how-can-i-contribute)
-  - [Participate in discussions](#discussions)
-  - [Join a working group](#working-groups)
-  - [Report bugs](#bug-reports)
-  - [Make a pull request](#pull-requests)
+作为贡献者，我们希望你在为 Autoware 及其相关仓库贡献时遵循以下指南。
 
-Like Autoware itself, these guidelines are being actively developed and suggestions for improvement are always welcome! Guideline changes can be proposed by [creating a discussion in the Ideas category](https://github.com/autowarefoundation/autoware/discussions/new?category=ideas).
+- [行为准则](#code-of-conduct)
+- [开始之前需要了解什么？](#what-should-i-know-before-i-get-started)
+  - [Autoware 概念](#autoware-concepts)
+  - [为开源项目贡献](#contributing-to-open-source-projects)
+- [如何获取帮助？](#how-can-i-get-help)
+- [如何参与贡献？](#how-can-i-contribute)
+  - [参与讨论](#discussions)
+  - [加入工作组](#working-groups)
+  - [报告缺陷](#bug-reports)
+  - [提交拉取请求](#pull-requests)
 
-## Code of Conduct
+与 Autoware 本身一样，这些指南也在不断完善，欢迎随时提出改进建议！你可以[在 Ideas 分类中创建讨论](https://github.com/autowarefoundation/autoware/discussions/new?category=ideas)，提出对指南的修改建议。
 
-To ensure the Autoware community stays open and inclusive, please follow the [Code of Conduct](https://github.com/autowarefoundation/autoware/blob/main/CODE_OF_CONDUCT.md).
+<a id="code-of-conduct"></a>
 
-If you believe that someone in the community has violated the Code of Conduct, please make a report by emailing [conduct@autoware.org](mailto:conduct@autoware.org).
+## 行为准则
 
-## What should I know before I get started?
+为确保 Autoware 社区保持开放和包容，请遵守[行为准则](https://github.com/autowarefoundation/autoware/blob/main/CODE_OF_CONDUCT.md)。
 
-### Autoware concepts
+如果你认为社区成员违反了行为准则，请发送邮件至 [conduct@autoware.org](mailto:conduct@autoware.org) 进行举报。
 
-To gain a high-level understanding of Autoware's architecture and design, the following pages provide a brief overview:
+<a id="what-should-i-know-before-i-get-started"></a>
 
-- [Autoware architecture](../design/index.md)
-- [Autoware concepts](../design/autoware-concepts/index.md)
+## 开始之前需要了解什么？
 
-For experienced developers, the [Autoware interfaces](../design/autoware-architecture-v1/interfaces/index.md) and [individual component pages](../design/autoware-architecture-v1/interfaces/components/index.md) should also be reviewed to understand the inputs and outputs for each component or module at a more detailed level.
+<a id="autoware-concepts"></a>
 
-### Contributing to open source projects
+### Autoware 概念
 
-If you are new to open source projects, we recommend reading GitHub's [How to Contribute to Open Source guide](https://opensource.guide/how-to-contribute) for an overview of why people contribute to open source projects, what it means to contribute and much more besides.
+以下页面简要介绍了 Autoware，可帮助你从整体上了解其架构和设计：
 
-## How can I get help?
+- [Autoware 架构](../design/index.md)
+- [Autoware 概念](../design/autoware-concepts/index.md)
 
-Do not open issues for general support questions as we want to keep GitHub issues for confirmed bug reports. Instead, open a discussion in the Q&A category. For more details on the support mechanisms for Autoware, refer to the [Support guidelines](../community/support/index.md).
+有经验的开发者还应阅读 [Autoware 接口](../design/autoware-architecture-v1/interfaces/index.md)和[各组件页面](../design/autoware-architecture-v1/interfaces/components/index.md)，更详细地了解各组件或模块的输入和输出。
+
+<a id="contributing-to-open-source-projects"></a>
+
+### 为开源项目贡献
+
+如果你刚接触开源项目，建议阅读 GitHub 的[如何为开源做贡献指南](https://opensource.guide/how-to-contribute)，了解人们为什么参与开源、贡献意味着什么，以及其他相关内容。
+
+<a id="how-can-i-get-help"></a>
+
+## 如何获取帮助？
+
+请不要为一般性的支持问题创建 issue，因为我们希望将 GitHub issue 用于已经确认的缺陷报告。请改为在 Q&A 分类中发起讨论。有关 Autoware 支持渠道的更多信息，请参阅[支持指南](../community/support/index.md)。
 
 !!! note
 
-    Issues created for questions or unconfirmed bugs will be moved to GitHub discussions by the maintainers.
+    对于提问或尚未确认的缺陷所创建的 issue，维护者会将其转移到 GitHub Discussions。
 
-## How can I contribute?
+<a id="how-can-i-contribute"></a>
 
-### Discussions
+## 如何参与贡献？
 
-You can contribute to Autoware by facilitating and participating in discussions, such as:
+<a id="discussions"></a>
 
-- [Proposing a new feature to enhance Autoware](https://github.com/orgs/autowarefoundation/discussions/categories/feature-requests)
-- [Joining an existing discussion and expressing your opinion](https://github.com/orgs/autowarefoundation/discussions)
-- Organizing discussions for other contributors
-- [Answering questions and supporting other contributors](https://github.com/autowarefoundation/autoware/discussions/categories/q-a?discussions_q=category%3AQ%26A+is%3Aunanswered)
+### 讨论
 
-### Working groups
+你可以通过推动和参与讨论来为 Autoware 做贡献，例如：
 
-The [various working groups](https://github.com/autowarefoundation/autoware-projects/wiki#working-group-list) within the Autoware Foundation are responsible for accomplishing goals set by the Technical Steering Committee. These working groups are open to everyone, and joining a particular working group will allow you to gain an understanding of current projects, see how those projects are managed within each group and to contribute to issues that will help progress a particular project.
+- [提出增强 Autoware 的新功能](https://github.com/orgs/autowarefoundation/discussions/categories/feature-requests)
+- [加入已有讨论并表达意见](https://github.com/orgs/autowarefoundation/discussions)
+- 为其他贡献者组织讨论
+- [回答问题并支持其他贡献者](https://github.com/autowarefoundation/autoware/discussions/categories/q-a?discussions_q=category%3AQ%26A+is%3Aunanswered)
 
-To see the schedule for upcoming working group meetings, refer to the [Autoware Foundation events calendar](https://calendar.google.com/calendar/u/0/embed?src=autoware.org_6lol0ho5ft0217h8c60pi1fm30@group.calendar.google.com).
+<a id="working-groups"></a>
 
-### Bug reports
+### 工作组
 
-Before you report a bug, please search the issue tracker for the appropriate repository. It is possible that someone has already reported the same issue and that workarounds exist. If you can't determine the appropriate repository, ask the maintainers for help by creating a new discussion in the [Q&A category](https://github.com/autowarefoundation/autoware/discussions/new?category=q-a).
+Autoware 基金会的[各工作组](https://github.com/autowarefoundation/autoware-projects/wiki#working-group-list)负责完成技术指导委员会设定的目标。这些工作组向所有人开放。加入某个工作组后，你可以了解当前的项目、了解各组如何管理项目，并参与解决有助于推进特定项目的问题。
 
-When reporting a bug, you should provide a minimal set of instructions to reproduce the issue. Doing so allows us to quickly confirm and focus on the right problem.
+要查看即将举行的工作组会议安排，请参阅 [Autoware 基金会活动日历](https://calendar.google.com/calendar/u/0/embed?src=autoware.org_6lol0ho5ft0217h8c60pi1fm30@group.calendar.google.com)。
 
-If you want to fix the bug by yourself that will be appreciated, but you should discuss possible approaches with the maintainers in the issue before submitting a pull request.
+<a id="bug-reports"></a>
 
-[Creating an issue is straightforward](https://docs.github.com/en/issues/tracking-your-work-with-issues/creating-an-issue#creating-an-issue-from-a-repository), but if you happen to experience any problems then create a Q&A discussion to ask for help.
+### 缺陷报告
 
-### Pull requests
+在报告缺陷之前，请先搜索相关仓库的 issue。可能已经有人报告了同样的问题，并提供了解决办法。如果无法确定应使用哪个仓库，请在 [Q&A 分类](https://github.com/autowarefoundation/autoware/discussions/new?category=q-a)中创建讨论，向维护者寻求帮助。
 
-You can submit pull requests for small changes such as:
+报告缺陷时，应提供复现问题所需的最少操作步骤。这有助于我们快速确认问题，并专注于正确的方向。
 
-- Minor documentation updates
-- Fixing spelling mistakes
-- Fixing CI failures
-- Fixing warnings detected by compilers or analysis tools
-- Making small changes to a single package
+如果你愿意自行修复缺陷，我们非常欢迎；但在提交拉取请求之前，应先在 issue 中与维护者讨论可行方案。
 
-If your pull request is a large change, the following process should be followed:
+[创建 issue 很简单](https://docs.github.com/en/issues/tracking-your-work-with-issues/creating-an-issue#creating-an-issue-from-a-repository)，如果遇到任何问题，可以创建 Q&A 讨论寻求帮助。
 
-1. [Create a GitHub Discussion](https://docs.github.com/en/discussions/collaborating-with-your-community-using-discussions/collaborating-with-maintainers-using-discussions) to propose the change. Doing so allows you to get feedback from other members and the Autoware maintainers and to ensure that the proposed change is in line with Autoware's design philosophy and current development plans. If you're not sure where to have that conversation, then [create a new Q&A discussion](https://github.com/autowarefoundation/autoware/discussions/new?category=q-a).
+<a id="pull-requests"></a>
 
-2. [Create an issue](https://docs.github.com/en/issues/tracking-your-work-with-issues/creating-an-issue) following consensus in the discussions
+### 拉取请求
 
-3. [Create a pull request](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request) to implement the changes that references the Issue created in step 2
+对于以下小规模修改，你可以直接提交拉取请求：
 
-4. Create documentation for the new addition (if relevant)
+- 小幅更新文档
+- 修正拼写错误
+- 修复 CI 失败
+- 修复编译器或分析工具检测到的警告
+- 对单个功能包进行小幅修改
 
-Examples of large changes include:
+如果拉取请求涉及较大的修改，应遵循以下流程：
 
-- Adding a new feature to Autoware
-- Adding a new documentation page or section
+1. [创建 GitHub Discussion](https://docs.github.com/en/discussions/collaborating-with-your-community-using-discussions/collaborating-with-maintainers-using-discussions)，提出修改方案。这样可以获取其他成员和 Autoware 维护者的反馈，并确保提议的修改符合 Autoware 的设计理念及当前开发计划。如果不确定应在哪里讨论，请[创建新的 Q&A 讨论](https://github.com/autowarefoundation/autoware/discussions/new?category=q-a)。
 
-For more information on how to submit a good pull request, have a read of the [pull request guidelines](pull-request-guidelines/index.md) and don't forget to review the required [license notations](license.md)!
+2. 在讨论中达成共识后，[创建 issue](https://docs.github.com/en/issues/tracking-your-work-with-issues/creating-an-issue)。
 
-If you use AI tools to help create your contributions, follow the [AI contribution policy](ai-contribution-policy.md).
+3. [创建拉取请求](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request)来实现修改，并引用第 2 步创建的 issue。
+
+4. 为新增内容编写文档（如适用）。
+
+大规模修改的示例包括：
+
+- 为 Autoware 添加新功能
+- 添加新的文档页面或章节
+
+有关如何提交高质量拉取请求的更多信息，请阅读[拉取请求指南](pull-request-guidelines/index.md)，并且不要忘记检查所需的[许可证声明](license.md)！
+
+如果使用 AI 工具辅助完成贡献，请遵循 [AI 贡献政策](ai-contribution-policy.md)。

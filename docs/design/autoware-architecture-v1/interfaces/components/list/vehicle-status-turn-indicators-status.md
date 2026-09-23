@@ -12,57 +12,77 @@ qos_depth: 1
 
 # {{ interface_name }}
 
-## Specifications
+<a id="specifications"></a>
+
+## 规格
 
 {% include 'design/autoware-architecture-v1/interfaces/templates/topic.jinja2' %}
 
-## Description
+<a id="description"></a>
 
-Get the current turn indicators status of the vehicle. The status is `ENABLE_RIGHT` or `ENABLE_LEFT`, or `DISABLE`.
-It is recommended to set QoS to transient_local and publish only when the status changes, but currently many implementations publish the status periodically.
-Therefore, ensure consistency across the entire system.
+## 说明
 
-Note that this status indicates the logical activation state of the turn indicators system (i.e., whether the function is active), not the instantaneous physical state of the light bulbs (i.e., whether the bulb is lit or unlit during a blinking cycle). Therefore, the status typically remains ENABLE continuously while the turn indicators are blinking.
+获取车辆当前的转向灯状态。状态为 `ENABLE_RIGHT`、`ENABLE_LEFT` 或 `DISABLE`。
+建议将 QoS 设置为 transient_local，并仅在状态发生变化时发布；但目前许多实现会周期性发布状态。
+因此，请确保整个系统保持一致。
 
-## Message
+请注意，此状态表示转向灯系统在逻辑上是否启用，即功能是否处于激活状态，而不是灯泡的瞬时物理状态，即闪烁周期中灯泡点亮还是熄灭。因此，转向灯闪烁期间，状态通常会持续保持 ENABLE。
 
-The `stamp` field is the status received time or hardware time such as VCU. In the case of periodic publication, use the latest time, not the last status change.
-For the `report` field, use the valid values listed above.
+<a id="message"></a>
 
-## Errors
+## 消息
 
-Unknown status: If the vehicle interface cannot get the status due to connection loss, etc., the status is stopped and a diagnostic error is reported.
+`stamp` 字段表示状态接收时间或 VCU 等硬件的时间。周期性发布时，应使用最新时间，而不是上次状态改变的时间。
+`report` 字段应使用上述有效值。
 
-Invalid status: If the vehicle interface receives an undefined status, stop publishing status and report as diagnostics.
+<a id="errors"></a>
 
-Hardware Fault: If the vehicle platform reports a sensor fault, a diagnostic error is reported.
+## 错误
 
-## Support
+未知状态：如果车辆接口因连接丢失等原因无法获取状态，则停止发布状态并报告诊断错误。
 
-This interface is required. If the vehicle does not have turn indicators, always treat it as `DISABLE`.
+无效状态：如果车辆接口收到未定义的状态，则停止发布状态并通过诊断信息报告。
 
-## Limitations
+硬件故障：如果车辆平台报告传感器故障，则报告诊断错误。
 
-Hazard priority: If hazard lights are active, the vehicle hardware typically overrides the turn indicators. In such cases, this interface may report DISABLE or ENABLE, depending on the specific vehicle implementation, but the physical lights will be blinking as hazards.
+<a id="support"></a>
 
-Logical state: This interface reports the logical activation state (e.g., stalk position or system state). It typically does not toggle ENABLE/DISABLE in sync with the physical blinking of the light bulbs.
+## 支持要求
 
-## Use Cases
+此接口是必需的。如果车辆没有转向灯，应始终将其视为 `DISABLE`。
 
-- Control the vehicle for autonomous driving.
-- Display current turn indicators status to the operator.
+<a id="limitations"></a>
 
-## Requirement
+## 限制
 
-- Support getting the current turn indicators status of the vehicle.
-- Report the error as diagnostics if the status cannot be received or an unknown status is received.
+危险警告灯优先：如果危险警告灯已启用，车辆硬件通常会覆盖转向灯。在这种情况下，此接口可能报告 DISABLE 或 ENABLE，具体取决于车辆实现，但实际灯光会按危险警告灯方式闪烁。
 
-## Design
+逻辑状态：此接口报告逻辑启用状态，例如拨杆位置或系统状态。通常不会随着灯泡的实际闪烁同步切换 ENABLE/DISABLE。
 
-In the early stages, turn indicators and hazard lights were managed as different states of the same interface, but were split because the states needed to be managed separately.
+<a id="use-cases"></a>
 
-## History
+## 使用场景
 
-| Date       | Description                      |
+- 控制车辆进行自动驾驶。
+- 向操作员显示当前转向灯状态。
+
+<a id="requirement"></a>
+
+## 要求
+
+- 支持获取车辆当前的转向灯状态。
+- 无法接收状态或收到未知状态时，通过诊断信息报告错误。
+
+<a id="design"></a>
+
+## 设计
+
+早期实现将转向灯和危险警告灯作为同一接口的不同状态管理，后来由于需要分别管理状态而拆分。
+
+<a id="history"></a>
+
+## 历史记录
+
+| 日期 | 说明 |
 | ---------- | -------------------------------- |
-| 2026-01-21 | First release in the new format. |
+| 2026-01-21 | 首次以新格式发布。 |

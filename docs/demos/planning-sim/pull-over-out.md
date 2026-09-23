@@ -1,9 +1,11 @@
-# Pull out and pull over scenario
+<a id="pull-out-and-pull-over-scenario"></a>
 
-1. In a pull out scenario, set the ego vehicle at the road shoulder.
+# 驶离路肩与靠边停车场景
 
-   ![pullover-pullout](images/pullover-pullout/pullover-pullout.png)
+1. 在驶离路肩场景中，将自车放置在路肩上。
 
-2. Set a goal and then engage the ego vehicle.
+   ![靠边停车与驶离路肩](images/pullover-pullout/pullover-pullout.png)
 
-3. In a pull over scenario, similarly set the ego vehicle in a lane and set a goal on the road shoulder.
+2. 设置目标，然后启用自车自动驾驶。
+
+3. 在靠边停车场景中，同样将自车放置在车道内，并将目标设置在路肩上。

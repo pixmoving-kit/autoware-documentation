@@ -1,87 +1,111 @@
-# Pull request guidelines
+<a id="pull-request-guidelines"></a>
 
-## General pull request workflow
+# 拉取请求指南
 
-Autoware uses the fork-and-pull model.
-For more details about the model, refer to [GitHub Docs](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests).
+<a id="general-pull-request-workflow"></a>
 
-The following is a general example of the pull request workflow based on the fork-and-pull model.
-Use this workflow as a reference when you contribute to Autoware.
+## 通用拉取请求流程
 
-1. Create an issue.
-   - Discuss the approaches to the issue with maintainers.
-   - Confirm the [support guidelines](../../community/support/support-guidelines.md) before creating an issue.
-   - Follow the [discussion guidelines](../discussion-guidelines/index.md) when you discuss with other contributors.
-2. Create a fork repository. (for the first time only)
-3. Write code in your fork repository according to the approach agreed upon in the issue.
-   - Write the tests and documentation as appropriate.
-   - Follow the [coding guidelines](../coding-guidelines/index.md) guidelines when you write code.
-   - Follow the [Testing guidelines](../testing-guidelines/index.md) guidelines when you write tests.
-   - Follow the [Documentation guidelines](../documentation-guidelines/index.md) guidelines when you write documentation.
-   - Follow the [commit guidelines](commit-guidelines.md) when you commit your changes.
-   - Follow the [AI contribution policy](../ai-contribution-policy.md) if you use AI tools to help write your changes.
-4. Test the code.
-   - It is recommended that you summarize the test results, because you will need to explain the test results in the later review process.
-   - If you are not sure what tests should be done, discuss them with maintainers.
-5. Create a pull request.
-   - Follow the [pull request rules](#pull-request-rules) when you create a pull request.
-6. Wait for the pull request to be reviewed.
-   - The reviewers will review your code following the [review guidelines](review-guidelines.md).
-     - Not only the reviewers, but also the author is encouraged to understand the review guidelines.
-   - If [CI checks](ci-checks.md) have failed, fix the errors.
-   - Learn about code ownership from the [code owners](code-owners.md) guidelines.
-     - Check the [code owners FAQ section](code-owners.md#faq) if your pull request is not being reviewed.
-7. Address the review comments pointed out by the reviewers.
-   - If you don't understand the meaning of a review comment, ask the reviewers until you understand it.
-     - Fixing without understanding the reason is not recommended because the author should be responsible for the final content of their own pull request.
-   - If you don't agree with a review comment, ask the reviewers for a rational reason.
-     - The reviewers are obligated to make the author understand the meanings of each comment.
-   - After you have done with the review comments, re-request a review to the reviewers and back to 6.
-     - Avoid using force push as much as possible so reviewers only see the differences. More precisely, at least keep a commit history up to the point of review because GitHub Web UI such as the suggested change may require rebase to pass DCO CI.
-   - If there are no more new review comments, the reviewers will approve the pull request and proceed to 8.
-8. Merge the pull request.
-   - Anyone with write access can merge the pull request if there is no special request from maintainers.
-     - The author is encouraged to merge the pull request to feel responsible for their own pull request.
-     - If the author does not have write access, ask the reviewers or maintainers.
+Autoware 采用 fork-and-pull 模式。
+有关该模式的详细信息，请参阅 [GitHub 文档](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests)。
 
-## Pull request rules
+以下是基于 fork-and-pull 模式的通用拉取请求流程示例。
+为 Autoware 贡献时，请参考此流程。
 
-### Use an appropriate pull request template (required, non-automated)
+1. 创建 issue。
+   - 与维护者讨论解决问题的方案。
+   - 创建 issue 之前，请确认[支持指南](../../community/support/support-guidelines.md)。
+   - 与其他贡献者讨论时，请遵循[讨论指南](../discussion-guidelines/index.md)。
+2. 创建仓库的 fork。（仅首次需要）
+3. 按照 issue 中达成一致的方案，在你的 fork 仓库中编写代码。
+   - 根据需要编写测试和文档。
+   - 编写代码时遵循[编码指南](../coding-guidelines/index.md)。
+   - 编写测试时遵循[测试指南](../testing-guidelines/index.md)。
+   - 编写文档时遵循[文档指南](../documentation-guidelines/index.md)。
+   - 提交修改时遵循[提交指南](commit-guidelines.md)。
+   - 如果使用 AI 工具辅助编写修改，请遵循 [AI 贡献政策](../ai-contribution-policy.md)。
+4. 测试代码。
+   - 建议整理测试结果，因为后续审查过程中需要说明测试结果。
+   - 如果不确定应执行哪些测试，请与维护者讨论。
+5. 创建拉取请求。
+   - 创建拉取请求时遵循[拉取请求规则](#pull-request-rules)。
+6. 等待拉取请求审查。
+   - 审查者会按照[审查指南](review-guidelines.md)审查你的代码。
+     - 除审查者之外，也鼓励作者了解审查指南。
+   - 如果 [CI 检查](ci-checks.md)失败，请修复错误。
+   - 通过[代码所有者](code-owners.md)指南了解代码所有权。
+     - 如果拉取请求无人审查，请查看[代码所有者常见问题](code-owners.md#faq)。
+7. 处理审查者提出的意见。
+   - 如果不理解某条审查意见的含义，请向审查者询问，直到理解为止。
+     - 不建议在不理解原因的情况下修改，因为作者应对自己拉取请求的最终内容负责。
+   - 如果不赞同某条审查意见，请向审查者询问合理的依据。
+     - 审查者有义务让作者理解每条意见的含义。
+   - 处理完审查意见后，请再次请求审查，并返回第 6 步。
+     - 尽可能避免强制推送，以便审查者只需查看差异。更准确地说，至少应保留截至审查时的提交历史，因为 GitHub Web 界面中的建议修改等操作可能需要 rebase 才能通过 DCO CI。
+   - 如果没有新的审查意见，审查者会批准拉取请求，然后进入第 8 步。
+8. 合并拉取请求。
+   - 如果维护者没有特殊要求，任何具有写入权限的人都可以合并拉取请求。
+     - 鼓励作者亲自合并，以增强对自己拉取请求的责任感。
+     - 如果作者没有写入权限，请联系审查者或维护者。
 
-#### Rationale
+<a id="pull-request-rules"></a>
 
-- The unified style of descriptions by templates can make reviews efficient.
+## 拉取请求规则
 
-#### Steps to use an appropriate pull request template
+<a id="use-an-appropriate-pull-request-template-required-non-automated"></a>
 
-Some repositories may have multiple pull request templates. Follow the following instructions to create a pull request using the appropriate template:
+### 使用合适的拉取请求模板（必需，非自动检查）
 
-1. Select the appropriate template, as shown in [this video](https://user-images.githubusercontent.com/31987104/184344710-2adee239-799f-4fdf-bfab-be76345bfac1.mp4).
-2. Read the selected template carefully and fill the required content.
-3. Check the checkboxes during a review.
-   - There are [pre-review checklist](https://github.com/autowarefoundation/autoware/blob/44c70d33825617b56d8de5e6fe921000238238bd/.github/PULL_REQUEST_TEMPLATE/standard-change.md#pre-review-checklist-for-the-pr-author) and [post-review checklist](https://github.com/autowarefoundation/autoware/blob/44c70d33825617b56d8de5e6fe921000238238bd/.github/PULL_REQUEST_TEMPLATE/standard-change.md#post-review-checklist-for-the-pr-author) for the author.
+<a id="rationale"></a>
 
-### Set appropriate reviewers after creating a pull request (required, partially automated)
+#### 理由
 
-#### Rationale
+- 模板统一了描述的格式，可以提高审查效率。
 
-- Pull requests must be reviewed by appropriate reviewers to keep the quality of the codebase.
+<a id="steps-to-use-an-appropriate-pull-request-template"></a>
 
-#### Example
+#### 使用合适的拉取请求模板的步骤
 
-- For most ROS packages, reviewers will be automatically assigned based on the `maintainer` information in `package.xml`.
-- If no reviewer is assigned automatically, assign reviewers manually following the instructions in [GitHub Docs](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/requesting-a-pull-request-review).
-  - You can find the reviewers by seeing the `.github/CODEOWNERS` file of the repository.
-- If you are not sure the appropriate reviewers, ask `@autoware-maintainers`.
-- If you have no rights to assign reviewers, mention reviewers instead.
+部分仓库可能有多个拉取请求模板。请按以下说明使用合适的模板创建拉取请求：
 
-### Apply Conventional Commits to the pull request title (required, automated)
+1. 选择合适的模板，操作方法见[此视频](https://user-images.githubusercontent.com/31987104/184344710-2adee239-799f-4fdf-bfab-be76345bfac1.mp4)。
+2. 仔细阅读所选模板，并填写所需内容。
+3. 在审查过程中勾选相应复选框。
+   - 作者需要填写[审查前检查清单](https://github.com/autowarefoundation/autoware/blob/44c70d33825617b56d8de5e6fe921000238238bd/.github/PULL_REQUEST_TEMPLATE/standard-change.md#pre-review-checklist-for-the-pr-author)和[审查后检查清单](https://github.com/autowarefoundation/autoware/blob/44c70d33825617b56d8de5e6fe921000238238bd/.github/PULL_REQUEST_TEMPLATE/standard-change.md#post-review-checklist-for-the-pr-author)。
 
-#### Rationale
+<a id="set-appropriate-reviewers-after-creating-a-pull-request-required-partially-automated"></a>
 
-- [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) can generate categorized changelogs, for example using [git-cliff](https://github.com/orhun/git-cliff).
+### 创建拉取请求后指定合适的审查者（必需，部分自动完成）
 
-#### Example
+<a id="rationale_1"></a>
+
+#### 理由
+
+- 拉取请求必须由合适的审查者审查，以保持代码库的质量。
+
+<a id="example"></a>
+
+#### 示例
+
+- 对于大多数 ROS 功能包，系统会根据 `package.xml` 中的 `maintainer` 信息自动分配审查者。
+- 如果没有自动分配审查者，请按照 [GitHub 文档](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/requesting-a-pull-request-review)中的说明手动分配。
+  - 可以查看仓库的 `.github/CODEOWNERS` 文件来确定审查者。
+- 如果不确定应指定谁，请询问 `@autoware-maintainers`。
+- 如果没有分配审查者的权限，请通过提及审查者来请求审查。
+
+<a id="apply-conventional-commits-to-the-pull-request-title-required-automated"></a>
+
+### 拉取请求标题遵循约定式提交（必需，自动检查）
+
+<a id="rationale_2"></a>
+
+#### 理由
+
+- [约定式提交](https://www.conventionalcommits.org/en/v1.0.0/)可用于生成分类的变更日志，例如通过 [git-cliff](https://github.com/orhun/git-cliff) 生成。
+
+<a id="example_1"></a>
+
+#### 示例
 
 ```text
 feat(trajectory_follower): add an awesome feature
@@ -89,9 +113,9 @@ feat(trajectory_follower): add an awesome feature
 
 !!! note
 
-    You have to start the description part (here `add an awesome feature`) with a lowercase.
+    描述部分（此处为 `add an awesome feature`）必须以小写字母开头。
 
-If your change breaks some interfaces, use the `!` (breaking changes) mark as follows:
+如果修改破坏了某些接口，请如下使用 `!`（破坏性变更）标记：
 
 ```text
 feat(trajectory_follower)!: remove package
@@ -100,67 +124,87 @@ feat(planning)!: change topic names
 feat(autoware_utils)!: change function names
 ```
 
-For the repositories that contain code (most repositories), use the [definition of conventional-commit-types](https://github.com/commitizen/conventional-commit-types/blob/c3a9be4c73e47f2e8197de775f41d981701407fb/index.json) for the type.
+对于包含代码的仓库（大多数仓库），类型应采用 [conventional-commit-types 的定义](https://github.com/commitizen/conventional-commit-types/blob/c3a9be4c73e47f2e8197de775f41d981701407fb/index.json)。
 
-For documentation repositories such as [autoware-documentation](https://github.com/autowarefoundation/autoware-documentation), use the following definition:
+对于 [autoware-documentation](https://github.com/autowarefoundation/autoware-documentation) 等文档仓库，请使用以下定义：
 
 - `feat`
-  - Add new pages.
-  - Add contents to the existing pages.
+  - 添加新页面。
+  - 向现有页面添加内容。
 - `fix`
-  - Fix the contents in the existing pages.
+  - 修正现有页面的内容。
 - `refactor`
-  - Move contents to different pages.
+  - 将内容移动到其他页面。
 - `docs`
-  - Update documentation for the documentation repository itself.
+  - 更新介绍文档仓库本身的文档。
 - `build`
-  - Update the settings of the documentation site builder.
-- `!` (breaking changes)
-  - Remove pages.
-  - Change the URL of pages.
+  - 更新文档站点构建工具的配置。
+- `!`（破坏性变更）
+  - 删除页面。
+  - 更改页面的网址。
 
-`perf` and `test` are generally unused.
-Other types have the same meaning as the code repositories.
+通常不使用 `perf` 和 `test`。
+其他类型的含义与代码仓库相同。
 
-### Add the related component names to the scope of Conventional Commits (advisory, non-automated)
+<a id="add-the-related-component-names-to-the-scope-of-conventional-commits-advisory-non-automated"></a>
 
-#### Rationale
+### 在约定式提交的作用域中添加相关组件名称（建议，非自动检查）
 
-- It helps contributors find pull requests that are relevant to them.
-- It makes the changelog clearer.
+<a id="rationale_3"></a>
 
-#### Example
+#### 理由
 
-For ROS packages, adding the package name or component name is good.
+- 有助于贡献者找到与自己相关的拉取请求。
+- 使变更日志更加清晰。
+
+<a id="example_2"></a>
+
+#### 示例
+
+对于 ROS 功能包，建议添加功能包名称或组件名称。
 
 ```text
 feat(trajectory_follower): add an awesome feature
 refactor(planning, control): use common utils
 ```
 
-### Keep a pull request small (advisory, non-automated)
+<a id="keep-a-pull-request-small-advisory-non-automated"></a>
 
-#### Rationale
+### 保持拉取请求规模较小（建议，非自动检查）
 
-- Small pull requests are easy to understand for reviewers.
-- Small pull requests are easy to revert for maintainers.
+<a id="rationale_4"></a>
 
-#### Exception
+#### 理由
 
-It is acceptable if it is agreed with maintainers that there is no other way but to submit a big pull request.
+- 小规模拉取请求便于审查者理解。
+- 小规模拉取请求便于维护者回退。
 
-#### Example
+<a id="exception"></a>
 
-- Avoid developing two features in one pull request.
-- Avoid mixing different types (`feat`, `fix`, `refactor`, etc.) of changes in the same commit.
+#### 例外
 
-### Remind reviewers if there is no response for more than a week (advisory, non-automated)
+如果已与维护者达成一致，确认只能提交较大的拉取请求，那么也是可以接受的。
 
-#### Rationale
+<a id="example_3"></a>
 
-- It is the author's responsibility to care about their own pull request until it is merged.
+#### 示例
 
-#### Example
+- 避免在一个拉取请求中开发两个功能。
+- 避免在同一个提交中混合不同类型（`feat`、`fix`、`refactor` 等）的修改。
+
+<a id="remind-reviewers-if-there-is-no-response-for-more-than-a-week-advisory-non-automated"></a>
+
+### 超过一周没有回应时提醒审查者（建议，非自动检查）
+
+<a id="rationale_5"></a>
+
+#### 理由
+
+- 作者有责任持续关注自己的拉取请求，直到其合并。
+
+<a id="example_4"></a>
+
+#### 示例
 
 ```text
 @{some-of-developers} Would it be possible for you to review this PR?

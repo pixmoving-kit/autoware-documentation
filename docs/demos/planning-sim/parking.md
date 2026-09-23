@@ -1,10 +1,12 @@
-# Parking scenario
+<a id="parking-scenario"></a>
 
-1. Set an initial pose and a goal pose, and engage the ego vehicle.
+# 泊车场景
 
-   ![after-set-goal-pose](images/parking/after-set-goal-pose.png)
+1. 设置初始位姿和目标位姿，并启用自车自动驾驶。
 
-2. When the vehicle approaches the goal, it will switch from lane driving mode to parking mode.
-3. After that, the vehicle will maneuver into the destination parking spot.
+   ![设置目标位姿后](images/parking/after-set-goal-pose.png)
 
-   ![parking-maneuver](images/parking/parking-maneuver.png)
+2. 车辆接近目标时，将从车道行驶模式切换到泊车模式。
+3. 随后，车辆将驶入目标停车位。
+
+   ![泊车操作](images/parking/parking-maneuver.png)

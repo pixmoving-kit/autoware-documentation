@@ -6,11 +6,11 @@ type:
   name: autoware_adapi_v1_msgs/srv/ChangeOperationMode
   res:
     - name: status
-      text: response status
+      text: 响应状态
 ---
 
 {% extends 'design/autoware-architecture-v1/interfaces/templates/autoware-interface.jinja2' %}
 {% block description %}
-Change the operation mode to remote.
-For details, see the [operation mode](../../../features/operation_mode.md).
+将操作模式切换为远程模式。
+详情请参阅[操作模式](../../../features/operation_mode.md)。
 {% endblock %}

@@ -1,6 +1,10 @@
-# Manual control
+<a id="manual-control"></a>
 
-## Related API
+# 手动控制
+
+<a id="related-api"></a>
+
+## 相关 API
 
 - {{ link_ad_api('/api/manual/remote/control_mode/list') }}
 - {{ link_ad_api('/api/manual/remote/control_mode/select') }}
@@ -25,34 +29,42 @@
 - {{ link_ad_api('/api/manual/local/command/turn_indicators') }}
 - {{ link_ad_api('/api/manual/local/command/hazard_lights') }}
 
-## Description
+<a id="description"></a>
 
-This API is used to manually control the vehicle, and provides the same interface for different operators: remote and local.
-For example, the local operator controls a vehicle without a driver's seat using a joystick, while the remote operator provides remote support when problems occur with autonomous driving.
-The command sent will be used when [operation mode](operation_mode.md) is remote or local.
+## 说明
 
-## Operator status
+此 API 用于手动控制车辆，并为远程和本地两类操作员提供相同接口。
+例如，本地操作员使用操纵杆控制没有驾驶座的车辆；远程操作员则在自动驾驶出现问题时提供远程支持。
+当[运行模式](operation_mode.md)为 remote 或 local 时，会使用发送的命令。
 
-The application needs to determine whether the operator is able to drive and send that information via the operator status API.
-If the operator is unable to continue driving during manual operation, Autoware will perform MRM to bring the vehicle to a safe state.
-For level 3 and below, the operator status is referenced even during autonomous driving.
+<a id="operator-status"></a>
 
-## Control mode
+## 操作员状态
 
-Since there are multiple ways to control a vehicle, such as pedals or acceleration, the application must first select a control mode.
+应用需要判断操作员是否具备驾驶能力，并通过操作员状态 API 发送这一信息。
+手动操作期间，如果操作员无法继续驾驶，Autoware 将执行 MRM，使车辆进入安全状态。
+对于 L3 及以下级别，即使在自动驾驶期间也会参考操作员状态。
 
-| Mode         | Description                                                                |
+<a id="control-mode"></a>
+
+## 控制模式
+
+由于可以通过踏板或加速度等多种方式控制车辆，应用必须先选择控制模式。
+
+| 模式 | 说明 |
 | ------------ | -------------------------------------------------------------------------- |
-| disabled     | This is the initial mode. When selected, all command APIs are unavailable. |
-| pedals       | This mode provides longitudinal control using the pedals.                  |
-| acceleration | This mode provides longitudinal control using the target acceleration.     |
-| velocity     | This mode provides longitudinal control using the target velocity.         |
+| disabled | 初始模式。选择此模式时，所有命令 API 均不可用。 |
+| pedals | 使用踏板进行纵向控制。 |
+| acceleration | 使用目标加速度进行纵向控制。 |
+| velocity | 使用目标速度进行纵向控制。 |
 
-## Commands
+<a id="commands"></a>
 
-The commands available in each mode are as follows.
+## 命令
 
-| Command         | disabled |  pedals  | acceleration | velocity |
+各模式下可用的命令如下。
+
+| 命令 | disabled | pedals | acceleration | velocity |
 | --------------- | :------: | :------: | :----------: | :------: |
 | pedals          |    -     | &#x2713; |      -       |    -     |
 | acceleration    |    -     |    -     |   &#x2713;   |    -     |

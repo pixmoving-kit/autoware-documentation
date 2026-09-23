@@ -1,12 +1,18 @@
-# Troubleshooting
+<a id="troubleshooting"></a>
 
-## Setup issues
+# 故障排查
 
-### CUDA-related errors
+<a id="setup-issues"></a>
 
-When installing CUDA, errors may occur because of version conflicts. To resolve these types of errors, try one of the following methods:
+## 环境配置问题
 
-- Unhold all CUDA-related libraries and rerun the playbook.
+<a id="cuda-related-errors"></a>
+
+### CUDA 相关错误
+
+安装 CUDA 时，可能因版本冲突出错。可尝试以下方法之一来解决：
+
+- 解除所有 CUDA 相关库的版本锁定，并重新运行 playbook。
 
   ```bash
   sudo apt-mark unhold  \
@@ -21,7 +27,7 @@ When installing CUDA, errors may occur because of version conflicts. To resolve 
   ansible-playbook autoware.dev_env.install_dev_env
   ```
 
-- Uninstall all CUDA-related libraries and rerun the playbook.
+- 卸载所有 CUDA 相关库，并重新运行 playbook。
 
   ```bash
   sudo apt purge        \
@@ -40,9 +46,9 @@ When installing CUDA, errors may occur because of version conflicts. To resolve 
 
 !!! warning
 
-    Note that this may break your system and run carefully.
+    请注意，这可能破坏系统，请谨慎操作。
 
-- Run the playbook without installing CUDA-related libraries.
+- 运行 playbook 时跳过 CUDA 相关库的安装。
 
   ```bash
   ansible-playbook autoware.dev_env.install_dev_env --skip-tags nvidia
@@ -50,14 +56,18 @@ When installing CUDA, errors may occur because of version conflicts. To resolve 
 
 !!! warning
 
-    Note that some components in Autoware Universe require CUDA, and only the CUDA version in the [cuda role defaults](https://github.com/autowarefoundation/autoware/blob/main/ansible/roles/cuda/defaults/main.yaml) is supported at this time.
-    Autoware may work with other CUDA versions, but those versions are not supported and functionality is not guaranteed.
+    请注意，Autoware Universe 的部分组件依赖 CUDA，目前仅支持 [cuda 角色默认配置](https://github.com/autowarefoundation/autoware/blob/main/ansible/roles/cuda/defaults/main.yaml)中指定的 CUDA 版本。
+    Autoware 可能也能使用其他 CUDA 版本运行，但这些版本不受支持，功能无法保证。
 
-## Build issues
+<a id="build-issues"></a>
 
-### Insufficient memory
+## 构建问题
 
-Building Autoware requires a lot of memory, and your machine can freeze or crash if memory runs out during a build. To avoid this problem, 16-32GB of swap should be configured.
+<a id="insufficient-memory"></a>
+
+### 内存不足
+
+构建 Autoware 需要大量内存，如果构建期间内存耗尽，机器可能卡死或崩溃。为避免此问题，应配置 16–32GB 的交换空间。
 
 ```bash
 # Optional: Check the current swapfile
@@ -77,20 +87,20 @@ sudo swapon /swapfile
 free -h
 ```
 
-For more detailed configuration steps, along with an explanation of swap, refer to Digital Ocean's ["How To Add Swap Space on Ubuntu 20.04" tutorial](https://www.digitalocean.com/community/tutorials/how-to-add-swap-space-on-ubuntu-20-04)
+有关具体配置步骤和交换空间的说明，请参阅 Digital Ocean 的[“如何在 Ubuntu 20.04 上添加交换空间”教程](https://www.digitalocean.com/community/tutorials/how-to-add-swap-space-on-ubuntu-20-04)。
 
-If there are too many CPU cores (more than 64) in your machine, it might requires larger memory.
-A workaround here is to limit the job number while building.
+如果机器的 CPU 核心过多（超过 64 个），可能需要更多内存。
+一种解决办法是在构建时限制作业数量。
 
 ```bash
 MAKEFLAGS="-j4" colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release
 ```
 
-You can adjust `-j4` to any number based on your system.
-For more details, see the [manual page of GNU make](https://www.gnu.org/software/make/manual/make.html#Parallel-Disable).
+可以根据系统情况，将 `-j4` 调整为其他数量。
+详情请参阅 [GNU make 手册](https://www.gnu.org/software/make/manual/make.html#Parallel-Disable)。
 
-By reducing the number of packages built in parallel, you can also reduce the amount of memory used.
-In the following example, the number of packages built in parallel is set to 1, and the number of jobs used by `make` is limited to 1.
+减少同时构建的功能包数量，也可以降低内存占用。
+在下面的示例中，并行构建的功能包数量设为 1，`make` 使用的作业数量也限制为 1。
 
 ```bash
 MAKEFLAGS="-j1" colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release --parallel-workers 1
@@ -98,142 +108,160 @@ MAKEFLAGS="-j1" colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=R
 
 !!! note
 
-    By lowering both the number of packages built in parallel and the number of jobs used by `make`, you can reduce the memory usage.
-    However, this also means that the build process takes longer.
+    同时减少并行构建的功能包数量和 `make` 的作业数量，可以降低内存占用。
+    但这也意味着构建耗时更长。
 
-### Errors when using the latest version of Autoware
+<a id="errors-when-using-the-latest-version-of-autoware"></a>
 
-If you are working with the latest version of Autoware, issues can occur due to out-of-date software or old build files.
+### 使用最新版 Autoware 时出错
 
-To resolve these types of problems, first try cleaning your build artifacts and rebuilding:
+使用最新版 Autoware 时，过时的软件或旧构建文件可能导致问题。
+
+要解决此类问题，首先尝试清理构建产物并重新构建：
 
 ```bash
 rm -rf build/ install/ log/
 colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release
 ```
 
-If the error is not resolved, remove `src/` and update your workspace according to installation type ([Docker](../../../installation/autoware/docker-installation.md#update-the-workspace) / [source](../../../installation/autoware/source-installation.md#how-to-update-a-workspace)).
+如果仍未解决，请删除 `src/`，并根据安装方式更新工作区（[Docker](../../../installation/autoware/docker-installation.md#update-the-workspace) / [源码](../../../installation/autoware/source-installation.md#how-to-update-a-workspace)）。
 
 !!! Warning
 
-    Before removing `src/`, confirm that there are no modifications in your local environment that you want to keep!
+    删除 `src/` 之前，请确认本地没有需要保留的修改！
 
-If errors still persist after trying the steps above, delete the entire workspace, clone the repository once again and restart the installation process.
+如果上述步骤后错误仍然存在，请删除整个工作区，重新克隆仓库，并从头开始安装。
 
 ```bash
 rm -rf autoware/
 git clone https://github.com/autowarefoundation/autoware.git
 ```
 
-### Errors when using a fixed version of Autoware
+<a id="errors-when-using-a-fixed-version-of-autoware"></a>
 
-In principle, errors should not occur when using a fixed version. That said, possible causes include:
+### 使用固定版本 Autoware 时出错
 
-- ROS 2 has been updated with breaking changes.
-  - For confirmation, check the [Packaging and Release Management](https://discourse.ros.org/c/release/16) tag on ROS Discourse.
-- Your local environment is broken.
-  - Confirm your `.bashrc` file, environment variables, and library versions.
+原则上，使用固定版本时不应发生错误。不过，可能的原因包括：
 
-In addition to the causes listed above, there are two common misunderstandings around the use of fixed versions.
+- ROS 2 更新引入了破坏性变更。
+  - 可查看 ROS Discourse 上的[软件打包与发布管理](https://discourse.ros.org/c/release/16)分类进行确认。
+- 本地环境损坏。
+  - 检查 `.bashrc` 文件、环境变量及库版本。
 
-1. You used a fixed version for `autowarefoundation/autoware` only.
-   All of the repository versions in the `.repos` file must be specified in order to use a completely fixed version.
+除上述原因外，使用固定版本还存在两种常见误解。
 
-2. You didn't update the workspace after changing the branch of `autowarefoundation/autoware`.
-   Changing the branch of `autowarefoundation/autoware` does not affect the files under `src/`. You have to run the `vcs import` command to update them.
+1. 仅为 `autowarefoundation/autoware` 使用了固定版本。
+   要使用完全固定的版本，必须指定 `.repos` 文件中所有仓库的版本。
 
-### Error when building python package
+2. 更改 `autowarefoundation/autoware` 分支后，未更新工作区。
+   更改 `autowarefoundation/autoware` 分支不会影响 `src/` 下的文件，必须运行 `vcs import` 才能更新。
 
-During building the following issue can occurs
+<a id="error-when-building-python-package"></a>
+
+### 构建 Python 功能包时出错
+
+构建过程中可能出现以下问题。
 
 ```bash
 pkg_resources.extern.packaging.version.InvalidVersion: Invalid version: '0.23ubuntu1'
 ```
 
-The error is due to the fact that for versions between 66.0.0 and 67.5.0 `setuptools` enforces the python packages to be
-[PEP-440](https://peps.python.org/pep-0440/) conformant.
-Since version 67.5.1 `setuptools` has a [fallback](https://github.com/pypa/setuptools/commit/1640731114734043b8500d211366fc941b741f67) that makes it possible to work with old packages again.
+原因是 66.0.0 至 67.5.0 版本的 `setuptools` 强制要求 Python 软件包
+符合 [PEP-440](https://peps.python.org/pep-0440/)。
+从 67.5.1 起，`setuptools` 提供了[回退机制](https://github.com/pypa/setuptools/commit/1640731114734043b8500d211366fc941b741f67)，使旧软件包能够再次正常工作。
 
-The solution is to update `setuptools` to the newest version with the following command
+解决方法是使用以下命令将 `setuptools` 更新到最新版。
 
 ```bash
 pip install --upgrade setuptools
 ```
 
-## Docker/rocker issues
+<a id="dockerrocker-issues"></a>
 
-If any errors occur when running Autoware with Docker or rocker, first confirm that your Docker installation is working correctly by running the following commands:
+## Docker/rocker 问题
+
+使用 Docker 或 rocker 运行 Autoware 时如果出错，请先运行以下命令，确认 Docker 安装正常：
 
 ```bash
 docker run --rm -it hello-world
 docker run --rm -it ubuntu:latest
 ```
 
-Next, confirm that you are able to access the base Autoware image that is stored on the GitHub Packages website
+然后，确认可以访问存储在 GitHub Packages 网站上的 Autoware 基础镜像。
 
 ```bash
 docker run --rm -it ghcr.io/autowarefoundation/autoware:universe-jazzy
 ```
 
-## Runtime issues
+<a id="runtime-issues"></a>
 
-### CycloneDDS: Failed to find a free participant index (ROS 2 Jazzy)
+## 运行时问题
 
-When using ROS 2 Jazzy with CycloneDDS, you may see "Failed to find a free participant index for domain 0" and nodes failing to start. See [Runtime Troubleshooting: CycloneDDS failed to find a free participant index](runtime-troubleshooting.md#cyclonedds-failed-to-find-a-free-participant-index) for the cause and how to fix it.
+<a id="cyclonedds-failed-to-find-a-free-participant-index-ros-2-jazzy"></a>
 
-### Performance related issues
+### CycloneDDS：Failed to find a free participant index（ROS 2 Jazzy）
 
-Symptoms:
+使用 ROS 2 Jazzy 与 CycloneDDS 时，可能出现 "Failed to find a free participant index for domain 0"，并导致节点启动失败。原因与解决办法请参阅[运行时故障排查：CycloneDDS 无法找到空闲参与者索引](runtime-troubleshooting.md#cyclonedds-failed-to-find-a-free-participant-index)。
 
-- Autoware is running slower than expected
-- Messages show up late in RViz2
-- Point clouds are lagging
-- Camera images are lagging behind
-- Point clouds or markers flicker on RViz2
-- When multiple subscribers use the same publishers, the message rate drops
+<a id="performance-related-issues"></a>
 
-If you have any of these symptoms, please the [Performance Troubleshooting](performance-troubleshooting.md) page.
+### 性能相关问题
 
-### Map does not display when running the Planning Simulator
+症状：
 
-When running the Planning Simulator, the most common reason for the map not being displayed in RViz is because [the map path has not been specified correctly in the launch command](../../../demos/planning-sim/lane-driving.md). You can confirm if this is the case by searching for `Could not find lanelet map under {path-to-map-dir}/lanelet2_map.osm` errors in the log.
+- Autoware 运行速度低于预期。
+- 消息延迟出现在 RViz2 中。
+- 点云滞后。
+- 相机图像滞后。
+- 点云或标记在 RViz2 中闪烁。
+- 多个订阅者使用同一发布者时，消息频率下降。
 
-Another possible reason is that map loading is taking a long time due to poor DDS performance. For this, please visit the [Performance Troubleshooting](performance-troubleshooting.md) page.
+如果出现上述症状，请查看[性能故障排查](performance-troubleshooting.md)页面。
 
-### Died process issues
+<a id="map-does-not-display-when-running-the-planning-simulator"></a>
 
-Some modules may not be launched properly at runtime, and you may see "process has died" in your terminal.
-You can use the gdb tool to locate where the problem is occurring.
+### 运行 Planning Simulator 时地图不显示
 
-Debug build the module you wish to analyze under your autoware workspace
+运行 Planning Simulator 时，RViz 中不显示地图最常见的原因是[启动命令中的地图路径未正确指定](../../../demos/planning-sim/lane-driving.md)。可以在日志中搜索 `Could not find lanelet map under {path-to-map-dir}/lanelet2_map.osm` 错误，确认是否属于此情况。
+
+另一种可能是 DDS 性能较差，导致地图加载时间过长。对此，请参阅[性能故障排查](performance-troubleshooting.md)。
+
+<a id="died-process-issues"></a>
+
+### 进程退出问题
+
+运行时某些模块可能无法正常启动，终端中可能显示 "process has died"。
+可以使用 gdb 工具定位问题发生的位置。
+
+在 autoware 工作区中，以调试模式构建需要分析的模块。
 
 ```bash
 colcon build --cmake-args -DCMAKE_BUILD_TYPE=Debug --packages-up-to <the modules you wish to analyze> --catkin-skip-building-tests --symlink-install
 ```
 
-In this state, when a died process occurs when you run the autoware again, a core file will be created.
-Remember to remove the size limit of the core file.
+在这种配置下，再次运行 autoware 时如果进程异常退出，就会生成 core 文件。
+请记得移除 core 文件的大小限制。
 
 ```bash
 ulimit -c unlimited
 ```
 
-Rename the core file as `core.<PID>`.
+将 core 文件命名为 `core.<PID>`。
 
 ```bash
 echo core | sudo tee /proc/sys/kernel/core_pattern
 echo -n 1 | sudo tee /proc/sys/kernel/core_uses_pid
 ```
 
-Launch the autoware again. When a died process occurs, a core file will be created.
-`ll -ht` helps you to check if it was created.
+重新启动 autoware。进程异常退出时会生成 core 文件。
+可使用 `ll -ht` 检查是否已生成。
 
-Invoke gdb tool.
+启动 gdb 工具。
 
 ```bash
 gdb <executable file> <core file>
 #You can find the `<executable file>` in the error message.
 ```
 
-`bt` backtraces the stack of callbacks where a process dies.
-`f <frame number>` shows you the detail of a frame, and `l` shows you the code.
+`bt` 用于回溯进程退出时的回调调用栈。
+`f <frame number>` 显示某个栈帧的详情，`l` 显示代码。

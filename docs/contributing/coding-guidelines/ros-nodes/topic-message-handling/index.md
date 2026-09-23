@@ -1,15 +1,21 @@
-# Topic message handling guideline
+<a id="topic-message-handling-guideline"></a>
 
-## Introduction
+# 话题消息处理指南
 
-Here is coding guideline for topic message handling in Autoware. It includes the recommended manner than conventional one, which is roughly explained in [_Discussions page_](https://github.com/orgs/autowarefoundation/discussions/4612). Refer to the page to understand the basic concept of the recommended manner.
-You can find sample source code in [_ros2_subscription_examples_](https://github.com/takam5f2/ros2_subscription_examples) referred from this document.
+<a id="introduction"></a>
 
-## Conventional message handling manner
+## 简介
 
-At first, let us see a conventional manner of handling messages that is commonly used.
-[_ROS 2 Tutorials_](https://docs.ros.org/en/rolling/Tutorials/Beginner-Client-Libraries/Writing-A-Simple-Cpp-Publisher-And-Subscriber.html#write-the-subscriber-node) is one of the most cited references for ROS 2 applications, including Autoware.
-It implicitly recommends that each of messages received by subscriptions should be referred to and processed by a dedicated callback function. Autoware follows that manner thoroughly.
+本文介绍 Autoware 中话题消息处理的编码指南，其中包含相较于传统方式更推荐的处理方式。[_讨论页面_](https://github.com/orgs/autowarefoundation/discussions/4612)对其进行了概述，请参阅该页面了解推荐方式的基本概念。
+本文引用的示例源代码位于 [_ros2_subscription_examples_](https://github.com/takam5f2/ros2_subscription_examples)。
+
+<a id="conventional-message-handling-manner"></a>
+
+## 传统消息处理方式
+
+首先，来看一种常见的传统消息处理方式。
+[_ROS 2 教程_](https://docs.ros.org/en/rolling/Tutorials/Beginner-Client-Libraries/Writing-A-Simple-Cpp-Publisher-And-Subscriber.html#write-the-subscriber-node)是包括 Autoware 在内的 ROS 2 应用最常引用的资料之一。
+该教程隐含地建议为每个订阅使用专用回调函数，访问并处理接收到的消息。Autoware 全面沿用了这种方式。
 
 ```c++
   steer_sub_ = create_subscription<SteeringReport>(
@@ -17,13 +23,15 @@ It implicitly recommends that each of messages received by subscriptions should 
     [this](SteeringReport::SharedPtr msg) { current_steer_ = msg->steering_tire_angle; });
 ```
 
-In the code above, when a topic message whose name is `input/steering` is received, an anonymous function whose description is `{current_steer_ = msg->steering_tier_angle;}` is executed as a callback in a thread. The callback function is always executed when the message is received, which leads to waste computing resource if the message is not always necessary. Besides, waking up a thread costs computational overhead.
+在上述代码中，当收到名为 `input/steering` 的话题消息时，线程会执行内容为 `{current_steer_ = msg->steering_tier_angle;}` 的匿名函数作为回调。每当收到消息时都会执行回调函数，因此如果并非始终需要该消息，就会浪费计算资源。此外，唤醒线程也会带来计算开销。
 
-## Recommended manner
+<a id="recommended-manner"></a>
 
-This section introduces a recommended manner to take a message using `Subscription->take()` method only when the message is needed.
-The sample code given below shows that `Subscription->take()` method is called during execution of any callback function. In most cases, `Subscription->take()` method is called before a received message is consumed by a main logic.
-In this case, a topic message is retrieved from the subscription queue, the queue embedded in the subscription object, instead of using a callback function. To be precise, you have to program your code so that a callback function is not automatically called.
+## 推荐方式
+
+本节介绍一种推荐方式：仅在需要消息时，使用 `Subscription->take()` 方法获取消息。
+以下示例代码展示了如何在某个回调函数执行期间调用 `Subscription->take()` 方法。在大多数情况下，应在主逻辑使用接收消息之前调用 `Subscription->take()`。
+此时，话题消息直接从订阅队列（订阅对象内置的队列）中获取，而不通过回调函数。确切地说，需要在代码中确保回调函数不会自动调用。
 
 ```c++
   SteeringReport msg;
@@ -32,30 +40,36 @@ In this case, a topic message is retrieved from the subscription queue, the queu
     // processing and publishing after this
 ```
 
-Using this manner has the following benefits.
+采用这种方式有以下好处。
 
-- It can reduce the number of calls to subscription callback functions
-- There is no need to take a topic message from a subscription that a main logic does not consume
-- There is no mandatory thread waking for the callback function, which leads to multi-threaded programming, data races and exclusive locking
+- 可以减少订阅回调函数的调用次数。
+- 无须从订阅中获取主逻辑不使用的话题消息。
+- 无须为执行回调函数而唤醒线程，从而避免由此带来的多线程编程、数据竞争和互斥锁问题。
 
-## Manners to handle topic message data
+<a id="manners-to-handle-topic-message-data"></a>
 
-This section introduces four manners, including the recommended ones.
+## 话题消息数据的处理方式
 
-### 1. Obtain data by calling `Subscription->take()`
+本节介绍四种方式，包括推荐方式。
 
-To use the recommended manner using `Subscription->take()`, you basically need to do two things below.
+<a id="1-obtain-data-by-calling-subscription-take"></a>
 
-1. Prevent a callback function from being called when a topic message is received
-2. Call `take()` method of a subscription object when a topic message is needed
+### 1. 调用 `Subscription->take()` 获取数据
 
-You can see an example of the typical use of `take()` method in [_ros2_subscription_examples/simple_examples/src/timer_listener.cpp_](https://github.com/takam5f2/ros2_subscription_examples/blob/main/simple_examples/src/timer_listener.cpp).
+要采用使用 `Subscription->take()` 的推荐方式，主要需要完成以下两项工作。
 
-#### Prevent calling a callback function
+1. 防止在收到话题消息时调用回调函数。
+2. 需要话题消息时，调用订阅对象的 `take()` 方法。
 
-To prevent a callback function from being called automatically, the callback function has to belong a callback group whose callback functions are not added to any executor.
-According to the [_API specification of `create_subscription`_](http://docs.ros.org/en/iron/p/rclcpp/generated/classrclcpp_1_1Node.html), registering a callback function to a `rclcpp::Subscription` based object is mandatory even if the callback function has no operation.
-Here is a sample code snippet from [_ros2_subscription_examples/simple_examples/src/timer_listener.cpp_](https://github.com/takam5f2/ros2_subscription_examples/blob/main/simple_examples/src/timer_listener.cpp).
+`take()` 方法的典型用法示例见 [_ros2_subscription_examples/simple_examples/src/timer_listener.cpp_](https://github.com/takam5f2/ros2_subscription_examples/blob/main/simple_examples/src/timer_listener.cpp)。
+
+<a id="prevent-calling-a-callback-function"></a>
+
+#### 防止调用回调函数
+
+要防止回调函数被自动调用，必须使其所属回调组中的回调函数不被添加到任何执行器。
+根据 [_`create_subscription` 的 API 规范_](http://docs.ros.org/en/iron/p/rclcpp/generated/classrclcpp_1_1Node.html)，必须为基于 `rclcpp::Subscription` 的对象注册回调函数，即使该函数不执行任何操作。
+以下是 [_ros2_subscription_examples/simple_examples/src/timer_listener.cpp_](https://github.com/takam5f2/ros2_subscription_examples/blob/main/simple_examples/src/timer_listener.cpp) 中的示例代码片段。
 
 ```c++
     rclcpp::CallbackGroup::SharedPtr cb_group_not_executed = this->create_callback_group(
@@ -71,21 +85,23 @@ Here is a sample code snippet from [_ros2_subscription_examples/simple_examples/
     sub_ = create_subscription<std_msgs::msg::String>("chatter", qos, not_executed_callback, subscription_options);
 ```
 
-In the code above, `cb_group_not_executed` is created by calling `create_callback_group` with the second argument `false`. Any callback function which belongs to the callback group will not be called by an executor.
-If the `callback_group` member of `subscription_options` is set to `cb_group_not_executed`, then `not_executed_callback` will not be called when a corresponding topic message `chatter` is received.
-The second argument to `create_callback_group` is defined as follows.
+上述代码调用 `create_callback_group`，并将第二个参数设为 `false`，创建 `cb_group_not_executed`。执行器不会调用属于该回调组的任何回调函数。
+如果将 `subscription_options` 的 `callback_group` 成员设置为 `cb_group_not_executed`，那么收到对应话题 `chatter` 的消息时，就不会调用 `not_executed_callback`。
+`create_callback_group` 的第二个参数定义如下。
 
 ```c++
 rclcpp::CallbackGroup::SharedPtr create_callback_group(rclcpp::CallbackGroupType group_type, \
                                   bool automatically_add_to_executor_with_node = true)
 ```
 
-When `automatically_add_to_executor_with_node` is set to `true`, callback functions included in a node that is added to an executor will be automatically called by the executor.
+当 `automatically_add_to_executor_with_node` 设为 `true` 时，如果节点被添加到执行器，执行器会自动调用该节点包含的回调函数。
 
-#### Call `take()` method of Subscription object
+<a id="call-take-method-of-subscription-object"></a>
 
-To take a topic message from the `Subscription` based object, the `take()` method is called at the expected time.
-Here is a sample code snippet from [_ros2_subscription_examples/simple_examples/src/timer_listener.cpp_](https://github.com/takam5f2/ros2_subscription_examples/blob/main/simple_examples/src/timer_listener.cpp) using `take()` method.
+#### 调用 Subscription 对象的 `take()` 方法
+
+要从基于 `Subscription` 的对象中获取话题消息，请在预期时刻调用 `take()` 方法。
+以下是 [_ros2_subscription_examples/simple_examples/src/timer_listener.cpp_](https://github.com/takam5f2/ros2_subscription_examples/blob/main/simple_examples/src/timer_listener.cpp) 中使用 `take()` 方法的示例代码片段。
 
 ```c++
   std_msgs::msg::String msg;
@@ -95,25 +111,27 @@ Here is a sample code snippet from [_ros2_subscription_examples/simple_examples/
     RCLCPP_INFO(this->get_logger(), "I heard: [%s]", msg.data.c_str());
 ```
 
-In the code above, `take(msg, msg_info)` is called by `sub_` object instantiated from the `rclcpp::Subscription` class. It is called in a timer driven callback function. `msg` and `msg_info` indicate a message body and its metadata respectively. If there is a message in the subscription queue when `take(msg, msg_info)` is called, then the message is copied to `msg`.
-`take(msg, msg_info)` returns `true` if a message is successfully taken from the subscription. In this case, the above code prints out a string data of the message from `RCLCPP_INFO`.
-`take(msg, msg_info)` returns `false` if a message is not taken from the subscription.
-When `take(msg, msg_info)` is called, if the size of the subscription queue is greater than one and there are two or more messages in the queue, then the oldest message is copied to `msg`. If the size of the queue is one, the latest message is always obtained.
+上述代码由 `rclcpp::Subscription` 类实例化的 `sub_` 对象调用 `take(msg, msg_info)`。调用发生在定时器触发的回调函数中。`msg` 和 `msg_info` 分别表示消息正文及其元数据。如果调用 `take(msg, msg_info)` 时订阅队列中有消息，该消息就会复制到 `msg` 中。
+如果成功从订阅中获取消息，`take(msg, msg_info)` 会返回 `true`。此时，上述代码通过 `RCLCPP_INFO` 打印消息中的字符串数据。
+如果未能从订阅中获取消息，`take(msg, msg_info)` 会返回 `false`。
+调用 `take(msg, msg_info)` 时，如果订阅队列容量大于 1，且队列中有两条或更多消息，则最旧的消息会复制到 `msg` 中。如果队列容量为 1，则总是获取最新消息。
 
 !!! note
 
-    You can check the presence of incoming message with the returned value of `take()` method. However, you have to take care of the destructive nature of the take() method. The `take()` method modifies the subscription queue. Also, the `take()` method is irreversible and there is no undo operation against the `take()` method. Checking the incoming message with only the `take()` method always changes the subscription queue. If you want to check without changing the subscription queue, rclcpp::WaitSet is recommended. Refer to [_[supplement] Use rclcpp::WaitSet_](./supp-wait_set.md) for more detail.
+    可以根据 `take()` 方法的返回值检查是否有消息到达。但必须注意 take() 方法会改变数据：`take()` 会修改订阅队列，而且该操作不可逆，没有对应的撤销操作。仅使用 `take()` 检查到达消息时，总会改变订阅队列。如果希望在不改变订阅队列的情况下检查消息，建议使用 rclcpp::WaitSet。详情请参阅[_【补充】使用 rclcpp::WaitSet_](./supp-wait_set.md)。
 
 !!! note
 
-    The `take()` method is supported to only obtain a message which is passed through DDS as an inter-process communication. You must not use it for an intra-process communication because intra-process communication is based on another software stack of `rclcpp`. Refer to [_[supplement] Obtain a received message through intra-process communication_](./supp-intra-process-comm.md) in case of intra-process communication.
+    `take()` 方法仅支持获取通过 DDS 进行进程间通信的消息。不得将其用于进程内通信，因为进程内通信基于 `rclcpp` 的另一套软件实现。进程内通信的情况请参阅[_【补充】获取通过进程内通信接收的消息_](./supp-intra-process-comm.md)。
 
-#### 1.1 Obtain Serialized Message from Subscription
+<a id="11-obtain-serialized-message-from-subscription"></a>
 
-ROS 2 provides Serialized Message function which supports communication with arbitrary message types as described in [_Class SerializedMessage_](http://docs.ros.org/en/humble/p/rclcpp/generated/classrclcpp_1_1SerializedMessage.html). It is used by `topic_state_monitor` in Autoware.
-You have to use the `take_serialized()` method instead of the `take()` method to obtain a `rclcpp::SerializedMessage` based message from a subscription.
+#### 1.1 从订阅中获取序列化消息
 
-Here is a sample code snippet from [_ros2_subscription_examples/simple_examples/src/timer_listener_serialized_message.cpp_](https://github.com/takam5f2/ros2_subscription_examples/blob/main/simple_examples/src/timer_listener_serialized_message.cpp).
+ROS 2 提供序列化消息功能，支持任意消息类型的通信，详见 [_SerializedMessage 类_](http://docs.ros.org/en/humble/p/rclcpp/generated/classrclcpp_1_1SerializedMessage.html)。Autoware 中的 `topic_state_monitor` 使用了此功能。
+要从订阅中获取基于 `rclcpp::SerializedMessage` 的消息，必须使用 `take_serialized()` 方法，而非 `take()` 方法。
+
+以下是 [_ros2_subscription_examples/simple_examples/src/timer_listener_serialized_message.cpp_](https://github.com/takam5f2/ros2_subscription_examples/blob/main/simple_examples/src/timer_listener_serialized_message.cpp) 中的示例代码片段。
 
 ```c++
       // receive the serialized message.
@@ -125,18 +143,20 @@ Here is a sample code snippet from [_ros2_subscription_examples/simple_examples/
       }
 ```
 
-In the code above, `msg` is created by `create_serialized_message()` to store a received message, whose type is `std::shared_ptr<rclcpp::SerializedMessage>`. You can obtain a message of type `rclcpp::SerializedMessage` using the `take_serialized()` method. Note that the `take_serialized()` method needs reference type data as its first argument. Since `msg` is a pointer, `*msg` should be passed as the first argument to the `take_serialized().
+上述代码通过 `create_serialized_message()` 创建 `msg` 来存储接收的消息，其类型为 `std::shared_ptr<rclcpp::SerializedMessage>`。可以使用 `take_serialized()` 方法获取类型为 `rclcpp::SerializedMessage` 的消息。请注意，`take_serialized()` 的第一个参数需要引用类型的数据。由于 `msg` 是指针，因此应将 `*msg` 作为第一个参数传给 `take_serialized()。
 
 !!! note
 
-    ROS 2's `rclcpp` supports both `rclcpp::LoanedMessage` and `rclcpp::SerializedMessage`. If [_zero copy communication via loaned messages_](https://design.ros2.org/articles/zero_copy.html) is introduced to Autoware, `take_loaned()` method should be used for communication via loaned messages instead. In this document, the explanation of the `take_loaned()` method is omitted because it is not used for Autoware in this time (May. 2024).
+    ROS 2 的 `rclcpp` 同时支持 `rclcpp::LoanedMessage` 和 `rclcpp::SerializedMessage`。如果 Autoware 引入[_通过借用消息实现零拷贝通信_](https://design.ros2.org/articles/zero_copy.html)，则借用消息通信应改用 `take_loaned()` 方法。由于目前（2024 年 5 月）Autoware 尚未使用该方法，本文省略对 `take_loaned()` 的说明。
 
-### 2. Obtain multiple data stored in Subscription Queue
+<a id="2-obtain-multiple-data-stored-in-subscription-queue"></a>
 
-A subscription object can hold multiple messages in its queue if multiple queue size is configured with the QoS setting. The conventional manner using callback function forces a callback function to be executed per message. In other words, there is a constraint; a single cycle of callback function processes a single message . Note that with the conventional manner, if there are one or more messages in the subscription queue, the oldest one is taken and a thread is assigned to execute a callback function, which continues until the queue is empty.
-The `take()` method would alleviate this limitation. The `take()` method can be called in multiple iterations, so that a single cycle of the callback function processes multiple messages taken by `take()` methods.
+### 2. 获取订阅队列中存储的多条数据
 
-Here is a sample code, taken from [_ros2_subscription_examples/simple_examples/src/timer_batch_listener.cpp_](https://github.com/takam5f2/ros2_subscription_examples/blob/main/simple_examples/src/timer_batch_listener.cpp) which calls the `take()` method in a single cycle of a callback function.
+如果在 QoS 配置中将队列容量设为多条消息，订阅对象就可以在队列中保存多条消息。传统回调方式要求每条消息都执行一次回调函数。换句话说，它有一个限制：回调函数的一次执行只能处理一条消息。请注意，在传统方式下，只要订阅队列中还有消息，就会取出最旧的一条，并分配线程执行回调函数，直到队列为空。
+`take()` 方法可以缓解这一限制。它可以在循环中多次调用，使回调函数在一次执行期间处理多条通过 `take()` 获取的消息。
+
+以下示例代码来自 [_ros2_subscription_examples/simple_examples/src/timer_batch_listener.cpp_](https://github.com/takam5f2/ros2_subscription_examples/blob/main/simple_examples/src/timer_batch_listener.cpp)，它在回调函数的一次执行期间调用 `take()` 方法。
 
 ```c++
       std_msgs::msg::String msg;
@@ -147,16 +167,18 @@ Here is a sample code, taken from [_ros2_subscription_examples/simple_examples/s
         RCLCPP_INFO(this->get_logger(), "I heard: [%s]", msg.data.c_str());
 ```
 
-In the code above, `while(sub->take(msg, msg_info))` continues to take messages from the subscription queue until the queue is empty. Each message taken is processed per iteration.
-Note that you must determine size of a subscription queue by considering both frequency of a callback function and frequency of a message reception. For example, if a callback function is invoked at 10Hz and topic messages are received at 50Hz, the size of the subscription queue must be at least 5 to avoid losing received messages.
+上述代码中的 `while(sub->take(msg, msg_info))` 会持续从订阅队列中获取消息，直到队列为空。每次迭代处理一条获取的消息。
+请注意，确定订阅队列容量时，必须同时考虑回调函数的执行频率和消息接收频率。例如，如果回调函数以 10Hz 执行，而话题消息以 50Hz 接收，则订阅队列容量至少应为 5，以免丢失接收到的消息。
 
-Assigning a thread to execute a callback function per message will cause performance overhead. You can use the manner introduced in this section to avoid the unexpected overhead.
-The manner will be effective when there is a large difference between reception frequency and consumption frequency. For example, even if a message, such as a CAN message, is received at higher than 100 Hz, a user logic consumes messages at slower frequency such as 10 Hz. In such a case, the user logic should retrieve the required number of messages with the `take()` method to avoid the unexpected overhead.
+为每条消息分配线程执行回调函数会带来性能开销。可以使用本节介绍的方式避免这种不必要的开销。
+当接收频率与使用频率相差较大时，这种方式尤为有效。例如，即使 CAN 消息等以超过 100 Hz 的频率到达，用户逻辑也可能仅以 10 Hz 等较低频率使用消息。此时，用户逻辑应通过 `take()` 方法获取所需数量的消息，以避免不必要的开销。
 
-### 3. Obtain data by calling `Subscription->take` and then call a callback function
+<a id="3-obtain-data-by-calling-subscription-take-and-then-call-a-callback-function"></a>
 
-You can combine the `take()` (strictly `take_type_erased()`) method and the callback function to process received messages in a consistent way. Using this combination does not require waking up a thread.
-Here is a sample code snippet from [_ros2_subscription_examples/simple_examples/src/timer_listener_using_callback.cpp_](https://github.com/takam5f2/ros2_subscription_examples/blob/main/simple_examples/src/timer_listener_using_callback.cpp).
+### 3. 调用 `Subscription->take` 获取数据后，再调用回调函数
+
+可以将 `take()`（严格来说是 `take_type_erased()`）方法与回调函数结合，以一致的方式处理接收的消息。这种组合方式无须唤醒线程。
+以下是 [_ros2_subscription_examples/simple_examples/src/timer_listener_using_callback.cpp_](https://github.com/takam5f2/ros2_subscription_examples/blob/main/simple_examples/src/timer_listener_using_callback.cpp) 中的示例代码片段。
 
 ```c++
       auto msg = sub_->create_message();
@@ -166,21 +188,25 @@ Here is a sample code snippet from [_ros2_subscription_examples/simple_examples/
 
 ```
 
-In the code above, a message is taken by the `take_type_erased()` method before a registered callback function is called via the `handle_message()` method. Note that you must use `take_type_erased()` instead of `take()`. `take_type_erased()` needs `void` type data as its first argument. You must use the `get()` method to convert `msg` whose type is `shared_ptr<void>` to `void` type. Then the `handle_message()` method is called with the obtained message. A registered callback function is called within `handle_message()`.
-You don't need to take care of message type which is passed to `take_type_erased()` and `handle_message()`. You can define the message variable as `auto msg = sub_->create_message();`.
-You can also refer to [_the API document_](http://docs.ros.org/en/humble/p/rclcpp/generated/classrclcpp_1_1SubscriptionBase.html#_CPPv4N6rclcpp16SubscriptionBase16take_type_erasedEPvRN6rclcpp11MessageInfoE) as for `create_message()`, `take_type_erased()` and `handle_message()`.
+上述代码先通过 `take_type_erased()` 获取消息，再通过 `handle_message()` 调用已注册的回调函数。请注意，必须使用 `take_type_erased()`，而非 `take()`。`take_type_erased()` 的第一个参数需要 `void` 类型数据。必须使用 `get()` 方法，将类型为 `shared_ptr<void>` 的 `msg` 转换为 `void` 类型。随后使用获取的消息调用 `handle_message()`，已注册的回调函数会在 `handle_message()` 内部调用。
+无须关心传给 `take_type_erased()` 和 `handle_message()` 的消息类型。可以将消息变量定义为 `auto msg = sub_->create_message();`。
+关于 `create_message()`、`take_type_erased()` 和 `handle_message()`，也可参阅 [_API 文档_](http://docs.ros.org/en/humble/p/rclcpp/generated/classrclcpp_1_1SubscriptionBase.html#_CPPv4N6rclcpp16SubscriptionBase16take_type_erasedEPvRN6rclcpp11MessageInfoE)。
 
-### 4. Obtain data by a callback function
+<a id="4-obtain-data-by-a-callback-function"></a>
 
-A conventional manner, typically used in ROS 2 application, is a message reference using a callback function, is available. If you don't use a callback group with `automatically_add_to_executor_with_node = false`, a registered callback function will be called automatically by an executor when a topic message is received.
-One of the advantages of this manner is that you don't have to take care whether a topic message is passed through inter-process or intra-process. Remember that `take()` can only be used for inter-process communication via DDS, while another manner provided by `rclcpp` can be used for intra-process communication via `rclcpp`.
+### 4. 通过回调函数获取数据
 
-## Appendix
+仍可使用 ROS 2 应用中常见的传统方式，即通过回调函数访问消息。如果没有使用设置了 `automatically_add_to_executor_with_node = false` 的回调组，那么在收到话题消息时，执行器会自动调用已注册的回调函数。
+这种方式的优点之一是无须关心话题消息通过进程间通信还是进程内通信传递。请记住，`take()` 只能用于通过 DDS 的进程间通信，而通过 `rclcpp` 的进程内通信需要使用 `rclcpp` 提供的另一种方式。
 
-A callback function is used to obtain a topic message in many of ROS 2 applications. It is as like a rule or a custom. As this document page explains, you can use the `Subscription->take()` method to obtain a topic message without calling a subscription callback function.
-This manner is also documented in [_Template Class Subscription — rclcpp 16.0.8 documentation_](https://docs.ros.org/en/humble/p/rclcpp/generated/classrclcpp_1_1Subscription.html#_CPPv4N6rclcpp12Subscription4takeER14ROSMessageTypeRN6rclcpp11MessageInfoE).
+<a id="appendix"></a>
 
-Many of ROS 2 users may be afraid to use the `take()` method because they may not be so familiar with it and there is a lack of documentation about `take()`, but it is widely used in the `rclcpp::Executor` implementation as shown in [_rclcpp/executor.cpp_](https://github.com/ros2/rclcpp/blob/47c977d1bc82fc76dd21f870bcd3ea473eca2f59/rclcpp/src/rclcpp/executor.cpp#L643-L648) shown below. So it turns out that you are indirectly using the `take()` method, whether you know it or not.
+## 附录
+
+许多 ROS 2 应用使用回调函数获取话题消息，这似乎已成为一种规则或惯例。如本文所述，可以使用 `Subscription->take()` 方法获取话题消息，而不调用订阅回调函数。
+[_Subscription 模板类 — rclcpp 16.0.8 文档_](https://docs.ros.org/en/humble/p/rclcpp/generated/classrclcpp_1_1Subscription.html#_CPPv4N6rclcpp12Subscription4takeER14ROSMessageTypeRN6rclcpp11MessageInfoE)也介绍了这种方式。
+
+许多 ROS 2 用户可能不敢使用 `take()`，因为对它不够熟悉，相关文档也较少。但它在 `rclcpp::Executor` 实现中得到了广泛使用，如下方 [_rclcpp/executor.cpp_](https://github.com/ros2/rclcpp/blob/47c977d1bc82fc76dd21f870bcd3ea473eca2f59/rclcpp/src/rclcpp/executor.cpp#L643-L648) 所示。因此，无论你是否知晓，其实都在间接使用 `take()` 方法。
 
 ```c++
     std::shared_ptr<void> message = subscription->create_message();
@@ -193,15 +219,15 @@ Many of ROS 2 users may be afraid to use the `take()` method because they may no
 
 !!!note
 
-    Strictly speaking, the `take_type_erased()` method is called in the executor, but not the `take()` method.
+    严格来说，执行器调用的是 `take_type_erased()`，而不是 `take()`。
 
-    But `take_type_erased()` is the embodiment of `take()`, while `take()` internally calls `take_type_erased()`.
+    但 `take_type_erased()` 是 `take()` 的具体实现，`take()` 会在内部调用 `take_type_erased()`。
 
-If `rclcpp::Executor` based object, an executor, is programmed to call a callback function, the executor itself determines when to do it. Because the executor is essentially calling a best-effort callback function, the message is not guaranteed to be necessarily referenced or processed even though it is received. Therefore it is desirable to call the `take()` method directly to ensure that a message is referenced or processed at the intended time.
+如果基于 `rclcpp::Executor` 的对象（执行器）被编程为调用回调函数，则由执行器自身决定调用时机。由于执行器本质上以尽力而为的方式调用回调函数，即使消息已接收，也不能保证一定被访问或处理。因此，为确保在预期时刻访问或处理消息，最好直接调用 `take()` 方法。
 
 ---
 
-As of May 2024, the recommended manners are beginning to be used in Autoware Universe.
-See the following PR if you want an example in Autoware Universe.
+截至 2024 年 5 月，Autoware Universe 已开始采用这些推荐方式。
+如需查看 Autoware Universe 中的示例，请参阅以下 PR。
 
 [_feat(tier4_autoware_utils, obstacle_cruise): change to read topic by polling #6702_](https://github.com/autowarefoundation/autoware_universe/pull/6702)

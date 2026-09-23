@@ -1,10 +1,16 @@
-# Launch and terminate
+<a id="launch-and-terminate"></a>
 
-## Related API
+# 启动与终止
 
-- T.B.D.
+<a id="related-api"></a>
 
-## Sequence
+## 相关 API
+
+- 待补充。
+
+<a id="sequence"></a>
+
+## 时序
 
 ```plantuml
 {% include 'design/autoware-architecture-v1/interfaces/ad-api/use-cases/sequence/launch-terminate.plantuml' %}

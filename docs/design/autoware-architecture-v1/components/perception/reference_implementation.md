@@ -1,129 +1,153 @@
-# Perception Component Reference Implementation Design
+<a id="perception-component-reference-implementation-design"></a>
 
-## Purpose of this document
+# 感知组件参考实现设计
 
-This document outlines detailed design of the reference implementations. This allows developers and users to understand what is currently available with the Perception Component, how to utilize, expand, or add to its features.
+<a id="purpose-of-this-document"></a>
 
-## Whole architecture
+## 本文目的
 
-This diagram describes the architecture of the reference implementation.
+本文概述参考实现的详细设计，使开发者和用户了解感知组件当前提供的功能，以及如何使用、扩展或添加功能。
+
+<a id="whole-architecture"></a>
+
+## 整体架构
+
+下图描述参考实现的架构。
 
 ![overall-perception-architecture](image/reference-implementaion-perception-diagram.drawio.svg)
 
-The Perception component consists of the following sub-components:
+感知组件由以下子组件组成：
 
-- **Obstacle Segmentation**: Identifies point clouds originating from obstacles(not only dynamic objects but also static obstacles that should be avoided, such as stationary obstacles) that the ego vehicle should avoid. For example, construction cones are recognized using this module.
-- **Occupancy Grid Map**: Detects blind spots (areas where no information is available and where dynamic objects may jump out).
-- **Object Recognition**: Recognizes dynamic objects surrounding the ego vehicle in the current frame and predicts their future trajectories.
-  - **Detection**: Detects the pose and velocity of dynamic objects such as vehicles and pedestrians.
-    - **Detector**: Triggers object detection processing frame by frame.
-    - **Interpolator**: Maintains stable object detection. Even if the output from Detector suddenly becomes unavailable, Interpolator uses the output from the Tracking module to maintain the detection results without missing any objects.
-  - **Tracking**: Associates detected results across multiple frames.
-  - **Prediction**: Predicts trajectories of dynamic objects.
-- **Traffic Light Recognition**: Recognizes the colors of traffic lights and the directions of arrow signals.
+- **障碍物分割**：识别来自自车应避让障碍物的点云，包括动态目标以及应避让的静态障碍物。例如，施工交通锥通过此模块识别。
+- **占据栅格地图**：检测盲区（无法获取信息、可能有动态目标突然出现的区域）。
+- **目标识别**：识别当前帧中自车周围的动态目标，并预测其未来轨迹。
+  - **检测**：检测车辆和行人等动态目标的位姿及速度。
+    - **检测器**：逐帧触发目标检测处理。
+    - **插值器**：维持稳定的目标检测。即使检测器输出突然不可用，插值器也会利用跟踪模块的输出维持检测结果，避免遗漏目标。
+  - **跟踪**：关联多个帧中的检测结果。
+  - **预测**：预测动态目标轨迹。
+- **交通信号灯识别**：识别交通信号灯颜色和箭头信号方向。
 
-### Internal interface in the perception component
+<a id="internal-interface-in-the-perception-component"></a>
 
-- **Obstacle Segmentation to Object Recognition**
-  - Point Cloud: A Point Cloud observed in the current frame, where the ground and outliers are removed.
-- **Obstacle Segmentation to Occupancy Grid Map**
-  - Ground filtered Point Cloud: A Point Cloud observed in the current frame, where the ground is removed.
-- **Occupancy Grid Map to Obstacle Segmentation**
-  - Occupancy Grid Map: This is used for filtering outlier.
+### 感知组件内部接口
 
-## Architecture for object recognition
+- **障碍物分割到目标识别**
+  - 点云：当前帧观测的点云，已移除地面和离群点。
+- **障碍物分割到占据栅格地图**
+  - 地面过滤点云：当前帧观测的点云，已移除地面。
+- **占据栅格地图到障碍物分割**
+  - 占据栅格地图：用于过滤离群点。
+
+<a id="architecture-for-object-recognition"></a>
+
+## 目标识别架构
 
 ![Overall Pipeline](image/new_autoware_design.drawio.svg)
 
-### Base 3D Detection
+<a id="base-3d-detection"></a>
 
-Autoware primarily uses ML-based methods for 3D detection, referred to as **Base 3D Detection**.
-Available methods include:
+### 基础 3D 检测
+
+Autoware 主要使用机器学习方法进行 3D 检测，称为**基础 3D 检测**。
+可用方法包括：
 
 - [CenterPoint](https://github.com/autowarefoundation/autoware.universe/tree/main/perception/autoware_lidar_centerpoint)
 - [TransFusion-L](https://github.com/autowarefoundation/autoware.universe/tree/main/perception/autoware_lidar_transfusion)
 - [BEVFusion-L](https://github.com/autowarefoundation/autoware_universe/tree/main/perception/autoware_bevfusion)
-- [Apollo instance segmentation](https://github.com/autowarefoundation/autoware.universe/tree/main/perception/autoware_lidar_apollo_instance_segmentation) + [shape estimation](https://github.com/autowarefoundation/autoware.universe/tree/main/perception/autoware_shape_estimation)
+- [Apollo 实例分割](https://github.com/autowarefoundation/autoware.universe/tree/main/perception/autoware_lidar_apollo_instance_segmentation) + [形状估计](https://github.com/autowarefoundation/autoware.universe/tree/main/perception/autoware_shape_estimation)
 
-The detection range for `Base 3D Detection` typically falls between 90m and 120m, depending on the specific case.
-If you wish to use Camera-LiDAR fusion, models like BEVFusion-CL (the model of Camera-LiDAR fusion) can be integrated.
-However, since `Base 3D Detection` is a critical component of the new architecture, stable performance is essential.
-Therefore, we do not recommend using Camera-LiDAR fusion methods in environments where sensor data frequently drops.
+`Base 3D Detection` 的检测范围通常为 90m 到 120m，取决于具体情况。
+如果希望使用相机与 LiDAR 融合，可集成 BEVFusion-CL 等模型（相机与 LiDAR 融合模型）。
+但由于 `Base 3D Detection` 是新架构的关键组件，稳定的性能至关重要。
+因此，不建议在传感器数据频繁丢失的环境中使用相机与 LiDAR 融合方法。
 
-### Near-Object 3D Detection
+<a id="near-object-3d-detection"></a>
 
-As optional method for detection to enhance detection of nearby objects, especially pedestrians and cyclists, we have introduced **Near-Object 3D Detection**.
-This can serve as a supplementary detection method alongside `Base 3D Detection`.
+### 近距离目标 3D 检测
 
-We primarily use ML-based methods like CenterPoint for near-object detection, which excels at detecting small objects.
-By applying higher-resolution voxel grids in the ML model, we improve detection accuracy for small objects.
-The detection range typically falls between 30m and 50m.
+为增强近距离目标（特别是行人和骑行者）的检测，我们引入了可选的**近距离目标 3D 检测**。
+它可作为 `Base 3D Detection` 的补充检测方法。
 
-### (TBD) Camera-Only 3D Detection
+近距离目标检测主要使用 CenterPoint 等擅长检测小目标的机器学习方法。
+通过在机器学习模型中应用更高分辨率的体素网格，提高小目标检测精度。
+检测范围通常为 30m 到 50m。
 
-As optional method for detection to improve detection of objects that LiDAR-based methods struggle with, we have introduced **Camera-Only 3D Detection**.
-`Camera-Only 3D detection` aims to solve the cases that are difficult to detect with LiDAR-based methods.
-For example, `Camera-Only 3D detection` will deal with detection of objects with tree occlusion and long-distance recognition.
+<a id="tbd-camera-only-3d-detection"></a>
 
-Note that we will apply a high-confidence threshold to suppress the impact of false positives in `Camera-Only 3D Detection`.
+### （待定）纯相机 3D 检测
 
-### Radar-Only Faraway Object 3D Detection
+为改善 LiDAR 方法难以检测的目标的检测效果，我们引入了可选的**纯相机 3D 检测**。
+`Camera-Only 3D detection` 旨在处理 LiDAR 方法难以检测的情况。
+例如，`Camera-Only 3D detection` 将处理树木遮挡目标的检测和远距离识别。
 
-For enhanced detection of distant objects, we use **Radar-Only 3D Detection**.
-For more details, see [the document on faraway radar object detection](reference-implementations/radar-based-3d-detector/faraway-object-detection.md).
+注意，我们将对 `Camera-Only 3D Detection` 应用较高的置信度阈值，以抑制误检影响。
 
-### (TBD) 3D Semantic Segmentation
+<a id="radar-only-faraway-object-3d-detection"></a>
 
-To improve detection of objects that are difficult to detect using traditional 3D detection methods, especially vegetation and traffic cone, we will implement **3D Semantic Segmentation**.
-`3D Semantic Segmentation` provides non-ground point clouds and labeled pointcloud for some objects and vegetation.
+### 纯雷达远距离目标 3D 检测
 
-Available methods include:
+为增强远距离目标检测，使用**纯雷达 3D 检测**。
+详情请参阅[雷达远距离目标检测文档](reference-implementations/radar-based-3d-detector/faraway-object-detection.md)。
 
-- FRNet (TBD)
+<a id="tbd-3d-semantic-segmentation"></a>
 
-To integrate with the Autoware interface, we use a euclidean clustering method for processing 3D segmentation outputs.
+### （待定）3D 语义分割
 
-### Cluster-Based 3D Detection
+为改善传统 3D 检测方法难以检测的目标，尤其是植被和交通锥的检测效果，我们将实现 **3D 语义分割**。
+`3D Semantic Segmentation` 提供非地面点云，以及部分目标和植被的带标签点云。
 
-To enhance detection of objects that LiDAR-based methods may struggle with, we offer **Cluster-Based 3D Detection**.
-`Cluster-Based 3D Detection` consists of many nodes, and the pipeline shows as following.
+可用方法包括：
+
+- FRNet（待定）
+
+为与 Autoware 接口集成，使用欧氏聚类方法处理 3D 分割输出。
+
+<a id="cluster-based-3d-detection"></a>
+
+### 基于聚类的 3D 检测
+
+为增强 LiDAR 方法可能难以检测的目标的检测效果，我们提供**基于聚类的 3D 检测**。
+`Cluster-Based 3D Detection` 包含多个节点，其处理流程如下。
 
 ![](image/clustering_based_detection.drawio.svg)
 
-`Cluster-Based 3D Detection` is based on euclidean clustering including roi based pointcloud fusion.
-Its process combines non-ground LiDAR point clouds with the results of 2D detection or semantic segmentation.
-This can be used as supplementary detection alongside `Base 3D Detection`.
+`Cluster-Based 3D Detection` 基于欧氏聚类，包括基于 roi 的点云融合。
+其处理过程结合非地面 LiDAR 点云与 2D 检测或语义分割结果。
+它可作为 `Base 3D Detection` 的补充检测。
 
-Note that as the data from point clouds and images increase, the processing time also increases.
-Therefore, we recommend avoiding this pipeline in situations where processing time is critical or use for only narrow detection range.
+注意，点云和图像数据量增加时，处理时间也会增加。
+因此，在对处理时间要求严格的情况下，建议避免使用此流程，或仅将其用于较小的检测范围。
 
-### Multi-Object Tracking v2
+<a id="multi-object-tracking-v2"></a>
 
-**Multi-Object Tracking v2** is based on existing [multi_object_tracker](https://github.com/autowarefoundation/autoware.universe/tree/main/perception/autoware_multi_object_tracker) and illustrated below:
+### 多目标跟踪 v2
+
+**多目标跟踪 v2** 基于现有的 [multi_object_tracker](https://github.com/autowarefoundation/autoware.universe/tree/main/perception/autoware_multi_object_tracker)，如下图所示：
 
 ![](image/multi_object_tracking.drawio.svg)
 
-The key features are as follows.
+主要功能如下。
 
-- **Priority Object Merger**
+- **优先级目标合并器**
 
-`Priority Object Merger` introduces new features compared to the existing [object_merger](https://github.com/autowarefoundation/autoware.universe/tree/main/perception/autoware_object_merger).
-`Priority Object Merger` can handle multiple inputs, reducing the need for multiple `object_merger` nodes.
-It leads to be easy to debug.
+相比现有的 [object_merger](https://github.com/autowarefoundation/autoware.universe/tree/main/perception/autoware_object_merger)，`Priority Object Merger` 引入了新功能。
+`Priority Object Merger` 可处理多个输入，减少对多个 `object_merger` 节点的需求。
+这使调试更加容易。
 
-The existing `object_merger` uses approximate synchronization via message filters, introducing time delays.
-As the amount of input data increases, which makes the delay, impacting the availability of autonomous driving.
-Additionally, if some detections fail, the merger fails to combine the results, reducing availability.
+现有 `object_merger` 通过消息过滤器进行近似同步，会引入时间延迟。
+输入数据量增加时，延迟也会增加，影响自动驾驶可用性。
+此外，如果某些检测失败，合并器无法合并结果，导致可用性下降。
 
 ![](image/priority_merger_1.drawio.svg)
 
-The `Priority Object Merger` eliminates the message filter and uses a priority-based approach for the main detection.
-When subscribing to the output of the main detection, it gathers all outputs from the detection pipeline.
-It gathers outputs from all detections, ensuring that even if a secondary detection fails, results from other detections can still be merged, improving overall reliability and availability.
+`Priority Object Merger` 移除了消息过滤器，采用基于优先级的主检测方法。
+订阅主检测输出时，它会收集检测流程的全部输出。
+它收集所有检测输出，确保即使次要检测失败，仍能合并其他检测结果，从而提升整体可靠性和可用性。
 
 ![](image/priority_merger_2.drawio.svg)
 
-- **Stationary detection**
+- **静止目标检测**
 
-As input data volume increases, processing time also increases.
-To optimize performance, we reduce computational cost by incorporating stationary object detection.
+输入数据量增加时，处理时间也会增加。
+为优化性能，我们通过引入静止目标检测降低计算成本。

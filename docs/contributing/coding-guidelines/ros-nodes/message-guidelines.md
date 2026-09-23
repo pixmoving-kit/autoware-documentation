@@ -1,16 +1,20 @@
-# Message guidelines
+<a id="message-guidelines"></a>
 
-## Format
+# 消息指南
 
-All messages should follow [ROS message description specification](https://docs.ros.org/en/humble/Concepts/About-ROS-Interfaces.html#background).
+<a id="format"></a>
 
-The accepted formats are:
+## 格式
+
+所有消息都应遵循 [ROS 消息描述规范](https://docs.ros.org/en/humble/Concepts/About-ROS-Interfaces.html#background)。
+
+支持以下格式：
 
 - `.msg`
 - `.srv`
 - `.action`
 
-The prototype files are expected to comply with following style.
+定义文件应遵循以下风格。
 
 ```text
 #
@@ -31,13 +35,13 @@ uint16 CONSTANT_ITEM2 = 0
 
 ```
 
-On top of the message, briefly explain what the message contains and/or what it is used for. For an example, see [sensor_msgs/msg/Imu.msg](https://github.com/ros2/common_interfaces/blob/master/sensor_msgs/msg/Imu.msg#L1-L13).
+在消息顶部，简要说明消息包含什么内容和/或用于什么用途。示例请参阅 [sensor_msgs/msg/Imu.msg](https://github.com/ros2/common_interfaces/blob/master/sensor_msgs/msg/Imu.msg#L1-L13)。
 
 !!! success ""
 
-    Even though it is not strictly checked, try not to pass 100 characters in a line.
+    虽然未严格检查，但请尽量保持每行不超过 100 个字符。
 
-_Example:_
+_示例：_
 
 ```text
 # Number of times the vehicle performed an emergency brake (required)
@@ -54,81 +58,89 @@ float limit_kmph
 
 ```
 
-If a specific field is not always required, it is expected be noted as `optional`.
+如果某个字段并非始终必需，应将其注明为 `optional`。
 
-- Basically, all field should be `required` and contain valid value.
-- An `optional` field may not contain valid value, so the subscriber/client must check if it is valid or not. For such field, default value should be provided.
+- 原则上，所有字段都应为 `required`，并包含有效值。
+- `optional` 字段可能不包含有效值，因此订阅者或客户端必须检查其有效性。此类字段应提供默认值。
 
-The user can learn about the message information by calling
+用户可以通过执行以下命令了解消息信息：
 
 ```bash
 ros2 interface show <message> --all-comments
 ```
 
-Each README.md in the repository should only provide extra illustrative descriptions and external resources. In `.msg` files, refer to the URL of README along with the corresponding anchor.
+仓库中的各 README.md 应仅提供补充说明和外部资源。在 `.msg` 文件中，应引用 README 的网址及对应锚点。
 
-_Example:_
+_示例：_
 
 ```text
 # please refer to https://github.com/autowarefoundation/autoware_msgs/blob/main/README.md#format for the illustrative description of this field
 ```
 
-## Naming
+<a id="naming"></a>
+
+## 命名
 
 !!! warning ""
 
-    Under Construction
+    编写中
 
-Use `Array` as a suffix when creating a plural type of a message. This suffix is commonly used in [common_interfaces](https://github.com/ros2/common_interfaces).
+创建某种消息的集合类型时，请使用 `Array` 后缀。[common_interfaces](https://github.com/ros2/common_interfaces) 中广泛使用此后缀。
 
-## Default units
+<a id="default-units"></a>
 
-All the fields by default have the following units depending on their types:
+## 默认单位
 
-| type           | default unit  |
+所有字段根据类型默认使用以下单位：
+
+| 类型           | 默认单位      |
 | -------------- | ------------- |
-| distance       | meter (m)     |
-| angle          | radians (rad) |
-| time           | second (s)    |
-| speed          | m/s           |
-| velocity       | m/s           |
-| acceleration   | m/s²          |
-| angular vel.   | rad/s         |
-| angular accel. | rad/s²        |
+| 距离           | 米（m）       |
+| 角度           | 弧度（rad）   |
+| 时间           | 秒（s）       |
+| 速率           | m/s           |
+| 速度           | m/s           |
+| 加速度         | m/s²          |
+| 角速度         | rad/s         |
+| 角加速度       | rad/s²        |
 
 !!! warning ""
 
-    If a field in a message has any of these default units, don't add any suffix or prefix denoting the type.
+    如果消息中的某个字段使用上述默认单位，请不要添加表示其类型的后缀或前缀。
 
-## Non-default units
+<a id="non-default-units"></a>
 
-For non-default units, use following suffixes:
+## 非默认单位
 
-| type     | non-default unit | suffix  |
+对于非默认单位，请使用以下后缀：
+
+| 类型     | 非默认单位       | 后缀    |
 | -------- | ---------------- | ------- |
-| distance | nanometer        | `_nm`   |
-| distance | micrometer       | `_um`   |
-| distance | millimeter       | `_mm`   |
-| distance | kilometer        | `_km`   |
-| angle    | degree (deg)     | `_deg`  |
-| time     | nanosecond       | `_ns`   |
-| time     | microsecond      | `_us`   |
-| time     | millisecond      | `_ms`   |
-| time     | minute           | `_min`  |
-| time     | hour (h)         | `_hour` |
-| velocity | km/h             | `_kmph` |
+| 距离     | 纳米             | `_nm`   |
+| 距离     | 微米             | `_um`   |
+| 距离     | 毫米             | `_mm`   |
+| 距离     | 千米             | `_km`   |
+| 角度     | 度（deg）        | `_deg`  |
+| 时间     | 纳秒             | `_ns`   |
+| 时间     | 微秒             | `_us`   |
+| 时间     | 毫秒             | `_ms`   |
+| 时间     | 分钟             | `_min`  |
+| 时间     | 小时（h）        | `_hour` |
+| 速度     | km/h             | `_kmph` |
 
 !!! tip ""
 
-    If a unit that you'd like to use doesn't exist here, [create an issue/PR](https://github.com/autowarefoundation/autoware-documentation/issues) to add it to this list.
+    如果此处没有列出你想使用的单位，请[创建 issue 或 PR](https://github.com/autowarefoundation/autoware-documentation/issues)，将其添加到列表中。
 
-## Message field types
+<a id="message-field-types"></a>
 
-For list of types supported by the ROS interfaces [see here](https://docs.ros.org/en/humble/Concepts/About-ROS-Interfaces.html#field-types).
+## 消息字段类型
 
-Also copied here for convenience:
+ROS 接口支持的类型列表[请见此处](https://docs.ros.org/en/humble/Concepts/About-ROS-Interfaces.html#field-types)。
 
-| Message Field Type | C++ equivalent   |
+为方便查阅，也复制如下：
+
+| 消息字段类型       | 对应的 C++ 类型  |
 | ------------------ | ---------------- |
 | `bool`             | `bool`           |
 | `byte`             | `uint8_t`        |
@@ -146,31 +158,35 @@ Also copied here for convenience:
 | `string`           | `std::string`    |
 | `wstring`          | `std::u16string` |
 
-### Arrays
+<a id="arrays"></a>
 
-For arrays, use `unbounded dynamic array` type.
+### 数组
 
-Example:
+对于数组，请使用 `unbounded dynamic array` 类型。
+
+示例：
 
 ```text
 int32[] unbounded_integer_array
 ```
 
-## Enumerations
+<a id="enumerations"></a>
 
-ROS 2 interfaces don't support enumerations directly.
+## 枚举
 
-It is possible to define integers constants and assign them to a non-constant integer parameter.
+ROS 2 接口不直接支持枚举。
 
-!!! success ""
-
-    Constants are written in `CONSTANT_CASE`.
+可以定义整数常量，并将其赋给非常量整数参数。
 
 !!! success ""
 
-    Assign a different value to each element of a constant.
+    常量使用 `CONSTANT_CASE` 命名。
 
-_Example:_
+!!! success ""
+
+    为每个常量元素赋予不同的值。
+
+_示例：_
 
 ```text
 # Classification of error states in Autoware Localization
@@ -190,16 +206,18 @@ uint16 type
 
 !!! tip ""
 
-    The constants are expected to be mutually exclusive and collectively exhaustive in the domain. It leads to clear and less confusing modelling.
+    这些常量应在所属领域内互斥且完整覆盖所有情况，从而使建模清晰、减少歧义。
 
-## Example usages
+<a id="example-usages"></a>
 
-- Don't use unit suffixes for default types:
-  - Bad: `float32 path_length_m`
-  - Good: `float32 path_length`
-- Don't prefix the units:
-  - Bad: `float32 kmph_velocity_vehicle`
-  - Good: `float32 velocity_vehicle_kmph`
-- Use recommended suffixes [if they are available in the table](#non-default-units):
-  - Bad: `float32 velocity_vehicle_km_h`
-  - Good: `float32 velocity_vehicle_kmph`
+## 使用示例
+
+- 默认类型不使用单位后缀：
+  - 错误：`float32 path_length_m`
+  - 正确：`float32 path_length`
+- 不要将单位放在前缀中：
+  - 错误：`float32 kmph_velocity_vehicle`
+  - 正确：`float32 velocity_vehicle_kmph`
+- [如果表中提供了推荐后缀](#non-default-units)，请使用它：
+  - 错误：`float32 velocity_vehicle_km_h`
+  - 正确：`float32 velocity_vehicle_kmph`

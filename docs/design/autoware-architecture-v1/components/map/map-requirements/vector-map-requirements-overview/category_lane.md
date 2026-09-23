@@ -1,454 +1,626 @@
-## Category:Lane
+<a id="categorylane"></a>
+
+## 类别：车道
 
 ---
 
-### vm-01-01 Lanelet basics
+<a id="vm-01-01-lanelet-basics"></a>
 
-#### Detail of requirements <!-- omit in toc -->
+### vm-01-01 Lanelet 基础
 
-The road's Lanelets must comply with the following requirements.
+<a id="detail-of-requirements"></a>
+
+#### 需求详情 <!-- omit in toc -->
+
+道路的 Lanelet 必须满足以下要求。
 
 - _subtype:road_
-- location:urban, for public roads
-- Align the Lanelet's direction with the direction of vehicle move. (You can visualize lanelet direction as arrows with [Vector Map Builder](https://docs.web.auto/en/user-manuals/vector-map-builder/screen-layout#project-tab))
-- Set lane change is allowed or not, according to [vm-01-02](#vm-01-02-allowance-for-lane-changes).
-- Set the Linestring IDs for Lanelet's left_bound and right_bound respectively. See [vm-01-03](#vm-01-03-linestring-sharing).
-- tag : _one_way=yes_. Autoware currently does not support no.
-- Connect the Lanelet to another Lanelet, except if it's at the start or end.
-- Position the points (x, y, z) within the Lanelet to align with the PCD Map, ensuring accuracy not only laterally but also in elevation. The height of a Point should be based on the ellipsoidal height (WGS84). Refer to [vm-07-04](category_others.md#vm-07-04-ellipsoidal-height).
+- 公共道路设置 location:urban
+- 使 Lanelet 方向与车辆行驶方向一致。（可在 [Vector Map Builder](https://docs.web.auto/en/user-manuals/vector-map-builder/screen-layout#project-tab) 中以箭头显示 lanelet 方向。）
+- 根据 [vm-01-02](#vm-01-02-allowance-for-lane-changes) 设置是否允许变道。
+- 分别为 Lanelet 的 left_bound 和 right_bound 设置 Linestring ID。参阅 [vm-01-03](#vm-01-03-linestring-sharing)。
+- 标签：_one_way=yes_。Autoware 当前不支持 no。
+- 除起点或终点外，将 Lanelet 连接到其他 Lanelet。
+- 将 Lanelet 中的点（x、y、z）与 PCD 地图对齐，确保横向和高程均准确。Point 的高度应基于椭球高（WGS84）。参阅 [vm-07-04](category_others.md#vm-07-04-ellipsoidal-height)。
 
-#### Preferred vector map <!-- omit in toc -->
+<a id="preferred-vector-map"></a>
+
+#### 推荐的矢量地图 <!-- omit in toc -->
 
 ![lanelet](../assets/vm-01-01.svg)
 
 ---
 
-### vm-01-02 Allowance for lane changes
+<a id="vm-01-02-allowance-for-lane-changes"></a>
 
-#### Detail of requirements <!-- omit in toc -->
+### vm-01-02 变道许可
 
-Add a tag to the Lanelet's Linestring indicating lane change permission or prohibition.
+<a id="detail-of-requirements_1"></a>
 
-- Permit _lane_change=yes_
-- Prohibit _lane_change=no_
+#### 需求详情 <!-- omit in toc -->
 
-Set the Linestring _subtype_ according to the type of line.
+为 Lanelet 的 Linestring 添加标签，指示允许或禁止变道。
+
+- 允许：_lane_change=yes_
+- 禁止：_lane_change=no_
+
+根据标线类型设置 Linestring 的 _subtype_。
 
 - _solid_
 - _dashed_
 
-##### Referenced from Japan's Road Traffic Law <!-- omit in toc -->
+<a id="referenced-from-japans-road-traffic-law"></a>
 
-- White dashed lines : indicate that lane changes and overtaking are permitted.
-- White solid lines : indicate that changing lanes and overtaking are allowed.
-- Yellow solid lines : mean no lane changes are allowed.
+##### 参考日本《道路交通法》 <!-- omit in toc -->
+
+- 白色虚线：表示允许变道和超车。
+- 白色实线：表示允许变道和超车。
+- 黄色实线：表示禁止变道。
 
 ![lines](../assets/vm-01-02.svg)
 
-#### Related Autoware module
+<a id="related-autoware-module"></a>
 
-- [Lane Change design - Autoware Universe Documentation](https://autowarefoundation.github.io/autoware_universe/main/planning/behavior_path_planner/autoware_behavior_path_lane_change_module/)
-- [Static Avoidance - Autoware Universe Documentation](https://autowarefoundation.github.io/autoware_universe/main/planning/behavior_path_planner/autoware_behavior_path_static_obstacle_avoidance_module/)
-- [Dynamic Avoidance - Autoware Universe Documentation](https://autowarefoundation.github.io/autoware_universe/main/planning/behavior_path_planner/autoware_behavior_path_dynamic_obstacle_avoidance_module/)
-- [Out of lane design - Autoware Universe Documentation](https://autowarefoundation.github.io/autoware_universe/main/planning/motion_velocity_planner/autoware_motion_velocity_out_of_lane_module/)
+#### 相关 Autoware 模块
+
+- [变道设计 - Autoware Universe 文档](https://autowarefoundation.github.io/autoware_universe/main/planning/behavior_path_planner/autoware_behavior_path_lane_change_module/)
+- [静态避障 - Autoware Universe 文档](https://autowarefoundation.github.io/autoware_universe/main/planning/behavior_path_planner/autoware_behavior_path_static_obstacle_avoidance_module/)
+- [动态避障 - Autoware Universe 文档](https://autowarefoundation.github.io/autoware_universe/main/planning/behavior_path_planner/autoware_behavior_path_dynamic_obstacle_avoidance_module/)
+- [驶出车道设计 - Autoware Universe 文档](https://autowarefoundation.github.io/autoware_universe/main/planning/motion_velocity_planner/autoware_motion_velocity_out_of_lane_module/)
 
 ---
 
-### vm-01-03 Linestring sharing
+<a id="vm-01-03-linestring-sharing"></a>
 
-#### Detail of requirements <!-- omit in toc -->
+### vm-01-03 共享 Linestring
 
-Share the Linestring when creating Lanelets that are physically adjacent to others.
+<a id="detail-of-requirements_2"></a>
 
-##### Behavior of Autoware <!-- omit in toc -->
+#### 需求详情 <!-- omit in toc -->
 
-If the Lanelet adjacent to the one the vehicle is driving on shares a Linestring, the following behaviors become possible:
+创建物理上相邻的 Lanelet 时，应共享 Linestring。
 
-- The vehicle moves out of their lanes to avoid obstacles.
-- The vehicle turns a curve while slightly extending out of the lane.
-- Lane changes
+<a id="behavior-of-autoware"></a>
+
+##### Autoware 的行为 <!-- omit in toc -->
+
+如果自车所在 Lanelet 与相邻 Lanelet 共享 Linestring，则可实现以下行为：
+
+- 车辆驶出所在车道避让障碍物。
+- 车辆转弯时略微超出车道边界。
+- 变道
 
 ![lines](../assets/vm-01-03_1.svg)
 
-#### Preferred vector map <!-- omit in toc -->
+<a id="preferred-vector-map_1"></a>
+
+#### 推荐的矢量地图 <!-- omit in toc -->
 
 ![lines](../assets/vm-01-03_2.svg)
 
-#### Incorrect vector map <!-- omit in toc -->
+<a id="incorrect-vector-map"></a>
+
+#### 错误的矢量地图 <!-- omit in toc -->
 
 ![lines](../assets/vm-01-03_3.svg)
 
-#### Related Autoware module
+<a id="related-autoware-module_1"></a>
 
-- [Lane Change design - Autoware Universe Documentation](https://autowarefoundation.github.io/autoware_universe/main/planning/behavior_path_planner/autoware_behavior_path_lane_change_module/)
-- [Static Avoidance - Autoware Universe Documentation](https://autowarefoundation.github.io/autoware_universe/main/planning/behavior_path_planner/autoware_behavior_path_static_obstacle_avoidance_module/)
-- [Dynamic Avoidance - Autoware Universe Documentation](https://autowarefoundation.github.io/autoware_universe/main/planning/behavior_path_planner/autoware_behavior_path_dynamic_obstacle_avoidance_module/)
-- [Out of lane design - Autoware Universe Documentation](https://autowarefoundation.github.io/autoware_universe/main/planning/motion_velocity_planner/autoware_motion_velocity_out_of_lane_module/)
+#### 相关 Autoware 模块
+
+- [变道设计 - Autoware Universe 文档](https://autowarefoundation.github.io/autoware_universe/main/planning/behavior_path_planner/autoware_behavior_path_lane_change_module/)
+- [静态避障 - Autoware Universe 文档](https://autowarefoundation.github.io/autoware_universe/main/planning/behavior_path_planner/autoware_behavior_path_static_obstacle_avoidance_module/)
+- [动态避障 - Autoware Universe 文档](https://autowarefoundation.github.io/autoware_universe/main/planning/behavior_path_planner/autoware_behavior_path_dynamic_obstacle_avoidance_module/)
+- [驶出车道设计 - Autoware Universe 文档](https://autowarefoundation.github.io/autoware_universe/main/planning/motion_velocity_planner/autoware_motion_velocity_out_of_lane_module/)
 
 ---
 
-### vm-01-04 Sharing of the centerline of lanes for opposing traffic
+<a id="vm-01-04-sharing-of-the-centerline-of-lanes-for-opposing-traffic"></a>
 
-#### Detail of requirements <!-- omit in toc -->
+### vm-01-04 对向车道共享道路中心线
 
-When the vehicle's lanelet and the opposing lanelet physically touch, the road center line's Linestring ID must be shared between these two Lanelets. For that purpose, the lengths of those two Lanelets must match.
+<a id="detail-of-requirements_3"></a>
 
-##### Behavior of Autoware：<!-- omit in toc -->
+#### 需求详情 <!-- omit in toc -->
 
-Obstacle avoidance across the opposing lane is possible.
+当自车 lanelet 与对向 lanelet 在物理上相接时，这两个 Lanelet 必须共享道路中心线的 Linestring ID。为此，两者长度必须一致。
+
+<a id="behavior-of-autoware_1"></a>
+
+##### Autoware 的行为：<!-- omit in toc -->
+
+可跨入对向车道避让障碍物。
 
 ![svg](../assets/vm-01-04_1.svg)
 
-#### Preferred vector map <!-- omit in toc -->
+<a id="preferred-vector-map_2"></a>
+
+#### 推荐的矢量地图 <!-- omit in toc -->
 
 ![svg](../assets/vm-01-04_2.svg)
 
-#### Incorrect vector map <!-- omit in toc -->
+<a id="incorrect-vector-map_1"></a>
+
+#### 错误的矢量地图 <!-- omit in toc -->
 
 ![svg](../assets/vm-01-04_3.svg)
 
 ---
 
-### vm-01-05 Lane geometry
+<a id="vm-01-05-lane-geometry"></a>
 
-#### Detail of requirements <!-- omit in toc -->
+### vm-01-05 车道几何形状
 
-The geometry of the road lanelet needs to comply with the following:
+<a id="detail-of-requirements_4"></a>
 
-- The left and right Linestrings must follow the road's boundary lines.
-- The lines of a Lanelet, which join with lanelets ahead and behind it, must form straight lines.
-- Ensure the outline is smooth and not jagged or bumpy, except for L-shaped cranks.
+#### 需求详情 <!-- omit in toc -->
+
+道路 lanelet 的几何形状应满足以下要求：
+
+- 左右 Linestring 必须沿道路边界线绘制。
+- Lanelet 与前后 lanelet 连接的边必须是直线。
+- 除 L 形急转段外，轮廓应平滑，不应出现锯齿或凹凸。
 
 ![svg](../assets/vm-01-05_1.svg)
 
-#### Preferred vector map <!-- omit in toc -->
+<a id="preferred-vector-map_3"></a>
+
+#### 推荐的矢量地图 <!-- omit in toc -->
 
 ![svg](../assets/vm-01-05_2.svg)
 
-#### Incorrect vector map <!-- omit in toc -->
+<a id="incorrect-vector-map_2"></a>
+
+#### 错误的矢量地图 <!-- omit in toc -->
 
 ![svg](../assets/vm-01-05_3.svg)
 
 ---
 
-### vm-01-06 Line position (1)
+<a id="vm-01-06-line-position-1"></a>
 
-#### Detail of requirements <!-- omit in toc -->
+### vm-01-06 标线位置（1）
 
-Ensure the road's center line Linestring is located in the exact middle of the road markings.
+<a id="detail-of-requirements_5"></a>
+
+#### 需求详情 <!-- omit in toc -->
+
+确保道路中心线 Linestring 位于道路标线的正中间。
 
 ![svg](../assets/vm-01-06_1.svg)
 
-#### Preferred vector map <!-- omit in toc -->
+<a id="preferred-vector-map_4"></a>
+
+#### 推荐的矢量地图 <!-- omit in toc -->
 
 ![svg](../assets/vm-01-06_2.svg)
 
-#### Incorrect vector map <!-- omit in toc -->
+<a id="incorrect-vector-map_3"></a>
+
+#### 错误的矢量地图 <!-- omit in toc -->
 
 ![svg](../assets/vm-01-06_3.svg)
 
 ---
 
-### vm-01-07 Line position (2)
+<a id="vm-01-07-line-position-2"></a>
 
-#### Detail of requirements <!-- omit in toc -->
+### vm-01-07 标线位置（2）
 
-Place the Linestring at the center of the markings when lines exist outside the road.
+<a id="detail-of-requirements_6"></a>
+
+#### 需求详情 <!-- omit in toc -->
+
+当道路外侧存在标线时，将 Linestring 放在标线中心。
 
 ![svg](../assets/vm-01-07_1.svg)
 
-#### Preferred vector map <!-- omit in toc -->
+<a id="preferred-vector-map_5"></a>
+
+#### 推荐的矢量地图 <!-- omit in toc -->
 
 ![svg](../assets/vm-01-07_2.svg)
 
-#### Incorrect vector map <!-- omit in toc -->
+<a id="incorrect-vector-map_4"></a>
 
-None in particular.
+#### 错误的矢量地图 <!-- omit in toc -->
+
+无特别说明。
 
 ---
 
-### vm-01-08 Line position (3)
+<a id="vm-01-08-line-position-3"></a>
 
-#### Detail of requirements <!-- omit in toc -->
+### vm-01-08 标线位置（3）
 
-If there are no lines on the outer side within the road, position the Linestring 0.5 m from the road's edge.
+<a id="detail-of-requirements_7"></a>
+
+#### 需求详情 <!-- omit in toc -->
+
+如果道路外侧没有标线，将 Linestring 放在距离道路边缘 0.5 m 的位置。
 
 ![svg](../assets/vm-01-08_1.svg)
 
-##### Caution
+<a id="caution"></a>
 
-The width depends on the laws of your country.
+##### 注意
 
-#### Preferred vector map <!-- omit in toc -->
+宽度取决于所在国家的法律。
+
+<a id="preferred-vector-map_6"></a>
+
+#### 推荐的矢量地图 <!-- omit in toc -->
 
 ![svg](../assets/vm-01-08_2.svg)
 
-#### Incorrect vector map <!-- omit in toc -->
+<a id="incorrect-vector-map_5"></a>
 
-None in particular.
+#### 错误的矢量地图 <!-- omit in toc -->
+
+无特别说明。
 
 ---
 
-### vm-01-09 Speed limits
+<a id="vm-01-09-speed-limits"></a>
 
-#### Detail of requirements <!-- omit in toc -->
+### vm-01-09 限速
 
-In the following cases, add a speed limit (_tag:speed_limit_) to the Lanelet (_subtype:road_) the vehicle is driving on, in km/h.
+<a id="detail-of-requirements_8"></a>
 
-- A speed limit road sign exists.
-- You can add a speed limit, for example, on narrow roads.
+#### 需求详情 <!-- omit in toc -->
 
-Note that the following is achieved through Autoware's settings and behavior.
+在以下情况下，为自车行驶的 Lanelet（_subtype:road_）添加限速（_tag:speed_limit_），单位为 km/h。
 
-- Vehicle's maximum velocity
-- Speed adjustment at places requiring deceleration, like curves and downhill areas.
+- 存在限速交通标志。
+- 也可在狭窄道路等处添加限速。
+
+请注意，下列功能通过 Autoware 设置和行为实现。
+
+- 车辆最大速度
+- 在弯道、下坡等需要减速的地方调整速度。
 
 ![svg](../assets/vm-01-09_1.svg)
 
-#### Preferred vector map <!-- omit in toc -->
+<a id="preferred-vector-map_7"></a>
+
+#### 推荐的矢量地图 <!-- omit in toc -->
 
 ![svg](../assets/vm-01-09_2.svg)
 
-#### Incorrect vector map <!-- omit in toc -->
+<a id="incorrect-vector-map_6"></a>
 
-None in particular.
+#### 错误的矢量地图 <!-- omit in toc -->
+
+无特别说明。
 
 ---
 
-### vm-01-10 Centerline
+<a id="vm-01-10-centerline"></a>
 
-#### Detail of requirements <!-- omit in toc -->
+### vm-01-10 中心线
 
-Autoware is designed to move through the midpoint calculated from a Lanelet's left and right Linestrings.
+<a id="detail-of-requirements_9"></a>
 
-Create a centerline for the Lanelet when there is a need to shift the driving position to the left or right due to certain circumstances, ensuring the centerline has a smooth shape for drivability.
+#### 需求详情 <!-- omit in toc -->
+
+Autoware 设计为沿 Lanelet 左右 Linestring 计算得到的中点行驶。
+
+因某些情况需要将行驶位置向左或向右偏移时，为 Lanelet 创建中心线，并确保形状平滑以便行驶。
 
 ![svg](../assets/vm-01-10_1.svg)
 
-##### Caution
+<a id="caution_1"></a>
 
-'Centerline' is a distinct concept from the central lane division line (centerline).
+##### 注意
 
-#### Preferred vector map <!-- omit in toc -->
+此处的“中心线”与分隔对向车道的道路中央分隔线（中心线）是不同概念。
+
+<a id="preferred-vector-map_8"></a>
+
+#### 推荐的矢量地图 <!-- omit in toc -->
 
 ![svg](../assets/vm-01-10_2.svg)
 
-#### Incorrect vector map <!-- omit in toc -->
+<a id="incorrect-vector-map_7"></a>
+
+#### 错误的矢量地图 <!-- omit in toc -->
 
 ![svg](../assets/vm-01-10_3.svg)
 
 ---
 
-### vm-01-11 Centerline connection (1)
+<a id="vm-01-11-centerline-connection-1"></a>
 
-#### Detail of requirements <!-- omit in toc -->
+### vm-01-11 中心线连接（1）
 
-When center lines have been added to several Lanelets, they should be connected.
+<a id="detail-of-requirements_10"></a>
+
+#### 需求详情 <!-- omit in toc -->
+
+为多个 Lanelet 添加中心线后，应将这些中心线连接起来。
 
 ![svg](../assets/vm-01-11_1.svg)
 
-#### Preferred vector map <!-- omit in toc -->
+<a id="preferred-vector-map_9"></a>
+
+#### 推荐的矢量地图 <!-- omit in toc -->
 
 ![svg](../assets/vm-01-11_2.svg)
 
-#### Incorrect vector map <!-- omit in toc -->
+<a id="incorrect-vector-map_8"></a>
+
+#### 错误的矢量地图 <!-- omit in toc -->
 
 ![svg](../assets/vm-01-11_3.svg)
 
 ---
 
-### vm-01-12 Centerline connection (2)
+<a id="vm-01-12-centerline-connection-2"></a>
 
-#### Detail of requirements <!-- omit in toc -->
+### vm-01-12 中心线连接（2）
 
-If a Lanelet with an added centerline is connected to Lanelets without one, ensure the start and end points of the added centerline are positioned at the Lanelet's center. Ensure the centerline has a smooth shape for drivability.
+<a id="detail-of-requirements_11"></a>
+
+#### 需求详情 <!-- omit in toc -->
+
+如果添加了中心线的 Lanelet 连接到未添加中心线的 Lanelet，应将新增中心线的起点和终点放在 Lanelet 的中央。确保中心线形状平滑，以便行驶。
 
 ![svg](../assets/vm-01-12_1.svg)
 
-#### Preferred vector map <!-- omit in toc -->
+<a id="preferred-vector-map_10"></a>
+
+#### 推荐的矢量地图 <!-- omit in toc -->
 
 ![svg](../assets/vm-01-12_2.svg)
 
-#### Incorrect vector map <!-- omit in toc -->
+<a id="incorrect-vector-map_9"></a>
+
+#### 错误的矢量地图 <!-- omit in toc -->
 
 ![svg](../assets/vm-01-12_3.svg)
 
 ---
 
-### vm-01-13 Roads with no centerline (1)
+<a id="vm-01-13-roads-with-no-centerline-1"></a>
 
-#### Detail of requirements <!-- omit in toc -->
+### vm-01-13 无道路中心线的道路（1）
 
-When a road lacks a central line but is wide enough for one's vehicle and oncoming vehicles to pass each other, Lanelets should be positioned next to each other at the center of the road.
+<a id="detail-of-requirements_12"></a>
+
+#### 需求详情 <!-- omit in toc -->
+
+当道路没有中央分隔线，但足够宽、可供自车与对向车辆会车时，应在道路中央相邻布置 Lanelet。
 
 ![svg](../assets/vm-01-13_1.svg)
 
-#### Preferred vector map <!-- omit in toc -->
+<a id="preferred-vector-map_11"></a>
+
+#### 推荐的矢量地图 <!-- omit in toc -->
 
 ![svg](../assets/vm-01-13_2.svg)
 
-#### Incorrect vector map <!-- omit in toc -->
+<a id="incorrect-vector-map_10"></a>
 
-None in particular.
+#### 错误的矢量地图 <!-- omit in toc -->
+
+无特别说明。
 
 ---
 
-### vm-01-14 Roads with no centerline (2)
+<a id="vm-01-14-roads-with-no-centerline-2"></a>
 
-#### Detail of requirements <!-- omit in toc -->
+### vm-01-14 无道路中心线的道路（2）
 
-Apply if all the next conditions are satisfied:
+<a id="detail-of-requirements_13"></a>
 
-- The road is a single lane without a central line and is too narrow for one's vehicle and an oncoming vehicle to pass each other.
-- It is an environment where no vehicles other than the autonomous vehicle enter this road.
-- The plan involves autonomous vehicles operating forth and back on this road.
+#### 需求详情 <!-- omit in toc -->
 
-Requirement for Vector Map creation:
+当满足以下全部条件时适用：
 
-- Stack two Lanelets together.
+- 道路为没有中央分隔线的单车道，宽度不足以供自车与对向车辆会车。
+- 环境中除自动驾驶车辆外，其他车辆不会进入该道路。
+- 计划由自动驾驶车辆在该道路上往返运行。
 
-##### Supplementary information
+矢量地图创建要求：
 
-- The application of this case depends on local operational policies and vehicle specifications, and should be determined in discussion with the map requestor.
-- The current Autoware does not possess the capability to pass oncoming vehicles in shared lanes.
+- 将两个 Lanelet 重叠放置。
+
+<a id="supplementary-information"></a>
+
+##### 补充信息
+
+- 是否采用此情况取决于当地运营策略和车辆规格，应与地图需求方讨论确定。
+- 当前 Autoware 不具备在共用车道上与对向车辆会车的能力。
 
 ![svg](../assets/vm-01-14_1.svg)
 
-#### Preferred vector map <!-- omit in toc -->
+<a id="preferred-vector-map_12"></a>
+
+#### 推荐的矢量地图 <!-- omit in toc -->
 
 ![svg](../assets/vm-01-14_2.svg)
 
-#### Incorrect vector map <!-- omit in toc -->
+<a id="incorrect-vector-map_11"></a>
+
+#### 错误的矢量地图 <!-- omit in toc -->
 
 ![svg](../assets/vm-01-14_3.svg)
 
 ---
 
-### vm-01-15 Road Shoulder
+<a id="vm-01-15-road-shoulder"></a>
 
-#### Detail of requirements <!-- omit in toc -->
+### vm-01-15 路肩
 
-If there is a shoulder next to the road, place the lanelet for the road shoulder (_subtype:road_shoulder_). However, it is not necessary to create this within intersections.
+<a id="detail-of-requirements_14"></a>
 
-The road shoulder's Lanelet and sidewalk's Lanelet share the Linestring (_subtype:road_border_).
+#### 需求详情 <!-- omit in toc -->
 
-There must not be a road shoulder Lanelet next to another road shoulder Lanelet.
+如果道路旁有路肩，创建路肩 lanelet（_subtype:road_shoulder_）。但交叉路口内无需创建。
 
-A road Lanelet must be next to the shoulder Lanelet.
+路肩 Lanelet 与人行道 Lanelet 共享 Linestring（_subtype:road_border_）。
 
-##### Behavior of Autoware <!-- omit in toc -->
+路肩 Lanelet 不得与另一个路肩 Lanelet 相邻。
 
-- Autoware can start from the shoulder and also reach the shoulder.
-- The margin for moving to the edge upon arrival is determined by the Autoware parameter _margin_from_boundary_. It does not need to be considered when creating the Vector Map.
-- Autoware does not park on the road shoulder lanelet if it overlaps with any of the following:
-  - A Polygon marked as _no_parking_area_
-  - A Polygon marked as _no_stopping_area_
-  - Areas near intersection and in the intersection
-  - Crosswalk
+路肩 Lanelet 必须与道路 Lanelet 相邻。
 
-_tag:lane_change=yes_ is not required on the Linestring marking the boundary of the shoulder.
+<a id="behavior-of-autoware_2"></a>
+
+##### Autoware 的行为 <!-- omit in toc -->
+
+- Autoware 可从路肩出发，也可到达路肩。
+- 到达时向边缘靠近的余量由 Autoware 参数 _margin_from_boundary_ 决定，创建矢量地图时无需考虑。
+- 如果路肩 lanelet 与以下任一对象重叠，Autoware 不会在其上停车：
+  - 标记为 _no_parking_area_ 的 Polygon
+  - 标记为 _no_stopping_area_ 的 Polygon
+  - 交叉路口附近及内部区域
+  - 人行横道
+
+标示路肩边界的 Linestring 无需设置 _tag:lane_change=yes_。
 
 ![svg](../assets/vm-01-15_1.svg)
 
-#### Preferred vector map <!-- omit in toc -->
+<a id="preferred-vector-map_13"></a>
+
+#### 推荐的矢量地图 <!-- omit in toc -->
 
 ![svg](../assets/vm-01-15_2.svg)
 
-#### Incorrect vector map <!-- omit in toc -->
+<a id="incorrect-vector-map_12"></a>
 
-Do not create a road shoulder Lanelet for roads without a shoulder.
+#### 错误的矢量地图 <!-- omit in toc -->
+
+不要为没有路肩的道路创建路肩 Lanelet。
 
 ![svg](../assets/vm-01-15_3.svg)
 
-#### Related Autoware module
+<a id="related-autoware-module_2"></a>
 
-- [Static Avoidance - Autoware Universe Documentation](https://autowarefoundation.github.io/autoware_universe/main/planning/behavior_path_planner/autoware_behavior_path_static_obstacle_avoidance_module/)
-- [Dynamic Avoidance - Autoware Universe Documentation](https://autowarefoundation.github.io/autoware_universe/main/planning/behavior_path_planner/autoware_behavior_path_dynamic_obstacle_avoidance_module/)
-- [Goal Planner design - Autoware Universe Documentation](https://autowarefoundation.github.io/autoware_universe/main/planning/behavior_path_planner/autoware_behavior_path_goal_planner_module/)
+#### 相关 Autoware 模块
+
+- [静态避障 - Autoware Universe 文档](https://autowarefoundation.github.io/autoware_universe/main/planning/behavior_path_planner/autoware_behavior_path_static_obstacle_avoidance_module/)
+- [动态避障 - Autoware Universe 文档](https://autowarefoundation.github.io/autoware_universe/main/planning/behavior_path_planner/autoware_behavior_path_dynamic_obstacle_avoidance_module/)
+- [目标规划器设计 - Autoware Universe 文档](https://autowarefoundation.github.io/autoware_universe/main/planning/behavior_path_planner/autoware_behavior_path_goal_planner_module/)
 
 ---
 
-### vm-01-16 Road shoulder Linestring sharing
+<a id="vm-01-16-road-shoulder-linestring-sharing"></a>
 
-#### Detail of requirements <!-- omit in toc -->
+### vm-01-16 路肩共享 Linestring
 
-The Lanelets for the road shoulder and the adjacent road should have a common Linestring.
+<a id="detail-of-requirements_15"></a>
+
+#### 需求详情 <!-- omit in toc -->
+
+路肩 Lanelet 与相邻道路 Lanelet 应共享 Linestring。
 
 ![svg](../assets/vm-01-15_1.svg)
 
-#### Preferred vector map <!-- omit in toc -->
+<a id="preferred-vector-map_14"></a>
+
+#### 推荐的矢量地图 <!-- omit in toc -->
 
 ![svg](../assets/vm-01-16_2.svg)
 
-#### Incorrect vector map <!-- omit in toc -->
+<a id="incorrect-vector-map_13"></a>
 
-None in particular.
+#### 错误的矢量地图 <!-- omit in toc -->
 
-#### Related Autoware module
+无特别说明。
 
-- [Static Avoidance - Autoware Universe Documentation](https://autowarefoundation.github.io/autoware_universe/main/planning/behavior_path_planner/autoware_behavior_path_static_obstacle_avoidance_module/)
-- [Dynamic Avoidance - Autoware Universe Documentation](https://autowarefoundation.github.io/autoware_universe/main/planning/behavior_path_planner/autoware_behavior_path_dynamic_obstacle_avoidance_module/)
-- [Goal Planner design - Autoware Universe Documentation](https://autowarefoundation.github.io/autoware_universe/main/planning/behavior_path_planner/autoware_behavior_path_goal_planner_module/)
+<a id="related-autoware-module_3"></a>
+
+#### 相关 Autoware 模块
+
+- [静态避障 - Autoware Universe 文档](https://autowarefoundation.github.io/autoware_universe/main/planning/behavior_path_planner/autoware_behavior_path_static_obstacle_avoidance_module/)
+- [动态避障 - Autoware Universe 文档](https://autowarefoundation.github.io/autoware_universe/main/planning/behavior_path_planner/autoware_behavior_path_dynamic_obstacle_avoidance_module/)
+- [目标规划器设计 - Autoware Universe 文档](https://autowarefoundation.github.io/autoware_universe/main/planning/behavior_path_planner/autoware_behavior_path_goal_planner_module/)
 
 ---
 
-### vm-01-17 Side strip
+<a id="vm-01-17-side-strip"></a>
 
-#### Detail of requirements <!-- omit in toc -->
+### vm-01-17 路侧带
 
-Place a Lanelet (_subtype:pedestrian_lane_) on the side strip. However, it is not necessary to create this within intersections.
+<a id="detail-of-requirements_16"></a>
 
-The side strip's Lanelet must have the Linestring (_subtype:road_border_) outside.
+#### 需求详情 <!-- omit in toc -->
+
+在路侧带创建 Lanelet（_subtype:pedestrian_lane_）。但交叉路口内无需创建。
+
+路侧带 Lanelet 的外侧必须具有 Linestring（_subtype:road_border_）。
 
 ![svg](../assets/vm-01-17_1.svg)
 
-#### Preferred vector map <!-- omit in toc -->
+<a id="preferred-vector-map_15"></a>
+
+#### 推荐的矢量地图 <!-- omit in toc -->
 
 ![svg](../assets/vm-01-17_2.svg)
 
-#### Incorrect vector map <!-- omit in toc -->
+<a id="incorrect-vector-map_14"></a>
 
-None in particular.
+#### 错误的矢量地图 <!-- omit in toc -->
+
+无特别说明。
 
 ---
 
-### vm-01-18 Side strip Linestring sharing
+<a id="vm-01-18-side-strip-linestring-sharing"></a>
 
-#### Detail of requirements <!-- omit in toc -->
+### vm-01-18 路侧带共享 Linestring
 
-The Lanelet for the side strip and the adjacent road Lanelet should have a common Linestring.
+<a id="detail-of-requirements_17"></a>
+
+#### 需求详情 <!-- omit in toc -->
+
+路侧带 Lanelet 与相邻道路 Lanelet 应共享 Linestring。
 
 ![svg](../assets/vm-01-17_1.svg)
 
-#### Preferred vector map <!-- omit in toc -->
+<a id="preferred-vector-map_16"></a>
+
+#### 推荐的矢量地图 <!-- omit in toc -->
 
 ![svg](../assets/vm-01-18_2.svg)
 
-#### Incorrect vector map <!-- omit in toc -->
+<a id="incorrect-vector-map_15"></a>
 
-None in particular.
+#### 错误的矢量地图 <!-- omit in toc -->
+
+无特别说明。
 
 ---
 
-### vm-01-19 sidewalk
+<a id="vm-01-19-sidewalk"></a>
 
-#### Detail of requirements <!-- omit in toc -->
+### vm-01-19 人行道
 
-Place a sidewalk Lanelet (_subtype:walkway_) where necessary. However, install only when there is a crosswalk intersecting the vehicle's lane. Do not install if there is no intersection.
+<a id="detail-of-requirements_18"></a>
 
-The length of the lanelet (_subtype:walkway_) should be the area intersecting with your lane and additional 3 meters before and after.
+#### 需求详情 <!-- omit in toc -->
+
+在需要的地方创建人行道 Lanelet（_subtype:walkway_）。仅当人行横道与自车车道相交时创建，没有交叉时不创建。
+
+lanelet（_subtype:walkway_）的长度应覆盖与自车车道相交的区域，并向前后各延伸 3 米。
 
 ![svg](../assets/vm-01-19_1.svg)
 
-#### Preferred vector map <!-- omit in toc -->
+<a id="preferred-vector-map_17"></a>
+
+#### 推荐的矢量地图 <!-- omit in toc -->
 
 ![svg](../assets/vm-01-19_2.svg)
 
-#### Incorrect vector map <!-- omit in toc -->
+<a id="incorrect-vector-map_16"></a>
 
-None in particular.
+#### 错误的矢量地图 <!-- omit in toc -->
 
-#### Related Autoware module
+无特别说明。
 
-- [Intersection - Autoware Universe Documentation](https://autowarefoundation.github.io/autoware_universe/main/planning/behavior_velocity_planner/autoware_behavior_velocity_intersection_module/)
-- [Walkway design- Autoware Universe Documentation](https://autowarefoundation.github.io/autoware_universe/main/planning/behavior_velocity_planner/autoware_behavior_velocity_walkway_module/)
+<a id="related-autoware-module_4"></a>
+
+#### 相关 Autoware 模块
+
+- [交叉路口 - Autoware Universe 文档](https://autowarefoundation.github.io/autoware_universe/main/planning/behavior_velocity_planner/autoware_behavior_velocity_intersection_module/)
+- [人行道设计 - Autoware Universe 文档](https://autowarefoundation.github.io/autoware_universe/main/planning/behavior_velocity_planner/autoware_behavior_velocity_walkway_module/)

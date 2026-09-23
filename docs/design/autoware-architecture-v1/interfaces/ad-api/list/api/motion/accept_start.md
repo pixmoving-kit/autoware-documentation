@@ -6,10 +6,10 @@ type:
   name: autoware_adapi_v1_msgs/srv/AcceptStart
   res:
     - name: status
-      text: response status
+      text: 响应状态
 ---
 
 {% extends 'design/autoware-architecture-v1/interfaces/templates/autoware-interface.jinja2' %}
 {% block description %}
-Accept the vehicle to start. This API can be used when the [motion state](../../../features/motion.md) is STARTING.
+允许车辆起步。当[运动状态](../../../features/motion.md)为 STARTING 时，可以使用此 API。
 {% endblock %}

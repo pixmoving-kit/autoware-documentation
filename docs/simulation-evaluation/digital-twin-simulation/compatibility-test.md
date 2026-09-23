@@ -1,23 +1,27 @@
-# Compatibility test
+<a id="compatibility-test"></a>
 
-The compatibility test tool is used to verify whether a digital-twin simulator works correctly with Autoware.
+# 兼容性测试
 
-## `simulator_compatibility_test` package
+兼容性测试工具用于验证数字孪生仿真器能否与 Autoware 正常协作。
 
-- This tool is built on **ROS 2 Humble**.
-- As of **Jan 26th, 2023**, it has been tested only with [**MORAI SIM: Drive Demo**](../../demos/digital-twin-demos/MORAI_Sim-tutorial.md).
-- For full source code and instructions, see:
+<a id="simulator_compatibility_test-package"></a>
+
+## `simulator_compatibility_test` 功能包
+
+- 此工具基于 **ROS 2 Humble** 构建。
+- 截至 **2023 年 1 月 26 日**，仅使用 [**MORAI SIM：Drive 演示**](../../demos/digital-twin-demos/MORAI_Sim-tutorial.md)进行过测试。
+- 完整源代码与说明请参阅：
   [autoware_tools/simulator/simulator_compatibility_test](https://github.com/autowarefoundation/autoware_tools/tree/main/simulator/simulator_compatibility_test#simulator_compatibility_test)
 
 !!! note
 
-    The test suite includes a set of manual and automated test cases that check whether a simulator correctly publishes and receives the Autoware-required messages (e.g., control mode, gear, velocity, steering, turn indicators, hazard lights).
-    These tests verify bidirectional communication by sending control commands and checking the simulator’s reported status.
+    测试套件包含手动和自动测试用例，检查仿真器是否正确发布及接收 Autoware 所需消息（例如控制模式、挡位、速度、转向、转向灯和危险警告灯）。
+    这些测试通过发送控制命令并检查仿真器报告的状态，验证双向通信。
 
 !!! info
 
-    Simulators other than MORAI SIM can also use the **common manual tests** (`test_sim_common_manual_testing`).
+    MORAI SIM 之外的仿真器也可以使用**通用手动测试**（`test_sim_common_manual_testing`）。
 
 !!! tip
 
-    Developers may extend these by creating simulator-specific automated versions similar to the MORAI SIM test set.
+    开发者可以参照 MORAI SIM 测试集，创建针对特定仿真器的自动化版本，扩展这些测试。

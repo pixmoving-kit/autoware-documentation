@@ -1,10 +1,16 @@
-# Get on and get off
+<a id="get-on-and-get-off"></a>
 
-## Related API
+# 上下车
 
-- [Vehicle doors](../features/vehicle-doors.md)
+<a id="related-api"></a>
 
-## Sequence
+## 相关 API
+
+- [车门](../features/vehicle-doors.md)
+
+<a id="sequence"></a>
+
+## 时序
 
 ```plantuml
 {% include 'design/autoware-architecture-v1/interfaces/ad-api/use-cases/sequence/get-on-off.plantuml' %}

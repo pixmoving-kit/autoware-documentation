@@ -1,9 +1,13 @@
-# [supplement] Use rclcpp::WaitSet
+<a id="supplement-use-rclcppwaitset"></a>
 
-## What is `rclcpp::WaitSet`
+# 【补充】使用 rclcpp::WaitSet
 
-As explained in [_call take() method of Subscription object_](./index.md#call-take-method-of-subscription-object), the `take()` method is irreversible. Once the `take()` method is executed, a state of a subscription object changes. Because there is no undo operation against the `take()` method, the subscription object can not be restored to its previous state. You can use the `rclcpp::WaitSet` before calling the `take()` to check the arrival of an incoming message in the subscription queue.
-The following sample code shows how the `wait_set_.wait()` tells you that a message has already been received and can be obtained by the `take()`.
+<a id="what-is-rclcppwaitset"></a>
+
+## 什么是 `rclcpp::WaitSet`
+
+如[_调用 Subscription 对象的 take() 方法_](./index.md#call-take-method-of-subscription-object)所述，`take()` 方法不可逆。一旦执行 `take()`，订阅对象的状态就会改变。由于没有对应的撤销操作，订阅对象无法恢复到之前的状态。可以在调用 `take()` 之前使用 `rclcpp::WaitSet`，检查订阅队列中是否有消息到达。
+以下示例代码展示了 `wait_set_.wait()` 如何告知你已经收到消息，且该消息可通过 `take()` 获取。
 
 ```c++
       auto wait_result = wait_set_.wait(std::chrono::milliseconds(0));
@@ -14,7 +18,7 @@ The following sample code shows how the `wait_set_.wait()` tells you that a mess
             RCLCPP_INFO(this->get_logger(), "I heard: [%s]", msg.data.c_str());
 ```
 
-A single `rclcpp::WaitSet` object is able to observe multiple subscription objects. If there are multiple subscriptions for different topics, you can check the arrival of incoming messages per subscription. Algorithms used in the field of autonomous robots requires multiple incoming messages, such as sensor data or actuation state. Using `rclcpp::WaitSet` for the multiple subscriptions, they are able to check whether or not required messages have arrived without taking any message.
+单个 `rclcpp::WaitSet` 对象可以观察多个订阅对象。如果存在多个订阅，分别对应不同话题，就可以逐个订阅检查消息是否到达。自主机器人领域的算法需要多种输入消息，例如传感器数据或执行器状态。对多个订阅使用 `rclcpp::WaitSet`，即可在不取出任何消息的情况下检查所需消息是否已经到达。
 
 ```c++
       auto wait_result = wait_set_.wait(std::chrono::milliseconds(0));
@@ -30,24 +34,28 @@ A single `rclcpp::WaitSet` object is able to observe multiple subscription objec
       }
 ```
 
-In the code above, unless `rclcpp::WaitSet` is used, it is impossible to verify the arrival of all needed messages without changing state of the subscription objects.
+在上述代码中，如果不使用 `rclcpp::WaitSet`，就无法在不改变订阅对象状态的情况下确认所有所需消息是否到达。
 
-## Coding manner
+<a id="coding-manner"></a>
 
-This section explains how to code using `rclcpp::WaitSet` with a sample code below.
+## 编码方式
+
+本节结合以下示例代码，介绍如何使用 `rclcpp::WaitSet` 编程。
 
 - [_ros2_subscription_examples/waitset_examples/src/talker_triple.cpp at main · takam5f2/ros2_subscription_examples_](https://github.com/takam5f2/ros2_subscription_examples/blob/main/waitset_examples/src/talker_triple.cpp)
-  - It periodically publishes `/chatter` every second, `/slower_chatter` every two seconds, and `/slowest_chatter` every three seconds.
+  - 它周期性地发布消息：`/chatter` 每秒一次，`/slower_chatter` 每两秒一次，`/slowest_chatter` 每三秒一次。
 - [_ros2_subscription_examples/waitset_examples/src/timer_listener_triple_async.cpp at main · takam5f2/ros2_subscription_examples_](https://github.com/takam5f2/ros2_subscription_examples/blob/main/waitset_examples/src/timer_listener_triple_async.cpp)
-  - It queries `WaitSet` per one second and if there is a message available, it obtains the message with `take()`
-  - It has three subscriptions for `/chatter` `/slower_chatter`, and `/slower_chatter`
+  - 它每秒查询一次 `WaitSet`，如果有可用消息，就通过 `take()` 获取。
+  - 它为 `/chatter`、`/slower_chatter` 和 `/slower_chatter` 设置了三个订阅。
 
-The following three steps are required to use `rclcpp::WaitSet`.
+使用 `rclcpp::WaitSet` 需要以下三个步骤。
 
-### 1. Declare and initialize `WaitSet`
+<a id="1-declare-and-initialize-waitset"></a>
 
-You must first instantiate a `rclcpp::WaitSet` based object.
-Below is a snippet from [_ros2_subscription_examples/waitset_examples/src/timer_listener_triple_async.cpp at main · takam5f2/ros2_subscription_examples_](https://github.com/takam5f2/ros2_subscription_examples/blob/main/waitset_examples/src/timer_listener_triple_async.cpp).
+### 1. 声明并初始化 `WaitSet`
+
+首先必须实例化一个基于 `rclcpp::WaitSet` 的对象。
+以下片段来自 [_ros2_subscription_examples/waitset_examples/src/timer_listener_triple_async.cpp at main · takam5f2/ros2_subscription_examples_](https://github.com/takam5f2/ros2_subscription_examples/blob/main/waitset_examples/src/timer_listener_triple_async.cpp)。
 
 ```c++
 rclcpp::WaitSet wait_set_;
@@ -55,22 +63,24 @@ rclcpp::WaitSet wait_set_;
 
 ??? note
 
-    There are several types of classes similar to the `rclcpp::WaitSet`. The `rclcpp::WaitSet` object can be configured during runtime. It is not thread-safe as explained in the [_API specification of `rclcpp::WaitSet`_](https://docs.ros.org/en/ros2_packages/humble/api/rclcpp/generated/typedef_namespacerclcpp_1ad6fb19c154de27e92430309d2da25ac3.html)
-    The thread-safe classes that are replacements for `rclcpp::WaitSet' are provided by the`rclcpp' package as listed below.
+    与 `rclcpp::WaitSet` 类似的类有多种。`rclcpp::WaitSet` 对象可以在运行时配置，但它不是线程安全的，详见 [_`rclcpp::WaitSet` 的 API 规范_](https://docs.ros.org/en/ros2_packages/humble/api/rclcpp/generated/typedef_namespacerclcpp_1ad6fb19c154de27e92430309d2da25ac3.html)。
+    rclcpp 包提供了以下可替代 rclcpp::WaitSet 的线程安全类。
 
-    - [_Typedef rclcpp::ThreadSafeWaitSet_](https://docs.ros.org/en/ros2_packages/humble/api/rclcpp/generated/typedef_namespacerclcpp_1acaec573e71549fd3078644e18e7f7127.html)
-      - Subscription, timer, etc. can only be registered to `ThreadSafeWaitSet` only in thread-safe state
-      - Sample code is here: [examples/rclcpp/wait_set/src/thread_safe_wait_set.cpp at rolling · ros2/examples](https://github.com/ros2/examples/blob/rolling/rclcpp/wait_set/src/thread_safe_wait_set.cpp)
-    - [_Typedef rclcpp::StaticWaitSet_](https://docs.ros.org/en/ros2_packages/humble/api/rclcpp/generated/typedef_namespacerclcpp_1adb06acf4a5723b1445fa6ed4e8f73374.html)
-      - Subscription, timer, etc. can be registered to `rclcpp::StaticWaitSet` only at initialization
-      - Here are sample code:
+    - [_rclcpp::ThreadSafeWaitSet 类型别名_](https://docs.ros.org/en/ros2_packages/humble/api/rclcpp/generated/typedef_namespacerclcpp_1acaec573e71549fd3078644e18e7f7127.html)
+      - 订阅、定时器等只能在线程安全的状态下注册到 `ThreadSafeWaitSet`。
+      - 示例代码见：[examples/rclcpp/wait_set/src/thread_safe_wait_set.cpp at rolling · ros2/examples](https://github.com/ros2/examples/blob/rolling/rclcpp/wait_set/src/thread_safe_wait_set.cpp)
+    - [_rclcpp::StaticWaitSet 类型别名_](https://docs.ros.org/en/ros2_packages/humble/api/rclcpp/generated/typedef_namespacerclcpp_1adb06acf4a5723b1445fa6ed4e8f73374.html)
+      - 订阅、定时器等只能在初始化时注册到 `rclcpp::StaticWaitSet`。
+      - 示例代码如下：
         - [_ros2_subscription_examples/waitset_examples/src/timer_listener_twin_static.cpp at main · takam5f2/ros2_subscription_examples_](https://github.com/takam5f2/ros2_subscription_examples/blob/main/waitset_examples/src/timer_listener_twin_static.cpp)
         - [_examples/rclcpp/wait_set/src/static_wait_set.cpp at rolling · ros2/examples_](https://github.com/ros2/examples/blob/rolling/rclcpp/wait_set/src/static_wait_set.cpp)
 
-### 2. Register trigger (Subscription, Timer, and so on) to `WaitSet`
+<a id="2-register-trigger-subscription-timer-and-so-on-to-waitset"></a>
 
-You need to register a trigger to the `rclcpp::WaitSet` based object.
-The following is a snippet from [_ros2_subscription_examples/waitset_examples/src/timer_listener_triple_async.cpp at main · takam5f2/ros2_subscription_examples_](https://github.com/takam5f2/ros2_subscription_examples/blob/main/waitset_examples/src/timer_listener_triple_async.cpp)
+### 2. 向 `WaitSet` 注册触发源（Subscription、Timer 等）
+
+需要向基于 `rclcpp::WaitSet` 的对象注册触发源。
+以下片段来自 [_ros2_subscription_examples/waitset_examples/src/timer_listener_triple_async.cpp at main · takam5f2/ros2_subscription_examples_](https://github.com/takam5f2/ros2_subscription_examples/blob/main/waitset_examples/src/timer_listener_triple_async.cpp)。
 
 ```c++
     subscriptions_array_[0] = create_subscription<std_msgs::msg::String>("chatter", qos, not_executed_callback, subscription_options);
@@ -83,25 +93,27 @@ The following is a snippet from [_ros2_subscription_examples/waitset_examples/sr
     }
 ```
 
-In the code above, the `add_subscription()` method registers the created subscriptions with the `wait_set_` object.
-A `rclcpp::WaitSet`-based object basically handles objects each of which has a corresponding callback function. Not only`Subscription`based objects, but also `Timer`,`Service`or`Action`based objects can be observed by a `rclcpp::WaitSet` based object. A single`rclcpp::WaitSet` object accepts mixture of different types of objects.
-A sample code for registering timer triggers can be found here.
+上述代码中的 `add_subscription()` 方法将已创建的订阅注册到 `wait_set_` 对象。
+基于 `rclcpp::WaitSet` 的对象主要处理具有对应回调函数的对象。它不仅可以观察基于 `Subscription` 的对象，也可以观察基于 `Timer`、`Service` 或 `Action` 的对象。单个 `rclcpp::WaitSet` 对象可同时接收多种不同类型的对象。
+注册定时器触发源的示例代码如下。
 
 ```c++
 wait_set_.add_timer(much_slower_timer_);
 ```
 
-A trigger can be registered at declaration and initialization as described in [_wait_set_topics_and_timer.cpp from the examples_](https://github.com/ros2/examples/blob/rolling/rclcpp/wait_set/src/wait_set_topics_and_timer.cpp#L66).
+也可以在声明和初始化时注册触发源，如[_示例中的 wait_set_topics_and_timer.cpp_](https://github.com/ros2/examples/blob/rolling/rclcpp/wait_set/src/wait_set_topics_and_timer.cpp#L66) 所示。
 
-### 3. Verify WaitSet result
+<a id="3-verify-waitset-result"></a>
 
-The data structure of the test result returned from the `rclcpp::WaitSet` is nested.
-You can find the `WaitSet` result by the following 2 steps;
+### 3. 检查 WaitSet 结果
 
-1. Verify if any trigger has been invoked
-2. Verify if a specified trigger has been triggered
+`rclcpp::WaitSet` 返回的检查结果采用嵌套数据结构。
+可以通过以下两个步骤检查 `WaitSet` 的结果：
 
-For step 1, here is a sample code taken from [_ros2_subscription_examples/waitset_examples/src/timer_listener_triple_async.cpp at main · takam5f2/ros2_subscription_examples_](https://github.com/takam5f2/ros2_subscription_examples/blob/main/waitset_examples/src/timer_listener_triple_async.cpp).
+1. 检查是否有任意触发源被触发。
+2. 检查指定触发源是否被触发。
+
+对于第 1 步，以下示例来自 [_ros2_subscription_examples/waitset_examples/src/timer_listener_triple_async.cpp at main · takam5f2/ros2_subscription_examples_](https://github.com/takam5f2/ros2_subscription_examples/blob/main/waitset_examples/src/timer_listener_triple_async.cpp)。
 
 ```c++
       auto wait_result = wait_set_.wait(std::chrono::milliseconds(0));
@@ -113,10 +125,10 @@ For step 1, here is a sample code taken from [_ros2_subscription_examples/waitse
       }
 ```
 
-In the code above, `auto wait_result = wait_set_.wait(std::chrono::milliseconds(0))` tests if a trigger in `wait_set_` has been called. The argument to the`wait()`method is the timeout duration. If it is greater than 0 milliseconds or seconds, this method will wait for a message to be received until the timeout expires.
-If`wait_result.kind() == rclcpp::WaitResultKind::Ready`is`true`, then any trigger has been invoked.
+上述代码中的 `auto wait_result = wait_set_.wait(std::chrono::milliseconds(0))` 检查 `wait_set_` 中是否有触发源被触发。`wait()` 的参数是超时时长。如果该值大于 0 毫秒或 0 秒，此方法会等待接收消息，直到超时。
+如果 `wait_result.kind() == rclcpp::WaitResultKind::Ready` 为 `true`，则表示有触发源被触发。
 
-For step 2, here is a sample code taken from [_ros2_subscription_examples/waitset_examples/src/timer_listener_triple_async.cpp at main · takam5f2/ros2_subscription_examples_](https://github.com/takam5f2/ros2_subscription_examples/blob/main/waitset_examples/src/timer_listener_triple_async.cpp).
+对于第 2 步，以下示例来自 [_ros2_subscription_examples/waitset_examples/src/timer_listener_triple_async.cpp at main · takam5f2/ros2_subscription_examples_](https://github.com/takam5f2/ros2_subscription_examples/blob/main/waitset_examples/src/timer_listener_triple_async.cpp)。
 
 ```c++
       for (size_t i = 0; i < subscriptions_num; i++) {
@@ -128,4 +140,4 @@ For step 2, here is a sample code taken from [_ros2_subscription_examples/waitse
             RCLCPP_INFO(this->get_logger(), "I heard: [%s]", msg.data.c_str());
 ```
 
-In the code above, `wait_result.get_wait_set().get_rcl_wait_set().subscriptions[i]` indicates whether each individual trigger has been invoked or not. The result is stored in the `subscriptions` array. The order in the `subscriptions` array is the same as the order in which the triggers are registered.
+上述代码中的 `wait_result.get_wait_set().get_rcl_wait_set().subscriptions[i]` 表示各个触发源是否被触发。结果存储在 `subscriptions` 数组中，其顺序与触发源的注册顺序一致。

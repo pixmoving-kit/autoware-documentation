@@ -1,30 +1,38 @@
-# Coordinate system
+<a id="coordinate-system"></a>
 
-## Overview
+# 坐标系
 
-The commonly used coordinate systems include the world coordinate system, the vehicle coordinate system, and the sensor coordinate system.
+<a id="overview"></a>
 
-- The world coordinate system is a fixed coordinate system that defines the physical space in the environment where the vehicle is located.
+## 概述
 
-- The vehicle coordinate system is the vehicle's own coordinate system, which defines the vehicle's position and orientation in the world coordinate system.
+常用的坐标系包括世界坐标系、车辆坐标系和传感器坐标系。
 
-- The sensor coordinate system is the sensor's own coordinate system, which is used to define the sensor's position and orientation in the vehicle coordinate system.
+- 世界坐标系是固定的坐标系，用于定义车辆所在环境中的物理空间。
 
-## How coordinates are used in Autoware
+- 车辆坐标系是车辆自身的坐标系，用于定义车辆在世界坐标系中的位置和朝向。
 
-In Autoware, coordinate systems are typically used to represent the position and movement of vehicles and obstacles in space. Coordinate systems are commonly used for path planning, perception and control, can help the vehicle decide how to avoid obstacles and to plan a safe and efficient path of travel.
+- 传感器坐标系是传感器自身的坐标系，用于定义传感器在车辆坐标系中的位置和朝向。
 
-1. Transformation of sensor data
+<a id="how-coordinates-are-used-in-autoware"></a>
 
-   In Autoware, each sensor has a unique coordinate system and their data is expressed in terms of the coordinates. In order to correlate the independent data between different sensors, we need to find the position relationship between each sensor and the vehicle body. Once the installation position of the sensor on the vehicle body is determined, it will remain fixed during running, so the offline calibration method can be used to determine the precise position of each sensor relative to the vehicle body.
+## Autoware 如何使用坐标系
+
+在 Autoware 中，坐标系通常用于表示车辆和障碍物在空间中的位置与运动。坐标系常用于路径规划、感知和控制，帮助车辆决定如何避开障碍物，并规划安全高效的行驶路径。
+
+1. 传感器数据的变换
+
+   在 Autoware 中，每个传感器都有独立的坐标系，其数据以该坐标系表示。为了关联不同传感器的独立数据，需要确定每个传感器与车身之间的位置关系。传感器在车身上的安装位置一旦确定，运行期间就保持固定，因此可以通过离线标定确定各传感器相对于车身的精确位置。
 
 2. ROS TF2
 
-   The `TF2` system maintains a tree of coordinate transformations to represent the relationships between different coordinate systems. Each coordinate system is given a unique name and they are connected by coordinate transformations. How to use `TF2`, refer to the [TF2 tutorial](http://docs.ros.org/en/galactic/Concepts/About-Tf2.html).
+   `TF2` 系统维护一棵坐标变换树，表示不同坐标系之间的关系。每个坐标系都有唯一名称，并通过坐标变换相互连接。有关 `TF2` 的使用方法，请参阅 [TF2 教程](http://docs.ros.org/en/galactic/Concepts/About-Tf2.html)。
 
-## TF tree
+<a id="tf-tree"></a>
 
-In Autoware, a common coordinate system structure is shown below:
+## TF 树
+
+在 Autoware 中，常见的坐标系结构如下所示：
 
 ```mermaid
 graph TD
@@ -38,55 +46,61 @@ graph TD
     /camera_link --> /camera_optical_link
 ```
 
-- earth: `earth` coordinate system describe the position of any point on the earth in terms of geodetic longitude, latitude, and altitude. In Autoware, the `earth` frame is only used in the `GnssInsPositionStamped` message.
+- earth：`earth` 坐标系使用大地经度、纬度和高程描述地球上任意点的位置。在 Autoware 中，`earth` 坐标系仅用于 `GnssInsPositionStamped` 消息。
 
-- map: `map` coordinate system is used to represent the location of points on a local map. Geographical coordinate system are mapped into plane rectangular coordinate system using UTM or MGRS. The `map` frame`s axes point to the East, North, Up directions as explained in [Coordinate Axes Conventions](#coordinate-axes-conventions).
+- map：`map` 坐标系用于表示局部地图上各点的位置。地理坐标通过 UTM 或 MGRS 映射到平面直角坐标系。`map` 坐标系的坐标轴分别指向东、北、上，详见[坐标轴约定](#coordinate-axes-conventions)。
 
-- base_link: vehicle coordinate system, the origin of the coordinate system is the center of the rear axle of the vehicle.
+- base_link：车辆坐标系，其原点位于车辆后轴中心。
 
-- imu, lidar, gnss, radar: these are sensor frames, transfer to vehicle coordinate system through mounting relationship.
+- imu、lidar、gnss、radar：这些是传感器坐标系，通过安装关系转换到车辆坐标系。
 
-- camera_link: `camera_link` is ROS standard camera coordinate system .
+- camera_link：`camera_link` 是 ROS 标准相机坐标系。
 
-- camera_optical_link: `camera_optical_link` is image standard camera coordinate system.
+- camera_optical_link：`camera_optical_link` 是图像标准相机坐标系。
 
-### Estimating the `base_link` frame by using the other sensors
+<a id="estimating-the-base_link-frame-by-using-the-other-sensors"></a>
 
-Generally we don't have the localization sensors physically at the `base_link` frame. So various sensors localize with respect to their own frames, let's call it `sensor` frame.
+### 使用其他传感器估计 `base_link` 坐标系
 
-We introduce a new frame naming convention: `x_by_y`:
+定位传感器通常并未实际安装在 `base_link` 坐标系的原点。因此，各传感器相对于自身坐标系进行定位，我们将该坐标系称为 `sensor` 坐标系。
+
+我们引入新的坐标系命名约定：`x_by_y`：
 
 ```yaml
 x: estimated frame name
 y: localization method/source
 ```
 
-We cannot directly get the `sensor` frame. Because we would need the EKF module to estimate the `base_link` frame first.
+无法直接获得 `sensor` 坐标系，因为这需要 EKF 模块先估计 `base_link` 坐标系。
 
-Without the EKF module the best we can do is to estimate `Map[map] --> sensor_by_sensor --> base_link_by_sensor` using this sensor.
+没有 EKF 模块时，仅使用该传感器所能实现的是估计 `Map[map] --> sensor_by_sensor --> base_link_by_sensor`。
 
-#### Example by the GNSS/INS sensor
+<a id="example-by-the-gnssins-sensor"></a>
 
-For the integrated GNSS/INS we use the following frames:
+#### GNSS/INS 传感器示例
+
+对于集成式 GNSS/INS，我们使用以下坐标系：
 
 ```mermaid
 flowchart LR
     earth --> Map[map] --> gnss_ins_by_gnss_ins --> base_link_by_gnss_ins
 ```
 
-The `gnss_ins_by_gnss_ins` frame is obtained by the coordinates from GNSS/INS sensor. The coordinates are converted to `map` frame using the `gnss_poser` node.
+`gnss_ins_by_gnss_ins` 坐标系来自 GNSS/INS 传感器提供的坐标。这些坐标由 `gnss_poser` 节点转换到 `map` 坐标系。
 
-Finally `gnss_ins_by_gnss_ins` frame represents the position of the `gnss_ins` estimated by the `gnss_ins` sensor in the `map`.
+最终，`gnss_ins_by_gnss_ins` 坐标系表示 `gnss_ins` 传感器估计出的 `gnss_ins` 在 `map` 中的位置。
 
-Then by using the static transformation between `gnss_ins` and the `base_link` frame, we can obtain the `base_link_by_gnss_ins` frame. Which represents the `base_link` estimated by the `gnss_ins` sensor.
+然后，利用 `gnss_ins` 与 `base_link` 坐标系之间的静态变换，便可得到 `base_link_by_gnss_ins` 坐标系。它表示 `gnss_ins` 传感器估计出的 `base_link`。
 
-References:
+参考资料：
 
 - <https://www.ros.org/reps/rep-0105.html#earth>
 
-### Coordinate Axes Conventions
+<a id="coordinate-axes-conventions"></a>
 
-We are using East, North, Up (ENU) coordinate axes convention by default throughout the stack.
+### 坐标轴约定
+
+整个软件栈默认采用东、北、上（ENU）坐标轴约定。
 
 ```yaml
 X+: East
@@ -94,13 +108,13 @@ Y+: North
 Z+: Up
 ```
 
-The position, orientation, velocity, acceleration are all defined in the same axis convention.
+位置、朝向、速度和加速度均按同一坐标轴约定定义。
 
-Position by the GNSS/INS sensor is expected to be in `earth` frame.
+GNSS/INS 传感器提供的位置应位于 `earth` 坐标系中。
 
-Orientation, velocity, acceleration by the GNSS/INS sensor are expected to be in the sensor frame. Axes parallel to the `map` frame.
+GNSS/INS 传感器提供的朝向、速度和加速度应位于传感器坐标系中，其坐标轴与 `map` 坐标系平行。
 
-If roll, pitch, yaw is provided, they correspond to rotation around X, Y, Z axes respectively.
+如果提供 roll、pitch、yaw，它们分别对应绕 X、Y、Z 轴的旋转。
 
 ```yaml
 Rotation around:
@@ -109,23 +123,25 @@ Rotation around:
   Z+: yaw
 ```
 
-References:
+参考资料：
 
 - <https://www.ros.org/reps/rep-0103.html#axis-orientation>
 
-## How they can be created
+<a id="how-they-can-be-created"></a>
 
-1. Calibration of sensor
+## 如何建立这些坐标系
 
-   The conversion relationship between every sensor coordinate system and `base_link` can be obtained through sensor calibration technology.
-   Please consult the following link
-   [calibrating your sensors](../../../tutorials/integrating-autoware/creating-vehicle-and-sensor-model/calibrating-sensors/index.md) for instructions
-   on how to calibrate your sensors.
+1. 传感器标定
 
-2. Localization
+   通过传感器标定技术，可以获得各传感器坐标系与 `base_link` 之间的变换关系。
+   请参阅以下链接
+   [标定传感器](../../../tutorials/integrating-autoware/creating-vehicle-and-sensor-model/calibrating-sensors/index.md)，了解
+   如何标定传感器。
 
-   The relationship between the `base_link` coordinate system and the `map` coordinate system is determined by the position and orientation of the vehicle, and can be obtained from the vehicle localization result.
+2. 定位
 
-3. Geo-referencing of map data
+   `base_link` 坐标系与 `map` 坐标系之间的关系由车辆的位置和朝向决定，可以通过车辆定位结果获得。
 
-   The geo-referencing information can get the transformation relationship of `earth` coordinate system to local `map` coordinate system.
+3. 地图数据的地理参考
+
+   通过地理参考信息，可以获得 `earth` 坐标系到局部 `map` 坐标系的变换关系。

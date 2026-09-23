@@ -12,52 +12,72 @@ qos_depth: 1
 
 # {{ interface_name }}
 
-## Specifications
+<a id="specifications"></a>
+
+## 规格
 
 {% include 'design/autoware-architecture-v1/interfaces/templates/topic.jinja2' %}
 
-## Description
+<a id="description"></a>
 
-Get the current velocity status of the vehicle.
+## 说明
 
-## Message
+获取车辆当前的速度状态。
 
-See the [message definition]({{ data_type_link }}) for details.
+<a id="message"></a>
 
-## Errors
+## 消息
 
-Unknown status: If the vehicle interface cannot get the status due to connection loss, etc., the status is stopped and a diagnostic error is reported.
+详情请参阅[消息定义]({{ data_type_link }})。
 
-Hardware Fault: If the vehicle platform reports a sensor fault, a diagnostic error is reported.
+<a id="errors"></a>
 
-## Support
+## 错误
 
-This interface is required.
+未知状态：如果车辆接口因连接丢失等原因无法获取状态，则停止发布状态并报告诊断错误。
 
-## Limitations
+硬件故障：如果车辆平台报告传感器故障，则报告诊断错误。
 
-T.B.C.
+<a id="support"></a>
 
-## Use Cases
+## 支持要求
 
-- Control the vehicle for autonomous driving.
-- Display current velocity status to the operator.
+此接口是必需的。
 
-## Requirement
+<a id="limitations"></a>
 
-- Support getting the current velocity status of the vehicle.
-- Report the error as diagnostics if the status cannot be received or an unknown status is received.
+## 限制
 
-## Design
+待确认。
 
-Coordinate system & sign convention: The interface follows the standard vehicle coordinate system (ISO 8855 / ROS REP-103).
+<a id="use-cases"></a>
 
-- Longitudinal velocity: Positive (+) indicates **forward** motion. Negative (-) indicates **backward** motion.
-- Lateral velocity: Positive (+) indicates motion to the **left**. Negative (-) indicates motion to the **right**.
-- Heading rate: Positive (+) indicates **counter-clockwise** rotation (left turn).
+## 使用场景
 
-## History
+- 控制车辆进行自动驾驶。
+- 向操作员显示当前速度状态。
 
-| Date       | Description                      |
+<a id="requirement"></a>
+
+## 要求
+
+- 支持获取车辆当前的速度状态。
+- 无法接收状态或收到未知状态时，通过诊断信息报告错误。
+
+<a id="design"></a>
+
+## 设计
+
+坐标系与符号约定：此接口遵循标准车辆坐标系（ISO 8855 / ROS REP-103）。
+
+- 纵向速度：正值（+）表示**向前**运动。负值（-）表示**向后**运动。
+- 横向速度：正值（+）表示**向左**运动。负值（-）表示**向右**运动。
+- 航向角速度：正值（+）表示**逆时针**旋转（左转）。
+
+<a id="history"></a>
+
+## 历史记录
+
+| 日期 | 说明 |
 | ---------- | -------------------------------- |
-| 2026-01-21 | First release in the new format. |
+| 2026-01-21 | 首次以新格式发布。 |

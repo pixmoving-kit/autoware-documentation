@@ -1,4 +1,6 @@
-# Additional settings for developers
+<a id="additional-settings-for-developers"></a>
 
-- [Console settings for ROS 2](./console-settings.md)
-- [Network configuration for ROS 2](./network-configuration/index.md)
+# 开发者附加设置
+
+- [ROS 2 控制台设置](./console-settings.md)
+- [ROS 2 网络配置](./network-configuration/index.md)

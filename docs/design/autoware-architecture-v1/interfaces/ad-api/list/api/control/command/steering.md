@@ -6,12 +6,12 @@ type:
   name: autoware_adapi_v1_msgs/msg/SteeringCommand
   msg:
     - name: stamp
-      text: Timestamp when this message was sent.
+      text: 发送此消息时的时间戳。
     - name: steering_tire_angle
-      text: Target steering tire angle [rad].
+      text: 目标转向轮转角 [rad]。
 ---
 
 {% extends 'design/autoware-architecture-v1/interfaces/templates/autoware-interface.jinja2' %}
 {% block description %}
-This is the target steering that Autoware is sending to the vehicle.
+Autoware 发送给车辆的目标转向指令。
 {% endblock %}

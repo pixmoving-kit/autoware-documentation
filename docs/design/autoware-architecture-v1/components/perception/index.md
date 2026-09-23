@@ -1,117 +1,139 @@
-# Perception Component Design
+<a id="perception-component-design"></a>
 
-## Purpose of this document
+# 感知组件设计
 
-This document outlines the high-level design strategies, goals and related rationales in the development of the Perception Component. Through this document, it is expected that all OSS developers will comprehend the design philosophy, goals and constraints under which the Perception Component is designed, and participate seamlessly in the development.
+<a id="purpose-of-this-document"></a>
 
-## Overview
+## 本文目的
 
-The Perception Component receives inputs from Sensing, Localization, and Map components, and adds semantic information (e.g., Object Recognition, Obstacle Segmentation, Traffic Light Recognition, Occupancy Grid Map), which is then passed on to Planning Component. This component design follows the overarching philosophy of Autoware, defined as the [microautonomy concept](../../../autoware-concepts/index.md).
+本文概述感知组件开发中的高层设计策略、目标及其依据。希望所有开源开发者通过本文理解感知组件的设计理念、目标和约束，并顺利参与开发。
 
-## Goals and non-goals
+<a id="overview"></a>
 
-The role of the Perception Component is to recognize the surrounding environment based on the data obtained through Sensing and acquire sufficient information (such as the presence of dynamic objects, stationary obstacles, blind spots, and traffic signal information) to enable autonomous driving.
+## 概述
 
-In our overall design, we emphasize the concept of [microautonomy architecture](../../../autoware-concepts/index.md). This term refers to a design approach that focuses on the proper modularization of functions, clear definition of interfaces between these modules, and as a result, high expandability of the system. Given this context, the goal of the Perception Component is set not to solve every conceivable complex use case (although we do aim to support basic ones), but rather to provide a platform that can be customized to the user's needs and can facilitate the development of additional features.
+感知组件接收传感器、定位和地图组件的输入，添加语义信息（例如目标识别、障碍物分割、交通信号灯识别和占据栅格地图），再传递给规划组件。本组件设计遵循 Autoware 的总体理念，即[微自动驾驶概念](../../../autoware-concepts/index.md)。
 
-To clarify the design concepts, the following points are listed as goals and non-goals.
+<a id="goals-and-non-goals"></a>
 
-**Goals:**
+## 目标与非目标
 
-- To provide the basic functions so that a simple ODD can be defined.
-- To achieve a design that can provide perception functionality to every autonomous vehicle.
-- To be extensible with the third-party components.
-- To provide a platform that enables Autoware users to develop the complete functionality and capability.
-- To provide a platform that enables Autoware users to develop the autonomous driving system which always outperforms human drivers.
-- To provide a platform that enables Autoware users to develop the autonomous driving system achieving "100% accuracy" or "error-free recognition".
+感知组件根据传感器采集的数据识别周围环境，获取足以支持自动驾驶的信息，例如动态目标、静态障碍物、盲区和交通信号信息。
 
-**Non-goals:**
+整体设计强调[微自动驾驶架构](../../../autoware-concepts/index.md)：合理地模块化功能，清晰定义模块接口，从而实现高度可扩展的系统。在此背景下，感知组件的目标并非解决所有可想象的复杂场景（虽然希望支持基本场景），而是提供可按用户需求定制、便于开发附加功能的平台。
 
-- To develop the perception component architecture specialized for specific / limited ODDs.
-- To achieve the complete functionality and capability.
-- To outperform the recognition capability of human drivers.
-- To achieve "100% accuracy" or "error-free recognition".
+为明确设计理念，下面列出目标和非目标。
 
-## High-level architecture
+**目标：**
 
-This diagram describes the high-level architecture of the Perception Component.
+- 提供基本功能，使得能够定义简单的 ODD。
+- 实现能够为每辆自动驾驶车辆提供感知功能的设计。
+- 支持通过第三方组件扩展。
+- 提供平台，使 Autoware 用户能够开发完整的功能与能力。
+- 提供平台，使 Autoware 用户能够开发始终优于人类驾驶员的自动驾驶系统。
+- 提供平台，使 Autoware 用户能够开发实现“100% 准确率”或“无错误识别”的自动驾驶系统。
+
+**非目标：**
+
+- 开发针对特定或有限 ODD 的专用感知组件架构。
+- 实现完整的功能与能力。
+- 超越人类驾驶员的识别能力。
+- 实现“100% 准确率”或“无错误识别”。
+
+<a id="high-level-architecture"></a>
+
+## 高层架构
+
+下图描述感知组件的高层架构。
 
 ![overall-perception-architecture](image/high-level-perception-diagram.drawio.svg)
 
-The Perception Component consists of the following sub-components:
+感知组件由以下子组件组成：
 
-- **Object Recognition**: Recognizes dynamic objects surrounding the ego vehicle in the current frame, objects that were not present during map creation, and predicts their future trajectories. This includes:
-  - Pedestrians
-  - Cars
-  - Trucks/Buses
-  - Bicycles
-  - Motorcycles
-  - Animals
-  - Traffic cones
-  - Road debris: Items such as cardboard, oil drums, trash cans, wood, etc., either dropped on the road or floating in the air
-- **Obstacle Segmentation**: Identifies point clouds originating from obstacles, including both dynamic objects and static obstacles that requires the ego vehicle either steer clear of them or come to a stop in front of the obstacles.
-  - This includes:
-    - All dynamic objects (as listed above)
-    - Curbs/Bollards
-    - Barriers
-    - Trees
-    - Walls/Buildings
-  - This does not include:
-    - Grass
-    - Water splashes
-    - Smoke/Vapor
-    - Newspapers
-    - Plastic bags
-- **Occupancy Grid Map**: Detects blind spots (areas where no information is available and where dynamic objects may jump out).
-- **Traffic Light Recognition**: Recognizes the colors of traffic lights and the directions of arrow signals.
+- **目标识别**：识别当前帧中自车周围的动态目标，以及地图创建时不存在的目标，并预测其未来轨迹。包括：
+  - 行人
+  - 汽车
+  - 卡车/公交车
+  - 自行车
+  - 摩托车
+  - 动物
+  - 交通锥
+  - 道路杂物：掉落在道路上或飘浮在空中的纸板、油桶、垃圾桶、木材等
+- **障碍物分割**：识别来自障碍物的点云，包括需要自车绕行或在其前方停车的动态目标和静态障碍物。
+  - 包括：
+    - 所有动态目标（如上所列）
+    - 路缘石/隔离柱
+    - 障碍栏
+    - 树木
+    - 墙壁/建筑物
+  - 不包括：
+    - 草
+    - 水花
+    - 烟雾/蒸汽
+    - 报纸
+    - 塑料袋
+- **占据栅格地图**：检测盲区（无法获取信息、可能有动态目标突然出现的区域）。
+- **交通信号灯识别**：识别交通信号灯颜色和箭头信号方向。
 
-## Component interface
+<a id="component-interface"></a>
 
-The following describes the input/output concept between Perception Component and other components. See [the Perception Component Interface](../../interfaces/components/perception.md) page for the current implementation.
+## 组件接口
 
-### Input to the Perception Component
+下文说明感知组件与其他组件之间的输入/输出概念。当前实现请参阅[感知组件接口](../../interfaces/components/perception.md)页面。
 
-- **From Sensing**: This input should provide real-time information about the environment.
-  - Camera Image: Image data obtained from the camera.
-  - Point Cloud: Point Cloud data obtained from LiDAR.
-  - Radar Object: Object data obtained from radar.
-- **From Localization**: This input should provide real-time information about the ego vehicle.
-  - Vehicle motion information: Includes the ego vehicle's position.
-- **From Map**: This input should provide real-time information about the static information about the environment.
-  - Vector Map: Contains all static information about the environment, including lane area information.
-  - Point Cloud Map: Contains static point cloud maps, which should not include information about the dynamic objects.
-- **From API**:
-  - V2X information: The information from V2X modules. For example, the information from traffic signals.
+<a id="input-to-the-perception-component"></a>
 
-### Output from the Perception Component
+### 感知组件的输入
 
-- **To Planning**
-  - Dynamic Objects: Provides real-time information about objects that cannot be known in advance, such as pedestrians and other vehicles.
-  - Obstacle Segmentation: Supplies real-time information about the location of obstacles, which is more primitive than Detected Object.
-  - Occupancy Grid Map: Offers real-time information about the presence of occluded area information.
-  - Traffic Light Recognition result: Provides the current state of each traffic light in real time.
+- **来自传感器组件**：应提供环境的实时信息。
+  - 相机图像：相机获取的图像数据。
+  - 点云：LiDAR 获取的点云数据。
+  - 雷达目标：雷达获取的目标数据。
+- **来自定位组件**：应提供自车的实时信息。
+  - 车辆运动信息：包含自车位置。
+- **来自地图组件**：应提供环境静态信息的实时数据。
+  - 矢量地图：包含环境的全部静态信息，包括车道区域信息。
+  - 点云地图：包含静态点云地图，不应包含动态目标信息。
+- **来自 API**：
+  - V2X 信息：来自 V2X 模块的信息，例如交通信号信息。
 
-## How to add new modules (WIP)
+<a id="output-from-the-perception-component"></a>
 
-As mentioned in the goal session, this perception module is designed to be extensible by third-party components. For specific instructions on how to add new modules and expand its functionality, please refer to the provided documentation or guidelines (WIP).
+### 感知组件的输出
 
-## Supported Functions
+- **发送到规划组件**
+  - 动态目标：提供行人和其他车辆等无法预先获知的目标的实时信息。
+  - 障碍物分割：提供障碍物位置的实时信息，其表示比检测目标更基础。
+  - 占据栅格地图：提供遮挡区域存在情况的实时信息。
+  - 交通信号灯识别结果：实时提供各交通信号灯的当前状态。
 
-| Feature                      | Description                                                                                                                                                                                                                                                       | Requirements                                                    |
+<a id="how-to-add-new-modules-wip"></a>
+
+## 如何添加新模块（编写中）
+
+如目标一节所述，该感知模块支持通过第三方组件扩展。有关添加新模块和扩展功能的具体说明，请参阅提供的文档或指南（编写中）。
+
+<a id="supported-functions"></a>
+
+## 支持的功能
+
+| 功能 | 描述 | 要求 |
 | ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------- |
-| LiDAR DNN based 3D detector  | This module takes point clouds as input and detects objects such as vehicles, trucks, buses, pedestrians, and bicycles.                                                                                                                                           | - Point Clouds                                                  |
-| Camera DNN based 2D detector | This module takes camera images as input and detects objects such as vehicles, trucks, buses, pedestrians, and bicycles in the two-dimensional image space. It detects objects within image coordinates and providing 3D coordinate information is not mandatory. | - Camera Images                                                 |
-| LiDAR Clustering             | This module performs clustering of point clouds and shape estimation to achieve object detection without labels.                                                                                                                                                  | - Point Clouds                                                  |
-| Semi-rule based detector     | This module detects objects using information from both images and point clouds, and it consists of two components: LiDAR Clustering and Camera DNN based 2D detector.                                                                                            | - Output from Camera DNN based 2D detector and LiDAR Clustering |
-| Radar based 3D detector      | This module takes radar data as input and detects dynamic 3D objects. In detail, please see [this document](reference-implementations/radar-based-3d-detector/radar-based-3d-detector.md).                                                                        | - Radar data                                                    |
-| Object Merger                | This module integrates results from various detectors.                                                                                                                                                                                                            | - Detected Objects                                              |
-| Interpolator                 | This module stabilizes the object detection results by maintaining long-term detection results using Tracking results.                                                                                                                                            | - Detected Objects <br> - Tracked Objects                       |
-| Tracking                     | This module gives ID and estimate velocity to the detection results.                                                                                                                                                                                              | - Detected Objects                                              |
-| Prediction                   | This module predicts the future paths (and their probabilities) of dynamic objects according to the shape of the map and the surrounding environment.                                                                                                             | - Tracked Objects <br> - Vector Map                             |
-| Obstacle Segmentation        | This module identifies point clouds originating from obstacles that the ego vehicle should avoid.                                                                                                                                                                 | - Point Clouds <br> - Point Cloud Map                           |
-| Occupancy Grid Map           | This module detects blind spots (areas where no information is available and where dynamic objects may jump out).                                                                                                                                                 | - Point Clouds <br> - Point Cloud Map                           |
-| Traffic Light Recognition    | This module detects the position and state of traffic signals.                                                                                                                                                                                                    | - Camera Images <br> - Vector Map                               |
+| 基于 LiDAR DNN 的 3D 检测器 | 输入点云，检测汽车、卡车、公交车、行人和自行车等目标。 | - 点云 |
+| 基于相机 DNN 的 2D 检测器 | 输入相机图像，在二维图像空间检测汽车、卡车、公交车、行人和自行车等目标。检测结果位于图像坐标中，不强制提供三维坐标信息。 | - 相机图像 |
+| LiDAR 聚类 | 对点云进行聚类和形状估计，实现无标签目标检测。 | - 点云 |
+| 半规则式检测器 | 结合图像和点云检测目标，由 LiDAR 聚类和基于相机 DNN 的 2D 检测器组成。 | - 相机 DNN 2D 检测器与 LiDAR 聚类的输出 |
+| 基于雷达的 3D 检测器 | 输入雷达数据，检测动态 3D 目标。详情参阅[此文档](reference-implementations/radar-based-3d-detector/radar-based-3d-detector.md)。 | - 雷达数据 |
+| 目标合并器 | 整合各种检测器的结果。 | - 检测目标 |
+| 插值器 | 利用跟踪结果维持长期检测结果，使目标检测结果稳定。 | - 检测目标 <br> - 跟踪目标 |
+| 跟踪 | 为检测结果分配 ID 并估计速度。 | - 检测目标 |
+| 预测 | 根据地图形状与周围环境，预测动态目标的未来路径及其概率。 | - 跟踪目标 <br> - 矢量地图 |
+| 障碍物分割 | 识别来自自车应避让障碍物的点云。 | - 点云 <br> - 点云地图 |
+| 占据栅格地图 | 检测盲区（无法获取信息、可能有动态目标突然出现的区域）。 | - 点云 <br> - 点云地图 |
+| 交通信号灯识别 | 检测交通信号灯的位置和状态。 | - 相机图像 <br> - 矢量地图 |
 
-## Reference Implementation
+<a id="reference-implementation"></a>
 
-When Autoware is launched, the default parameters are loaded, and the Reference Implementation is started. For more details, please refer to [the Reference Implementation](reference_implementation.md).
+## 参考实现
+
+启动 Autoware 时，会加载默认参数并启动参考实现。详情请参阅[参考实现](reference_implementation.md)。

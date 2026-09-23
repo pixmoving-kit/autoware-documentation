@@ -6,17 +6,17 @@ type:
   name: autoware_adapi_v1_msgs/srv/GetCooperationPolicies
   res:
     - name: status
-      text: response status
+      text: 响应状态
     - name: policies.behavior
-      text: The type of the target behavior.
+      text: 目标行为的类型。
     - name: policies.sequence
-      text: The type of the target sequence.
+      text: 目标序列的类型。
     - name: policies.policy
-      text: The type of the cooperation policy.
+      text: 协作策略的类型。
 ---
 
 {% extends 'design/autoware-architecture-v1/interfaces/templates/autoware-interface.jinja2' %}
 {% block description %}
-Get the default decision that is used instead when the operator's decision is undecided.
-For details, see the [cooperation](../../../../features/cooperation.md).
+获取默认决策，在操作员尚未作出决定时使用。
+详情请参阅[协作](../../../../features/cooperation.md)。
 {% endblock %}

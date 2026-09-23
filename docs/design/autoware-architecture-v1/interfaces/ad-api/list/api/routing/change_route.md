@@ -6,19 +6,19 @@ type:
   name: autoware_adapi_v1_msgs/srv/SetRoute
   req:
     - name: header
-      text: header for pose transformation
+      text: 用于位姿变换的消息头
     - name: goal
-      text: goal pose
+      text: 目标位姿
     - name: segments
-      text: waypoint segments in lanelet format
+      text: 以 Lanelet 格式表示的途经路段
   res:
     - name: status
-      text: response status
+      text: 响应状态
 ---
 
 {% extends 'design/autoware-architecture-v1/interfaces/templates/autoware-interface.jinja2' %}
 {% block description %}
-Same as {{ link_ad_api('/api/routing/set_route') }}, but change the route while driving.
-This API only accepts the route when the route state is SET.
-In any other state, set the route first or wait for the route change to complete.
+与 {{ link_ad_api('/api/routing/set_route') }} 相同，但用于在行驶过程中更改路线。
+此 API 仅在路线状态为 SET 时接受路线。
+在其他状态下，请先设置路线，或等待路线更改完成。
 {% endblock %}

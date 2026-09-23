@@ -1,53 +1,71 @@
-# Console logging
+<a id="console-logging"></a>
 
-ROS 2 logging is a powerful tool for understanding and debugging ROS nodes.
+# 控制台日志
 
-This page focuses on how to design console logging in Autoware and shows several practical examples.
-To comprehensively understand how ROS 2 logging works, refer to the [logging documentation](https://docs.ros.org/en/humble/Concepts/About-Logging.html).
+ROS 2 日志是理解和调试 ROS 节点的强大工具。
 
-## Logging use cases in Autoware
+本页重点介绍如何设计 Autoware 中的控制台日志，并提供一些实用示例。
+要全面了解 ROS 2 日志的工作原理，请参阅[日志文档](https://docs.ros.org/en/humble/Concepts/About-Logging.html)。
 
-- Developers debug code by seeing the console logs.
-- Vehicle operators take appropriate risk-avoiding actions depending on the console logs.
-- Log analysts analyze the console logs that are recorded in rosbag files.
+<a id="logging-use-cases-in-autoware"></a>
 
-To efficiently support these use cases, clean and highly visible logs are required.
-For that, several rules are defined below.
+## Autoware 中日志的使用场景
 
-## Rules
+- 开发者通过查看控制台日志调试代码。
+- 车辆操作人员根据控制台日志采取适当的避险措施。
+- 日志分析人员分析记录在 rosbag 文件中的控制台日志。
 
-### Choose appropriate severity levels (required, non-automated)
+为高效支持这些场景，需要清晰且醒目的日志。
+为此，下文定义了若干规则。
 
-#### Rationale
+<a id="rules"></a>
 
-It's confusing if severity levels are inappropriate as follows:
+## 规则
 
-- Useless messages are marked as `FATAL`.
-- Very important error messages are marked as `INFO`.
+<a id="choose-appropriate-severity-levels-required-non-automated"></a>
 
-#### Example
+### 选择适当的严重性级别（必需，非自动检查）
 
-Use the following criteria as a reference:
+<a id="rationale"></a>
 
-- **DEBUG:** Use this level to show debug information for developers. Note that logs with this level is hidden by default.
-- **INFO:** Use this level to notify events (cyclic notifications during initialization, state changes, service responses, etc.) to operators.
-- **WARN:** Use this level when a node can continue working correctly, but unintended behaviors might happen.
-  - For example, "path optimization failed but the previous data can be used", "the localization score is low", etc.
-- **ERROR:** Use this level when a node can't continue working correctly, and unintended behaviors would happen.
-  - For example, "path optimization failed and the path is empty", "the vehicle will trigger an emergency stop", etc.
-- **FATAL:** Use this level when the entire system can't continue working correctly, and the system must be stopped.
-  - For example, "the vehicle control ECU doesn't respond", "the system storage crashed", etc.
+#### 理由
 
-### Filter out unnecessary logs by setting logging options (required, non-automated)
+严重性级别选择不当会造成混淆，例如：
 
-#### Rationale
+- 无用的消息被标记为 `FATAL`。
+- 非常重要的错误消息被标记为 `INFO`。
 
-Some third-party nodes such as drivers may not follow the Autoware's guidelines.
-If the logs are noisy, unnecessary logs should be filtered out.
+<a id="example"></a>
 
-#### Example
+#### 示例
 
-Use the `--log-level {level}` option to change the minimum level of logs to be displayed:
+请参考以下标准：
+
+- **DEBUG：**用于向开发者展示调试信息。请注意，此级别日志默认隐藏。
+- **INFO：**用于向操作人员通知事件（初始化期间的周期性通知、状态变化、服务响应等）。
+- **WARN：**用于节点仍可继续正常工作，但可能出现非预期行为的情况。
+  - 例如，“路径优化失败，但可以使用上一次的数据”“定位得分较低”等。
+- **ERROR：**用于节点无法继续正常工作，且将出现非预期行为的情况。
+  - 例如，“路径优化失败且路径为空”“车辆将触发紧急停车”等。
+- **FATAL：**用于整个系统无法继续正常工作，必须停止系统的情况。
+  - 例如，“车辆控制 ECU 无响应”“系统存储崩溃”等。
+
+<a id="filter-out-unnecessary-logs-by-setting-logging-options-required-non-automated"></a>
+
+### 通过日志选项过滤不必要的日志（必需，非自动检查）
+
+<a id="rationale_1"></a>
+
+#### 理由
+
+驱动程序等部分第三方节点可能不遵循 Autoware 的指南。
+如果日志过于嘈杂，应过滤不必要的日志。
+
+<a id="example_1"></a>
+
+#### 示例
+
+使用 `--log-level {level}` 选项修改需要显示的最低日志级别：
 
 ```xml
 <launch>
@@ -56,7 +74,7 @@ Use the `--log-level {level}` option to change the minimum level of logs to be d
 </launch>
 ```
 
-If you want to disable only specific output targets, use the `--disable-stdout-logs`, `--disable-rosout-logs`, and/or `--disable-external-lib-logs` options:
+如果只想禁用特定输出目标，请使用 `--disable-stdout-logs`、`--disable-rosout-logs` 和/或 `--disable-external-lib-logs` 选项：
 
 ```xml
 <launch>
@@ -72,16 +90,22 @@ If you want to disable only specific output targets, use the `--disable-stdout-l
 </launch>
 ```
 
-### Use throttled logging when the log is unnecessarily shown repeatedly (required, non-automated)
+<a id="use-throttled-logging-when-the-log-is-unnecessarily-shown-repeatedly-required-non-automated"></a>
 
-#### Rationale
+### 日志无须频繁重复显示时使用限频日志（必需，非自动检查）
 
-If tons of logs are shown on the console, people miss important message.
+<a id="rationale_2"></a>
 
-#### Example
+#### 理由
 
-While waiting for some messages, throttled logs are usually enough.
-In such cases, wait about 5 seconds as a reference value.
+如果控制台上显示大量日志，人们就可能错过重要消息。
+
+<a id="example_2"></a>
+
+#### 示例
+
+在等待某些消息时，限频日志通常已经足够。
+这种情况下，可将约 5 秒作为参考间隔。
 
 ```cpp
 // Compliant
@@ -101,21 +125,29 @@ void FooNode::on_timer() {
 }
 ```
 
-#### Exception
+<a id="exception"></a>
 
-The following cases are acceptable even if it's not throttled.
+#### 例外
 
-- The message is really worth displaying every time.
-- The message level is DEBUG.
+以下情况可以不进行限频。
 
-### Do not depend on rclcpp::Node in core library classes but depend only on rclcpp/logging.hpp (advisory, non-automated)
+- 消息确实值得每次都显示。
+- 消息级别为 DEBUG。
 
-#### Rationale
+<a id="do-not-depend-on-rclcppnode-in-core-library-classes-but-depend-only-on-rclcpplogginghpp-advisory-non-automated"></a>
 
-Core library classes, which contain reusable algorithms, may also be used for non-ROS platforms.
-When porting libraries to other platforms, fewer dependencies are preferred.
+### 核心库类不依赖 rclcpp::Node，仅依赖 rclcpp/logging.hpp（建议，非自动检查）
 
-#### Example
+<a id="rationale_3"></a>
+
+#### 理由
+
+包含可复用算法的核心库类也可能用于非 ROS 平台。
+将库移植到其他平台时，依赖越少越好。
+
+<a id="example_3"></a>
+
+#### 示例
 
 ```cpp
 // Compliant
@@ -160,22 +192,28 @@ private:
 };
 ```
 
-## Tips
+<a id="tips"></a>
 
-### Use rqt_console to filter logs
+## 提示
 
-To filter logs, using `rqt_console` is useful:
+<a id="use-rqt_console-to-filter-logs"></a>
+
+### 使用 rqt_console 过滤日志
+
+使用 `rqt_console` 可以方便地过滤日志：
 
 ```bash
 ros2 run rqt_console rqt_console
 ```
 
-For more details, refer to [ROS 2 Documentation](https://docs.ros.org/en/rolling/Tutorials/Beginner-CLI-Tools/Using-Rqt-Console/Using-Rqt-Console.html).
+更多信息请参阅 [ROS 2 文档](https://docs.ros.org/en/rolling/Tutorials/Beginner-CLI-Tools/Using-Rqt-Console/Using-Rqt-Console.html)。
 
-### Useful marco expressions
+<a id="useful-marco-expressions"></a>
 
-To debug program, sometimes you need to see which functions and lines of code are executed.
-In that case, you can use `__FILE__`, `__LINE__` and `__FUNCTION__` macro:
+### 实用的宏表达式
+
+调试程序时，有时需要查看执行了哪些函数和代码行。
+这时可以使用 `__FILE__`、`__LINE__` 和 `__FUNCTION__` 宏：
 
 ```cpp
 void FooNode::on_timer() {
@@ -183,6 +221,6 @@ void FooNode::on_timer() {
 }
 ```
 
-The example output is as follows:
+示例输出如下：
 
 > [DEBUG] [1671720414.395456931] [foo]: file: /path/to/file.cpp, line: 100, function: on_timer

@@ -1,49 +1,55 @@
-# Zenoh settings for ROS 2 and Autoware
+<a id="zenoh-settings-for-ros-2-and-autoware"></a>
 
-Autoware uses CycloneDDS as its default communication middleware, but it's also compatible with other protocols like Zenoh. The ROS community [has selected](https://discourse.openrobotics.org/t/ros-2-alternative-middleware-report/33771) Zenoh as a promising new middleware alternative due to its key advantages:
+# ROS 2 与 Autoware 的 Zenoh 设置
 
-- **Internet Communication**: Unlike DDS, which is limited to a local area network (LAN), Zenoh can seamlessly communicate with the cloud, eliminating the need for a separate bridge.
-- **Namespace Support**: Zenoh allows for the use of namespaces for each vehicle. This feature simplifies managing multiple vehicles and isolating network traffic.
-- **Non-Multicast Support**: Zenoh functions in non-multicast environments like 5G, a key limitation for DDS.
-- **Reduced Discovery Overhead**: Zenoh significantly reduces discovery packet overhead, a known issue with DDS in wireless environments.
-- **Superior Performance**: [A study](https://zenoh.io/blog/2023-03-21-zenoh-vs-mqtt-kafka-dds/) has shown that Zenoh generally outperforms other protocols such as DDS, MQTT, and Kafka.
+Autoware 默认使用 CycloneDDS 作为通信中间件，也兼容 Zenoh 等其他协议。ROS 社区[选择](https://discourse.openrobotics.org/t/ros-2-alternative-middleware-report/33771) Zenoh 作为具有潜力的新中间件替代方案，主要基于以下优势：
 
-The following sections provide a step-by-step tutorial for running Autoware with Zenoh. We recommend using **ROS 2 Jazzy**, supported since Autoware 1.7.1, as it includes a fix for the GuardCondition use-after-free issue and eliminates the need for any workaround patches.
+- **互联网通信**：与局限于局域网（LAN）的 DDS 不同，Zenoh 可以与云端无缝通信，无需单独的桥接组件。
+- **命名空间支持**：Zenoh 允许为每辆车使用命名空间，简化多车管理和网络流量隔离。
+- **非组播支持**：Zenoh 可在 5G 等非组播环境中运行，而这是 DDS 的一项主要限制。
+- **降低发现开销**：Zenoh 显著减少发现数据包的开销，改善 DDS 在无线环境中的这一已知问题。
+- **更高性能**：[一项研究](https://zenoh.io/blog/2023-03-21-zenoh-vs-mqtt-kafka-dds/)表明，Zenoh 的性能通常优于 DDS、MQTT、Kafka 等协议。
 
-## Install rmw_zenoh
+以下各节逐步介绍如何通过 Zenoh 运行 Autoware。建议使用自 Autoware 1.7.1 起支持的 **ROS 2 Jazzy**，它包含对 GuardCondition 释放后使用问题的修复，无需额外的临时补丁。
 
-1. Install rmw_zenoh
+<a id="install-rmw_zenoh"></a>
+
+## 安装 rmw_zenoh
+
+1. 安装 rmw_zenoh
 
    ```bash
    sudo apt update && sudo apt install ros-jazzy-rmw-zenoh-cpp
    ```
 
-2. Set rmw_zenoh as the default RMW implementation
+2. 将 rmw_zenoh 设置为默认 RMW 实现
 
-   Add the following line to your `~/.bashrc` file:
+   在 `~/.bashrc` 文件中添加以下内容：
 
    ```bash
    export RMW_IMPLEMENTATION=rmw_zenoh_cpp
    ```
 
-3. Reload your shell configuration (or open a new terminal):
+3. 重新加载 Shell 配置，或打开新的终端：
 
    ```bash
    source ~/.bashrc
    ```
 
-For more details, see the [rmw_zenoh repository](https://github.com/ros2/rmw_zenoh).
+更多详情请参阅 [rmw_zenoh 仓库](https://github.com/ros2/rmw_zenoh)。
 
-## Launch Autoware with Zenoh
+<a id="launch-autoware-with-zenoh"></a>
 
-1. Start the Zenoh router:
+## 使用 Zenoh 启动 Autoware
+
+1. 启动 Zenoh 路由器：
 
    ```bash
    # terminal 1
    ros2 run rmw_zenoh_cpp rmw_zenohd
    ```
 
-2. Launch Autoware:
+2. 启动 Autoware：
 
    ```bash
    # terminal 2
@@ -51,24 +57,28 @@ For more details, see the [rmw_zenoh repository](https://github.com/ros2/rmw_zen
    ros2 launch autoware_launch autoware.launch.xml ...
    ```
 
-## Logging
+<a id="logging"></a>
 
-Zenoh is implemented in Rust and uses a logging library configurable via the `RUST_LOG` environment variable.
-You can specify different levels (such as `info`, `debug`, or `trace`) for more or less verbosity.
+## 日志
 
-### Example
+Zenoh 使用 Rust 实现，其日志库可通过 `RUST_LOG` 环境变量配置。
+您可以指定不同级别（如 `info`、`debug` 或 `trace`），调整日志的详细程度。
 
-Start the Zenoh router with debug logs enabled:
+<a id="example"></a>
+
+### 示例
+
+启用调试日志并启动 Zenoh 路由器：
 
 ```bash
 export RUST_LOG=zenoh=debug
 ros2 run rmw_zenoh_cpp rmw_zenohd
 ```
 
-Or launch autoware with info log in a single command:
+或者通过一条命令，以 info 日志级别启动 Autoware：
 
 ```bash
 RUST_LOG=zenoh=info ros2 launch autoware_launch autoware.launch.xml ...
 ```
 
-For more information, see the [rmw_zenoh logging section](https://github.com/ros2/rmw_zenoh?tab=readme-ov-file#logging).
+更多信息请参阅 [rmw_zenoh 日志章节](https://github.com/ros2/rmw_zenoh?tab=readme-ov-file#logging)。

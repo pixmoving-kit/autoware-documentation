@@ -1,36 +1,42 @@
-# Traffic light recognition simulation
+<a id="traffic-light-recognition-simulation"></a>
 
-By default, traffic lights on the map are all treated as if they are set to green. As a result, when a path is created that passed through an intersection with a traffic light, the ego vehicle will drive through the intersection without stopping.
+# 交通信号灯识别仿真
 
-The following steps explain how to set and reset traffic lights in order to test how the Planning component will respond.
+默认情况下，地图上的所有交通信号灯均被视为绿灯。因此，当规划路径经过有信号灯的路口时，自车会直接通过路口而不停车。
 
-## Set traffic light
+以下步骤介绍如何设置和重置信号灯，以测试规划组件的响应。
 
-By default, Rviz doesn't display the IDs of traffic lights on the map.
-To enable the display of traffic light IDs, follow these steps:
+<a id="set-traffic-light"></a>
 
-1. In the `Displays` panel, find the `traffic_light_id` topic by toggling the triangle icons next to `Map > Lanelet2VectorMap > Namespaces`.
-2. Check the `traffic_light_id` checkbox.
-3. Reload the topic by clicking the `Map` checkbox twice.
-4. Have a closer look at the IDs by zooming in the region or by changing the View type.
+## 设置交通信号灯
 
-![see-traffic-light-ID](images/traffic-light/see-traffic-light-ID.png)
+默认情况下，RViz 不显示地图上的交通信号灯 ID。
+按照以下步骤启用交通信号灯 ID 显示：
 
-1. Go to `Panels -> Add new panel`, select `tier4_traffic_light_rviz_plugin/TrafficLightPublishPanel`, and then press `OK`.
+1. 在 `Displays` 面板中，依次展开 `Map > Lanelet2VectorMap > Namespaces` 旁的三角图标，找到 `traffic_light_id` 话题。
+2. 勾选 `traffic_light_id` 复选框。
+3. 点击两次 `Map` 复选框以重新加载话题。
+4. 放大相关区域或更改视图类型，以便仔细查看 ID。
 
-2. In `TrafficLightPublishPanel`, set the `ID` and color of the traffic light.
+![查看交通信号灯 ID](images/traffic-light/see-traffic-light-ID.png)
 
-3. Click the `SET` button.
-   ![set-traffic-light](images/traffic-light/set-traffic-light.png)
+1. 打开 `Panels -> Add new panel`，选择 `tier4_traffic_light_rviz_plugin/TrafficLightPublishPanel`，然后点击 `OK`。
 
-4. Finally, click the `PUBLISH` button to send the traffic light status to the simulator. Any planned path that goes past the selected traffic light will then change accordingly.
+2. 在 `TrafficLightPublishPanel` 中设置交通信号灯的 `ID` 和颜色。
 
-![send-traffic-light-color](images/traffic-light/send-traffic-light-color.png)
+3. 点击 `SET` 按钮。
+   ![设置交通信号灯](images/traffic-light/set-traffic-light.png)
 
-## Update/Reset traffic light
+4. 最后，点击 `PUBLISH` 按钮，将交通信号灯状态发送给仿真器。所有经过所选信号灯的规划路径都会相应变化。
 
-You can update the color of the traffic light by selecting the next color (in the image it is `GREEN`) and clicking `SET` button. In the image the traffic light in front of the ego vehicle changed from `RED` to `GREEN` and the vehicle restarted.
+![发送交通信号灯颜色](images/traffic-light/send-traffic-light-color.png)
 
-![after-traffic-light-color-update](images/traffic-light/after-traffic-light-color-update.png)
+<a id="updatereset-traffic-light"></a>
 
-To remove a traffic light from `TrafficLightPublishPanel`, click the `RESET` button.
+## 更新／重置交通信号灯
+
+选择新的颜色（图中为 `GREEN`）并点击 `SET` 按钮，即可更新交通信号灯颜色。图中自车前方的信号灯由 `RED` 变为 `GREEN` 后，车辆重新起步。
+
+![更新交通信号灯颜色后](images/traffic-light/after-traffic-light-color-update.png)
+
+要从 `TrafficLightPublishPanel` 中移除某个交通信号灯，请点击 `RESET` 按钮。

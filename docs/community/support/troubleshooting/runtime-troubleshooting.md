@@ -1,12 +1,18 @@
-# Runtime Troubleshooting
+<a id="runtime-troubleshooting"></a>
 
-This page describes runtime errors that are not covered by [Performance Troubleshooting](performance-troubleshooting.md) and how to resolve them.
+# 运行时故障排查
 
-## CycloneDDS: Failed to find a free participant index
+本页介绍[性能故障排查](performance-troubleshooting.md)未涵盖的运行时错误及解决办法。
 
-### Symptoms
+<a id="cyclonedds-failed-to-find-a-free-participant-index"></a>
 
-When running Autoware on **ROS 2 Jazzy** (Ubuntu 24.04) with `RMW_IMPLEMENTATION=rmw_cyclonedds_cpp`, some nodes fail to start with errors such as:
+## CycloneDDS：无法找到空闲参与者索引
+
+<a id="symptoms"></a>
+
+### 症状
+
+在 **ROS 2 Jazzy**（Ubuntu 24.04）上使用 `RMW_IMPLEMENTATION=rmw_cyclonedds_cpp` 运行 Autoware 时，某些节点可能启动失败，并出现以下错误：
 
 ```text
 [component_container_mt-16] Failed to find a free participant index for domain 0
@@ -15,17 +21,21 @@ When running Autoware on **ROS 2 Jazzy** (Ubuntu 24.04) with `RMW_IMPLEMENTATION
 [component_container_mt-16]   what():  failed to initialize rcl node: error not set, at ./src/rcl/node.c:252
 ```
 
-This often occurs when launching demos that use many nodes (e.g. [Planning Simulator](https://autowarefoundation.github.io/autoware-documentation/main/demos/planning-sim/)).
+这通常发生在启动使用大量节点的演示时，例如 [Planning Simulator](https://autowarefoundation.github.io/autoware-documentation/main/demos/planning-sim/)。
 
-### Cause
+<a id="cause"></a>
 
-CycloneDDS itself defaults to `ParticipantIndex=none`, which does not limit the number of participants. However, on ROS 2 Jazzy, **rmw_cyclonedds_cpp** builds the domain configuration and explicitly sets `ParticipantIndex=auto` and `MaxAutoParticipantIndex=32`, overriding the CycloneDDS default. As a result, only about 32 DDS participants can exist per host. Autoware can use more DDS participants than this limit (e.g. 100 or more), so new nodes cannot obtain a free participant index and fail to create the domain.
+### 原因
 
-This behavior comes from the RMW implementation; see [rmw_cyclonedds: check_create_domain()](https://github.com/ros2/rmw_cyclonedds/blob/7cd457de5825d4cb46ec7b081aa00a5392e388d0/rmw_cyclonedds_cpp/src/rmw_node.cpp#L1193-L1199) (lines 1193–1199).
+CycloneDDS 本身默认使用 `ParticipantIndex=none`，不限制参与者数量。但在 ROS 2 Jazzy 中，**rmw_cyclonedds_cpp** 构建域配置时会显式设置 `ParticipantIndex=auto` 和 `MaxAutoParticipantIndex=32`，覆盖 CycloneDDS 默认值。因此，每台主机只能存在约 32 个 DDS 参与者。Autoware 使用的 DDS 参与者可能超过此限制（例如 100 个或更多），导致新节点无法获取空闲参与者索引，创建域失败。
 
-### Solution
+此行为来自 RMW 实现，参见 [rmw_cyclonedds：check_create_domain()](https://github.com/ros2/rmw_cyclonedds/blob/7cd457de5825d4cb46ec7b081aa00a5392e388d0/rmw_cyclonedds_cpp/src/rmw_node.cpp#L1193-L1199)（第 1193–1199 行）。
 
-Configure CycloneDDS by adding a `<Discovery>` section to your `cyclonedds.xml` with `ParticipantIndex` set to `none`:
+<a id="solution"></a>
+
+### 解决办法
+
+在 `cyclonedds.xml` 中添加 `<Discovery>` 配置段，将 `ParticipantIndex` 设为 `none`：
 
 ```xml
 <Discovery>
@@ -33,11 +43,13 @@ Configure CycloneDDS by adding a `<Discovery>` section to your `cyclonedds.xml` 
 </Discovery>
 ```
 
-A full example is given in [CycloneDDS Configuration](../../../installation/additional-settings-for-developers/network-configuration/dds-settings.md#cyclonedds-configuration).
+完整示例见 [CycloneDDS 配置](../../../installation/additional-settings-for-developers/network-configuration/dds-settings.md#cyclonedds-configuration)。
 
-### References
+<a id="references"></a>
 
-- [autowarefoundation/autoware#6759](https://github.com/autowarefoundation/autoware/issues/6759) — Issue and discussion for this error
-- [rmw_cyclonedds: check_create_domain() (ParticipantIndex=auto, MaxAutoParticipantIndex=32)](https://github.com/ros2/rmw_cyclonedds/blob/7cd457de5825d4cb46ec7b081aa00a5392e388d0/rmw_cyclonedds_cpp/src/rmw_node.cpp#L1193-L1199) — Where the RMW overrides CycloneDDS defaults
-- [Eclipse Cyclone DDS — Controlling port numbers](https://cyclonedds.io/docs/cyclonedds/0.9.1/config.html#controlling-port-numbers)
-- [CycloneDDS config reference — MaxAutoParticipantIndex](https://cyclonedds.io/docs/cyclonedds/latest/config/config_file_reference.html#cyclonedds-domain-discovery-maxautoparticipantindex)
+### 参考资料
+
+- [autowarefoundation/autoware#6759](https://github.com/autowarefoundation/autoware/issues/6759)：此错误的 issue 与讨论。
+- [rmw_cyclonedds：check_create_domain()（ParticipantIndex=auto，MaxAutoParticipantIndex=32）](https://github.com/ros2/rmw_cyclonedds/blob/7cd457de5825d4cb46ec7b081aa00a5392e388d0/rmw_cyclonedds_cpp/src/rmw_node.cpp#L1193-L1199)：RMW 覆盖 CycloneDDS 默认配置的位置。
+- [Eclipse Cyclone DDS：控制端口号](https://cyclonedds.io/docs/cyclonedds/0.9.1/config.html#controlling-port-numbers)
+- [CycloneDDS 配置参考：MaxAutoParticipantIndex](https://cyclonedds.io/docs/cyclonedds/latest/config/config_file_reference.html#cyclonedds-domain-discovery-maxautoparticipantindex)

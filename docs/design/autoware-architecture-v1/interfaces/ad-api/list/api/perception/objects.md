@@ -6,19 +6,19 @@ type:
   name: autoware_adapi_v1_msgs/msg/DynamicObjectArray
   msg:
     - name: objects.id
-      text: The UUID of each object
+      text: 各目标的 UUID
     - name: objects.existence_probability
-      text: The probability of the object exits
+      text: 目标存在的概率
     - name: objects.classification
-      text: The type of the object recognized and the confidence level
+      text: 识别到的目标类型及其置信度
     - name: objects.kinematics
-      text: Consist of the object pose, twist, acceleration and the predicted_paths
+      text: 包含目标的位姿、速度、加速度和 predicted_paths
     - name: objects.shape
-      text: escribe the shape of the object with dimension, and polygon
+      text: 通过尺寸和多边形描述目标形状
 ---
 
 {% extends 'design/autoware-architecture-v1/interfaces/templates/autoware-interface.jinja2' %}
 {% block description %}
-Get the recognized objects array with label, shape, current position and predicted path
-For details, see the [perception](../../../features/perception.md).
+获取识别到的目标数组，包含类别标签、形状、当前位置和预测路径
+详情请参阅[感知](../../../features/perception.md)。
 {% endblock %}

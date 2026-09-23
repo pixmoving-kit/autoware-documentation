@@ -1,21 +1,27 @@
-# Testing guidelines
+<a id="testing-guidelines"></a>
 
-## Unit testing
+# 测试指南
 
-Unit testing is a software testing method that tests individual units of source code to determine whether they satisfy the specification.
+<a id="unit-testing"></a>
 
-For details, see the [Unit testing guidelines](unit-testing.md).
+## 单元测试
 
-## Integration testing
+单元测试是一种软件测试方法，通过测试源代码中的各个独立单元，判断它们是否满足规范。
 
-Integration testing combines and tests the individual software modules as a group, and is done after unit testing.
+详情请参阅[单元测试指南](unit-testing.md)。
 
-While performing integration testing, the following subtypes of tests are written:
+<a id="integration-testing"></a>
 
-1. Fault injection testing
-2. Back-to-back comparison between a model and code
-3. Requirements-based testing
-4. Anomaly detection during integration testing
-5. Random input testing
+## 集成测试
 
-For details, see the [Integration testing guidelines](integration-testing.md).
+集成测试在单元测试之后进行，将各个软件模块组合起来作为一个整体进行测试。
+
+开展集成测试时，会编写以下类型的测试：
+
+1. 故障注入测试
+2. 模型与代码的背靠背对比测试
+3. 基于需求的测试
+4. 集成测试中的异常检测
+5. 随机输入测试
+
+详情请参阅[集成测试指南](integration-testing.md)。

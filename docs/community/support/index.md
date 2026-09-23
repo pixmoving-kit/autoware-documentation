@@ -1,7 +1,9 @@
-# Support
+<a id="support"></a>
 
-This page explains several support resources.
+# 支持
 
-- [Support guidelines](support-guidelines.md) pages explain the support mechanisms and guidelines.
-- [Troubleshooting](troubleshooting/index.md) pages explain solutions for common issues.
-- [Docs guide](docs-guide.md) pages explain related documentation sites.
+本页介绍几类支持资源。
+
+- [支持指南](support-guidelines.md)页面介绍支持机制和相关准则。
+- [故障排查](troubleshooting/index.md)页面介绍常见问题的解决方法。
+- [文档指南](docs-guide.md)页面介绍相关文档网站。

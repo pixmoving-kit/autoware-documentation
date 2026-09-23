@@ -6,13 +6,13 @@ type:
   name: autoware_adapi_v1_msgs/msg/ManualOperatorHeartbeat
   msg:
     - name: stamp
-      text: Timestamp when this message was sent.
+      text: 发送此消息时的时间戳。
     - name: ready
-      text: Whether the operator is able to continue driving.
+      text: 操作员是否能够继续驾驶。
 ---
 
 {% extends 'design/autoware-architecture-v1/interfaces/templates/autoware-interface.jinja2' %}
 {% block description %}
-The application needs to determine whether the operator is able to drive and send that information via this API.
-For details, see the [manual control](../../../../../features/manual-control.md).
+应用程序需要判断操作员是否能够驾驶，并通过此 API 发送判断结果。
+详情请参阅[手动控制](../../../../../features/manual-control.md)。
 {% endblock %}

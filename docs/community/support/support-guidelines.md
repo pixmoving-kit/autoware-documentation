@@ -1,150 +1,172 @@
-# Support guidelines
+<a id="support-guidelines"></a>
 
-This page explains the support mechanisms we provide.
+# 支持指南
+
+本页介绍我们提供的支持渠道。
 
 !!! warning
 
-    Before asking for help, search and read this documentation site carefully.
-    Also, follow the [discussion guidelines](../../contributing/discussion-guidelines/index.md) for discussions.
+    寻求帮助前，请先仔细搜索并阅读本文档网站。
+    参与讨论时，也请遵循[讨论指南](../../contributing/discussion-guidelines/index.md)。
 
-Choose appropriate resources depending on what kind of help you need and read the detailed description in the sections below.
+根据所需帮助的类型选择合适的资源，并阅读下文各节的详细说明。
 
-- [Documentation sites](#documentation-sites)
-  - Gathering information
+- [文档网站](#documentation-sites)
+  - 收集信息。
 - [GitHub Discussions](#github-discussions)
-  - Questions or unconfirmed bugs -> [Q&A](https://github.com/orgs/autowarefoundation/discussions/categories/q-a)
-  - [Feature requests](https://github.com/orgs/autowarefoundation/discussions/categories/feature-requests)
-  - [Design discussions](https://github.com/orgs/autowarefoundation/discussions/categories/design)
+  - 提问或尚未确认的缺陷 → [Q&A](https://github.com/orgs/autowarefoundation/discussions/categories/q-a)。
+  - [功能请求](https://github.com/orgs/autowarefoundation/discussions/categories/feature-requests)。
+  - [设计讨论](https://github.com/orgs/autowarefoundation/discussions/categories/design)。
 - [GitHub Issues](#github-issues)
-  - Confirmed bugs
-  - Confirmed tasks
+  - 已确认的缺陷。
+  - 已确认的任务。
 - [Discord](#discord)
-  - Instant messaging between contributors
+  - 贡献者之间的即时交流。
 - [ROS Discourse](#ros-discourse)
-  - General topics that should be widely announced
+  - 需要广泛公告的一般性话题。
 
-## Guidelines for Autoware community support
+<a id="guidelines-for-autoware-community-support"></a>
 
-If you encounter a problem with Autoware, please follow these steps to seek help:
+## Autoware 社区支持指南
 
-### 1. Search for existing Issues and Questions
+如果遇到 Autoware 问题，请按以下步骤寻求帮助：
 
-Before creating a new issue or question, check if someone else has already reported or asked about the problem. Use the following resources:
+<a id="1-search-for-existing-issues-and-questions"></a>
+
+### 1. 搜索已有的 issue 和问题
+
+创建新的 issue 或提问之前，请先检查是否已经有人报告或询问过该问题。可使用以下资源：
 
 - **[Issues](https://github.com/autowarefoundation/autoware/issues)**
 
-  Note that Autoware has multiple repositories listed in [autoware.repos](https://github.com/autowarefoundation/autoware/blob/main/repositories/autoware.repos).
-  It is recommended to search across all repositories.
+  请注意，Autoware 包含多个仓库，列表见 [autoware.repos](https://github.com/autowarefoundation/autoware/blob/main/repositories/autoware.repos)。
+  建议跨所有仓库搜索。
 
-- **[Questions](https://github.com/autowarefoundation/autoware/discussions/categories/q-a)**
+- **[问题](https://github.com/autowarefoundation/autoware/discussions/categories/q-a)**
 
-### 2. Create a new question thread
+<a id="2-create-a-new-question-thread"></a>
 
-If you don't find an existing issue or question that addresses your problem, create a new question thread:
+### 2. 创建新的提问讨论
 
-- **[Ask a Question](https://github.com/autowarefoundation/autoware/discussions/categories/q-a)**
+如果现有 issue 或问题都无法解决你的问题，请创建新的提问讨论：
 
-  If your question is not answered within a week, mention `@autoware-maintainers` in a post to remind them.
+- **[提问](https://github.com/autowarefoundation/autoware/discussions/categories/q-a)**
 
-### 3. Participate in other discussions
+  如果一周内没有得到回答，请在帖子中提及 `@autoware-maintainers`，提醒维护者。
 
-You are also welcome to open or join discussions in other categories:
+<a id="3-participate-in-other-discussions"></a>
 
-- **[Feature requests](https://github.com/autowarefoundation/autoware/discussions/categories/feature-requests)**
-- **[Design discussions](https://github.com/autowarefoundation/autoware/discussions/categories/design)**
+### 3. 参与其他讨论
 
-### Additional resources
+也欢迎在其他分类中发起或参与讨论：
 
-If you are unsure how to create a discussion, refer to the [GitHub Docs on creating a new discussion](https://docs.github.com/en/discussions/quickstart#creating-a-new-discussion).
+- **[功能请求](https://github.com/autowarefoundation/autoware/discussions/categories/feature-requests)**
+- **[设计讨论](https://github.com/autowarefoundation/autoware/discussions/categories/design)**
 
-## Documentation sites
+<a id="additional-resources"></a>
 
-[Docs guide](docs-guide.md) shows the list of useful documentation sites.
-Visit them and see if there is any information related to your problem.
+### 其他资源
 
-Note that the documentation sites aren't always up-to-date and perfect.
-If you find out that some information is wrong, unclear, or missing in Autoware docs, feel free to submit a pull request following the [contribution guidelines](../../contributing/index.md).
+如果不确定如何创建讨论，请参阅 [GitHub 关于创建新讨论的文档](https://docs.github.com/en/discussions/quickstart#creating-a-new-discussion)。
+
+<a id="documentation-sites"></a>
+
+## 文档网站
+
+[文档指南](docs-guide.md)列出了实用的文档网站。
+请访问这些网站，查看是否有与你的问题相关的信息。
+
+请注意，文档网站并不总是最新或完全准确的。
+如果发现 Autoware 文档中存在错误、表述不清或内容缺失，欢迎按照[贡献指南](../../contributing/index.md)提交拉取请求。
 
 ## GitHub Discussions
 
-[GitHub discussions page](https://github.com/orgs/autowarefoundation/discussions) is the primary place for asking questions and discussing topics related to Autoware.
+[GitHub Discussions 页面](https://github.com/orgs/autowarefoundation/discussions)是提问和讨论 Autoware 相关话题的主要场所。
 
-| Category                                                                                                               | Description                                                             |
+| 分类 | 说明 |
 | :--------------------------------------------------------------------------------------------------------------------- | :---------------------------------------------------------------------- |
-| [Announcements](https://github.com/orgs/autowarefoundation/discussions/categories/announcements)                       | Official updates and news from the Autoware maintainers                 |
-| [Design](https://github.com/orgs/autowarefoundation/discussions/categories/design)                                     | Discussions on Autoware system and software design                      |
-| [Feature requests](https://github.com/orgs/autowarefoundation/discussions/categories/feature-requests)                 | Suggestions for new features and improvements                           |
-| [General](https://github.com/orgs/autowarefoundation/discussions/categories/general)                                   | General discussions about Autoware                                      |
-| [Ideas](https://github.com/orgs/autowarefoundation/discussions/categories/ideas)                                       | Brainstorming and sharing innovative ideas                              |
-| [Polls](https://github.com/orgs/autowarefoundation/discussions/categories/polls)                                       | Community polls and surveys                                             |
-| [Q&A](https://github.com/orgs/autowarefoundation/discussions/categories/q-a)                                           | Questions and answers from the community and developers                 |
-| [Show and tell](https://github.com/orgs/autowarefoundation/discussions/categories/show-and-tell)                       | Showcase of projects and achievements                                   |
-| [TSC meetings](https://github.com/orgs/autowarefoundation/discussions/categories/tsc-meetings)                         | Minutes and discussions from TSC(Technical Steering Committee) meetings |
-| [Working group activities](https://github.com/orgs/autowarefoundation/discussions/categories/working-group-activities) | Updates on working group activities                                     |
-| [Working group meetings](https://github.com/orgs/autowarefoundation/discussions/categories/working-group-meetings)     | Minutes and discussions from working group meetings                     |
+| [公告](https://github.com/orgs/autowarefoundation/discussions/categories/announcements) | Autoware 维护者发布的官方更新和新闻 |
+| [设计](https://github.com/orgs/autowarefoundation/discussions/categories/design) | Autoware 系统与软件设计讨论 |
+| [功能请求](https://github.com/orgs/autowarefoundation/discussions/categories/feature-requests) | 新功能和改进建议 |
+| [综合讨论](https://github.com/orgs/autowarefoundation/discussions/categories/general) | Autoware 的一般性讨论 |
+| [想法](https://github.com/orgs/autowarefoundation/discussions/categories/ideas) | 头脑风暴与创新想法分享 |
+| [投票](https://github.com/orgs/autowarefoundation/discussions/categories/polls) | 社区投票与调查 |
+| [问答](https://github.com/orgs/autowarefoundation/discussions/categories/q-a) | 社区和开发者的提问与回答 |
+| [成果展示](https://github.com/orgs/autowarefoundation/discussions/categories/show-and-tell) | 项目与成果展示 |
+| [TSC 会议](https://github.com/orgs/autowarefoundation/discussions/categories/tsc-meetings) | TSC（技术指导委员会）会议纪要与讨论 |
+| [工作组活动](https://github.com/orgs/autowarefoundation/discussions/categories/working-group-activities) | 工作组活动更新 |
+| [工作组会议](https://github.com/orgs/autowarefoundation/discussions/categories/working-group-meetings) | 工作组会议纪要与讨论 |
 
 !!! warning
 
-    GitHub Discussions is not the right place to track tasks or bugs. Use GitHub Issues for that purpose.
+    GitHub Discussions 不适合跟踪任务或缺陷，请使用 GitHub Issues。
 
 ## GitHub Issues
 
-GitHub Issues is the designated platform for tracking confirmed bugs, tasks, and enhancements within Autoware's various repositories.
+GitHub Issues 是在 Autoware 各仓库中跟踪已确认缺陷、任务和改进的指定平台。
 
-Follow these guidelines to ensure efficient issue tracking and resolution:
+请遵循以下指南，以高效跟踪和解决问题：
 
-### Reporting bugs
+<a id="reporting-bugs"></a>
 
-If you encounter a confirmed bug, please report it by creating an issue in the appropriate Autoware repository.
-Include detailed information such as steps to reproduce, expected outcomes, and actual results to assist maintainers in addressing the issue promptly.
+### 报告缺陷
 
-### Tracking tasks
+如果遇到已经确认的缺陷，请在对应的 Autoware 仓库中创建 issue 报告。
+请提供复现步骤、预期结果和实际结果等详细信息，以帮助维护者及时处理。
 
-GitHub Issues is also the place for managing tasks including:
+<a id="tracking-tasks"></a>
 
-- **Refactoring:** Propose refactoring existing code to improve efficiency, readability, or maintainability. Clearly describe what and why you propose to refactor.
-- **New Features:** If you have confirmed the need for a new feature through discussions, use Issues to track its development. Outline the feature's purpose, potential designs, and its intended impact.
-- **Documentation:** Propose changes to documentation to fix inaccuracies, update outdated content, or add new sections. Specify what changes are needed and why they are important.
+### 跟踪任务
 
-### Creating an issue
+GitHub Issues 也用于管理以下任务：
 
-When creating a new issue, use the following guidelines:
+- **重构：**提议重构现有代码，以提高效率、可读性或可维护性。请清楚说明建议重构的内容及原因。
+- **新功能：**如果已经通过讨论确认新功能的必要性，请使用 issue 跟踪开发，说明功能目的、可能的设计和预期影响。
+- **文档：**提议修改文档，以纠正错误、更新过时内容或添加新章节。请说明需要哪些修改，以及这些修改为何重要。
 
-1. **Choose the Correct Repository**: If unsure which repository is appropriate, start a discussion in the [Q&A category](https://github.com/autowarefoundation/autoware/discussions/categories/q-a) to seek guidance from maintainers.
-2. **Use Clear, Concise Titles**: Clearly summarize the issue or task in the title for quick identification.
-3. **Provide Detailed Descriptions**: Include all necessary details to understand the context and scope of the issue. Attach screenshots, error logs, and code snippets where applicable.
-4. **Tag Relevant Contributors**: Mention contributors or teams that might be impacted by or interested in the issue.
+<a id="creating-an-issue"></a>
 
-### Linking issues and pull requests
+### 创建 issue
 
-When you start working on an issue, link the related pull request to the issue by mentioning the issue number.
-This helps maintain a clear and traceable development history.
+创建新 issue 时，请遵循以下要求：
 
-For more details, see the [Pull Request Guidelines page](../../contributing/pull-request-guidelines/index.md).
+1. **选择正确的仓库**：如果不确定应使用哪个仓库，请在 [Q&A 分类](https://github.com/autowarefoundation/autoware/discussions/categories/q-a)中发起讨论，向维护者寻求指导。
+2. **使用清楚简洁的标题**：在标题中概括问题或任务，便于快速识别。
+3. **提供详细描述**：包含理解问题背景和范围所需的全部信息，必要时附上截图、错误日志和代码片段。
+4. **提及相关贡献者**：提及可能受影响或对此感兴趣的贡献者或团队。
+
+<a id="linking-issues-and-pull-requests"></a>
+
+### 关联 issue 与拉取请求
+
+开始处理 issue 时，请通过提及 issue 编号，将相关拉取请求与其关联。
+这样有助于保持清晰、可追溯的开发历史。
+
+更多信息请参阅[拉取请求指南](../../contributing/pull-request-guidelines/index.md)。
 
 !!! warning
 
-    GitHub Issues is not for questions or unconfirmed bugs. If an issue is created for such purposes,
-    it will likely be transferred to GitHub Discussions for further clarification.
+    GitHub Issues 不用于一般提问或尚未确认的缺陷。如果为此创建 issue，
+    通常会转移到 GitHub Discussions，以进一步澄清问题。
 
 ## Discord
 
 [![Discord](https://img.shields.io/discord/953808765935816715?label=Join%20Autoware%20Discord&style=for-the-badge)](https://discord.gg/Q94UsPvReQ)
 
-Autoware has a Discord server for casual communication between contributors.
+Autoware 提供 Discord 服务器，供贡献者轻松交流。
 
-The Autoware Discord server is a good place for the following activities:
+Autoware Discord 服务器适合以下活动：
 
-- Introduce yourself to the community.
-- Chat with contributors.
-- Take a quick straw poll.
+- 向社区介绍自己。
+- 与贡献者聊天。
+- 进行快速的非正式意见调查。
 
-Note that it is not the right place to get help for your issues.
+请注意，这里并不适合寻求具体问题的帮助。
 
 ## ROS Discourse
 
-If you want to widely discuss a topic with the general ROS community, post to [the Autoware category on ROS Discourse](https://discourse.ros.org).
+如果希望与整个 ROS 社区广泛讨论某个话题，请在 [ROS Discourse 的 Autoware 分类](https://discourse.ros.org)发帖。
 
 !!! warning
 
-    Do not post questions about bugs to ROS Discourse!
+    不要在 ROS Discourse 上发布缺陷相关问题！

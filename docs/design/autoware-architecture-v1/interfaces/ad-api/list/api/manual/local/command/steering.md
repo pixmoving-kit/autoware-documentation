@@ -6,15 +6,15 @@ type:
   name: autoware_adapi_v1_msgs/msg/SteeringCommand
   msg:
     - name: stamp
-      text: Timestamp when this message was sent.
+      text: 发送此消息时的时间戳。
     - name: steering_tire_angle
-      text: Target steering tire angle [rad].
+      text: 目标转向轮转角 [rad]。
     - name: steering_tire_velocity
-      text: Target steering tire velocity [rad/s].
+      text: 目标转向轮角速度 [rad/s]。
 ---
 
 {% extends 'design/autoware-architecture-v1/interfaces/templates/autoware-interface.jinja2' %}
 {% block description %}
-Send steering command to this API.
-To use this API, select the corresponding mode as described in [manual control](../../../../../features/manual-control.md).
+向此 API 发送转向指令。
+使用此 API 前，请按照[手动控制](../../../../../features/manual-control.md)中的说明选择相应模式。
 {% endblock %}

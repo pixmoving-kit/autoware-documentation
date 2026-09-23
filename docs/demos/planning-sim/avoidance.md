@@ -1,13 +1,15 @@
-# Avoidance scenario
+<a id="avoidance-scenario"></a>
 
-1. Set an initial pose and a goal pose in the same lane. A path will be planned.
+# 避障场景
 
-   ![set-position-and-goal](images/avoidance/set-position-and-goal.png)
+1. 在同一车道内设置初始位姿和目标位姿，系统将规划一条路径。
 
-2. Set a "2D Dummy Bus" on the roadside. A new path will be planned.
+   ![设置位置和目标](images/avoidance/set-position-and-goal.png)
 
-   ![set-dummy-bus](images/avoidance/set-dummy-bus.png)
+2. 在路边放置一个“2D Dummy Bus”（二维虚拟巴士），系统将重新规划路径。
 
-3. Engage the ego vehicle. It will avoid the obstacle along the newly planned path.
+   ![放置虚拟巴士](images/avoidance/set-dummy-bus.png)
 
-   ![avoidance-driving](images/avoidance/avoidance-driving.png)
+3. 启用自车自动驾驶。车辆将沿新规划的路径绕过障碍物。
+
+   ![避障行驶](images/avoidance/avoidance-driving.png)
