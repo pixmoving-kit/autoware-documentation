@@ -1,76 +1,102 @@
-# Radar pointcloud data pre-processing design
+<a id="radar-pointcloud-data-pre-processing-design"></a>
 
-## Overview
+# 雷达点云数据预处理设计
 
-### Pipeline
+<a id="overview"></a>
 
-This diagram describes the pre-process pipeline for radar pointcloud.
+## 概述
+
+<a id="pipeline"></a>
+
+### 流水线
+
+此图描述雷达点云的预处理流水线。
 
 ![radar-pointcloud-sensing](image/radar-pointcloud-sensing.drawio.svg)
 
-### Interface
+<a id="interface"></a>
 
-- Input
-  - Radar data from device
-  - Twist information of ego vehicle motion
-- Output
-  - Dynamic radar pointcloud (`ros-perception/radar_msgs/msg/RadarScan.msg`)
-  - Noise filtered radar pointcloud (`sensor_msgs/msg/Pointcloud2.msg`)
+### 接口
 
-### Note
+- 输入
+  - 来自设备的雷达数据
+  - 自车运动的 Twist 信息
+- 输出
+  - 动态雷达点云（`ros-perception/radar_msgs/msg/RadarScan.msg`）
+  - 过滤噪声后的雷达点云（`sensor_msgs/msg/Pointcloud2.msg`）
 
-- In the sensing layer, the radar pre-process packages filter noise through the `ros-perception/radar_msgs/msg/RadarScan.msg` message type with sensor coordinate.
-- For use of radar pointcloud data by LiDAR packages, we would like to propose a converter for creating `sensor_msgs/msg/Pointcloud2.msg` from `ros-perception/radar_msgs/msg/RadarScan.msg`.
+<a id="note"></a>
 
-## Reference implementations
+### 注意
 
-### Data message for radars
+- 在传感层中，雷达预处理软件包通过传感器坐标系下的 `ros-perception/radar_msgs/msg/RadarScan.msg` 消息类型过滤噪声。
+- 为了让激光雷达软件包使用雷达点云数据，我们建议提供转换器，从 `ros-perception/radar_msgs/msg/RadarScan.msg` 创建 `sensor_msgs/msg/Pointcloud2.msg`。
 
-Autoware uses radar objects data type as [radar_msgs/msg/RadarScan.msg](https://github.com/ros-perception/radar_msgs/blob/ros2/msg/RadarScan.msg).
-In detail, please see [Data message for radars](reference-implementations/data-message.md).
+<a id="reference-implementations"></a>
 
-### Device driver for radars
+## 参考实现
 
-Autoware support `ros-perception/radar_msgs/msg/RadarScan.msg` and `autoware_auto_perception_msgs/msg/TrackedObjects.msg` for Radar drivers.
+<a id="data-message-for-radars"></a>
 
-In detail, please see [Device driver for radars](reference-implementations/device-driver.md).
+### 雷达数据消息
 
-### Basic noise filter
+Autoware 使用的雷达目标数据类型为 [radar_msgs/msg/RadarScan.msg](https://github.com/ros-perception/radar_msgs/blob/ros2/msg/RadarScan.msg)。
+详情见[雷达数据消息](reference-implementations/data-message.md)。
+
+<a id="device-driver-for-radars"></a>
+
+### 雷达设备驱动程序
+
+Autoware 雷达驱动程序支持 `ros-perception/radar_msgs/msg/RadarScan.msg` 和 `autoware_auto_perception_msgs/msg/TrackedObjects.msg`。
+
+详情见[雷达设备驱动程序](reference-implementations/device-driver.md)。
+
+<a id="basic-noise-filter"></a>
+
+### 基础噪声滤波器
 
 - [radar_threshold_filter](https://github.com/autowarefoundation/autoware_universe/tree/main/sensing/autoware_radar_threshold_filter)
 
-This package removes pointcloud noise with low amplitude, edge angle, too near pointcloud by threshold.
-The noise depends on the radar devices and installation location.
+此软件包通过阈值去除低幅值、边缘角度和距离过近的点云噪声。
+噪声取决于雷达设备和安装位置。
 
-### Filter to static/dynamic pointcloud
+<a id="filter-to-staticdynamic-pointcloud"></a>
+
+### 静态/动态点云过滤
 
 - [radar_static_pointcloud_filter](https://github.com/autowarefoundation/autoware_universe/tree/main/sensing/autoware_radar_static_pointcloud_filter)
 
-This package extracts static/dynamic radar pointcloud by using doppler velocity and ego motion.
-The static radar pointcloud can be used for localization like NDT scan matching, and the dynamic radar pointcloud can be used for dynamic object detection.
+此软件包使用多普勒速度和自车运动提取静态/动态雷达点云。
+静态雷达点云可用于 NDT 扫描匹配等定位方法，动态雷达点云可用于动态目标检测。
 
-### Message converter from RadarScan to Pointcloud2
+<a id="message-converter-from-radarscan-to-pointcloud2"></a>
+
+### 从 RadarScan 到 Pointcloud2 的消息转换器
 
 - [radar_scan_to_pointcloud2](https://github.com/autowarefoundation/autoware_universe/tree/main/sensing/autoware_radar_scan_to_pointcloud2)
 
-For convenient use of radar pointcloud within existing LiDAR packages, we suggest a `radar_scan_to_pointcloud2_convertor` package for conversion from `ros-perception/radar_msgs/msg/RadarScan.msg` to `sensor_msgs/msg/Pointcloud2.msg`.
+为方便在现有激光雷达软件包中使用雷达点云，我们建议提供 `radar_scan_to_pointcloud2_convertor` 软件包，将 `ros-perception/radar_msgs/msg/RadarScan.msg` 转换为 `sensor_msgs/msg/Pointcloud2.msg`。
 
-|            |           LiDAR package           |                 Radar package                 |
+| | 激光雷达软件包 | 雷达软件包 |
 | :--------: | :-------------------------------: | :-------------------------------------------: |
-|  message   | `sensor_msgs/msg/Pointcloud2.msg` | `ros-perception/radar_msgs/msg/RadarScan.msg` |
-| coordinate |             (x, y, z)             |                   (r, θ, φ)                   |
-|   value    |             intensity             |          amplitude, doppler velocity          |
+| 消息 | `sensor_msgs/msg/Pointcloud2.msg` | `ros-perception/radar_msgs/msg/RadarScan.msg` |
+| 坐标 | (x, y, z) | (r, θ, φ) |
+| 数值 | 强度 | 幅值、多普勒速度 |
 
-For considered use cases,
+考虑的使用场景包括：
 
-- Use [pointcloud_preprocessor](https://github.com/autowarefoundation/autoware_universe/tree/main/sensing/autoware_pointcloud_preprocessor) for radar scan.
-- Apply obstacle segmentation like [ground segmentation](https://github.com/autowarefoundation/autoware_universe/tree/main/perception/autoware_ground_segmentation) to radar points for LiDAR-less (camera + radar) systems.
+- 将 [pointcloud_preprocessor](https://github.com/autowarefoundation/autoware_universe/tree/main/sensing/autoware_pointcloud_preprocessor) 用于雷达扫描。
+- 在无激光雷达（相机 + 雷达）系统中，对雷达点应用[地面分割](https://github.com/autowarefoundation/autoware_universe/tree/main/perception/autoware_ground_segmentation)等障碍物分割方法。
 
-## Appendix
+<a id="appendix"></a>
 
-### Discussion
+## 附录
 
-Radar architecture design is discussed as below.
+<a id="discussion"></a>
 
-- [Discussion 2531](https://github.com/orgs/autowarefoundation/discussions/2531)
-- [Discussion 2532](https://github.com/orgs/autowarefoundation/discussions/2532).
+### 讨论
+
+雷达架构设计讨论如下。
+
+- [讨论 2531](https://github.com/orgs/autowarefoundation/discussions/2531)
+- [讨论 2532](https://github.com/orgs/autowarefoundation/discussions/2532)。

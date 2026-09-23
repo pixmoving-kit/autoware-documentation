@@ -1,15 +1,23 @@
-# Data message for radars
+<a id="data-message-for-radars"></a>
 
-## Summary
+# 雷达数据消息
 
-To sum up, Autoware uses radar data type as below.
+<a id="summary"></a>
 
-- [radar_msgs/msg/RadarScan.msg](https://github.com/ros-perception/radar_msgs/blob/ros2/msg/RadarScan.msg) for radar pointcloud
-- [radar_msgs/msg/RadarTracks.msg](https://github.com/ros-perception/radar_msgs/blob/ros2/msg/RadarTracks.msg) for radar objects.
+## 概述
 
-## Radar data message for pointcloud
+总体而言，Autoware 使用以下雷达数据类型。
 
-### Message definition
+- 雷达点云使用 [radar_msgs/msg/RadarScan.msg](https://github.com/ros-perception/radar_msgs/blob/ros2/msg/RadarScan.msg)
+- 雷达目标使用 [radar_msgs/msg/RadarTracks.msg](https://github.com/ros-perception/radar_msgs/blob/ros2/msg/RadarTracks.msg)。
+
+<a id="radar-data-message-for-pointcloud"></a>
+
+## 点云雷达数据消息
+
+<a id="message-definition"></a>
+
+### 消息定义
 
 - [ros2/msg/RadarScan.msg](https://github.com/ros-perception/radar_msgs/blob/ros2/msg/RadarScan.msg)
 
@@ -33,9 +41,13 @@ float32 doppler_velocity                 # The doppler speeds (m/s) of the retur
 float32 amplitude                        # The amplitude of the of the return (dB)
 ```
 
-## Radar data message for tracked objects
+<a id="radar-data-message-for-tracked-objects"></a>
 
-### Message definition
+## 跟踪目标雷达数据消息
+
+<a id="message-definition_1"></a>
+
+### 消息定义
 
 - [radar_msgs/msg/RadarTrack.msg](https://github.com/ros-perception/radar_msgs/blob/ros2/msg/RadarTrack.msg)
 
@@ -59,13 +71,15 @@ float32[6] acceleration_covariance          # Upper-triangle covariance about th
 float32[6] size_covariance                  # Upper-triangle covariance about the x, y, z axes
 ```
 
-### Message usage for RadarTracks
+<a id="message-usage-for-radartracks"></a>
 
-- Object classifications
+### RadarTracks 消息用法
 
-In object classifications of [radar_msgs/msg/RadarTrack.msg](https://github.com/ros-perception/radar_msgs/blob/ros2/msg/RadarTrack.msg), additional classifications label can be used by the number starting from 32000.
+- 目标分类
 
-To express for [Autoware label definition](https://gitlab.com/autowarefoundation/autoware.auto/autoware_auto_msgs/-/blob/master/autoware_auto_perception_msgs/msg/ObjectClassification.idl), Autoware defines object classifications for `RadarTracks.msg` as below.
+在 [radar_msgs/msg/RadarTrack.msg](https://github.com/ros-perception/radar_msgs/blob/ros2/msg/RadarTrack.msg) 的目标分类中，可以使用从 32000 开始的编号定义额外分类标签。
+
+为表示 [Autoware 标签定义](https://gitlab.com/autowarefoundation/autoware.auto/autoware_auto_msgs/-/blob/master/autoware_auto_perception_msgs/msg/ObjectClassification.idl)，Autoware 为 `RadarTracks.msg` 定义如下目标分类。
 
 ```sh
 uint16 UNKNOWN = 32000;
@@ -78,10 +92,12 @@ uint16 BICYCLE = 32006;
 uint16 PEDESTRIAN = 32007;
 ```
 
-For detail implementation, please see [radar_tracks_msgs_converter](https://github.com/autowarefoundation/autoware_universe/tree/main/perception/autoware_radar_tracks_msgs_converter).
+具体实现见 [radar_tracks_msgs_converter](https://github.com/autowarefoundation/autoware_universe/tree/main/perception/autoware_radar_tracks_msgs_converter)。
 
 ## Note
 
-### Survey for radar message
+<a id="survey-for-radar-message"></a>
 
-Depending on the sensor manufacturer and its purpose, each sensor might exchange raw, post-processed data. This section introduces a survey about the previously developed messaging systems in the open-source community. Although there are many kinds of outputs, radar mainly adopt two types as outputs, pointcloud and objects. Related discussion for message definition in ros-perception are [PR #1](https://github.com/ros-perception/radar_msgs/pull/1), [PR #2](https://github.com/ros-perception/radar_msgs/pull/2), and [PR #3](https://github.com/ros-perception/radar_msgs/pull/3). Existing open source softwares for radar are summarized in these PR.
+### 雷达消息调研
+
+根据传感器厂商和用途，各传感器可能交换原始数据或经过后处理的数据。本节介绍开源社区已有消息系统的调研。虽然输出形式多样，雷达主要采用点云和目标两类输出。ros-perception 中关于消息定义的讨论见 [PR #1](https://github.com/ros-perception/radar_msgs/pull/1)、[PR #2](https://github.com/ros-perception/radar_msgs/pull/2) 和 [PR #3](https://github.com/ros-perception/radar_msgs/pull/3)。这些 PR 汇总了现有雷达开源软件。
